@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ThumbsUp, ThumbsDown, ArrowRight, CheckCircle, XCircle, Sparkles } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, ArrowRight, CheckCircle, XCircle, Sparkles, Eye } from 'lucide-react';
 import { Flashcard } from '@/types';
 import Mascot from '@/components/Mascot';
 import WriteAnswer from '@/components/WriteAnswer';
@@ -171,7 +171,7 @@ const FlashcardComponent = ({
       )}
       
       <div className="relative mx-auto max-w-2xl perspective-1000">
-        <div className="flashcard-container w-full" style={{ minHeight: '500px' }}>
+        <div className="flashcard-container w-full" style={{ minHeight: '550px' }}>
           <AnimatePresence initial={false} mode="wait">
             <motion.div
               key={isFlipped ? 'back' : 'front'}
@@ -180,16 +180,16 @@ const FlashcardComponent = ({
               initial="hidden"
               animate="visible"
               exit="exit"
-              style={{ width: '100%', minHeight: '500px' }}
+              style={{ width: '100%', minHeight: '550px' }}
               className="w-full absolute inset-0"
             >
               <Card
                 className={`flashcard-${isFlipped ? 'back' : 'front'} p-6 w-full shadow-lg border-2 ${
                   isFlipped 
-                    ? 'border-indigo-300 bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900 dark:to-blue-900 dark:border-indigo-600' 
+                    ? 'border-indigo-300 bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/80 dark:to-blue-900/80 dark:border-indigo-600' 
                     : 'border-app-blue-light dark:border-app-blue-medium bg-white dark:bg-gray-800'
                 }`}
-                style={{ minHeight: '500px' }}
+                style={{ minHeight: '550px' }}
               >
                 <div className="flex flex-col h-full">
                   <div className="flex justify-between items-center mb-4">
@@ -228,7 +228,7 @@ const FlashcardComponent = ({
                           >
                             <Sparkles className="h-6 w-6 text-yellow-500" />
                           </motion.div>
-                          <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2 bg-yellow-100 dark:bg-yellow-800 p-3 rounded-lg shadow relative">
+                          <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2 bg-yellow-100 dark:bg-yellow-800/70 p-3 rounded-lg shadow-md relative">
                             Réponse:
                           </h3>
                         </motion.div>
@@ -238,7 +238,7 @@ const FlashcardComponent = ({
                           variants={contentVariants}
                           initial="hidden"
                           animate="visible"
-                          className="text-app-blue-dark dark:text-blue-300 text-lg p-4 bg-white dark:bg-gray-700 rounded-lg shadow-md border border-gray-100 dark:border-gray-600"
+                          className="text-app-blue-dark dark:text-blue-200 text-lg p-5 bg-white dark:bg-gray-700/90 rounded-lg shadow-md border border-gray-100 dark:border-gray-600"
                         >
                           <p className="font-medium">{flashcard.answer || "Pas de réponse disponible"}</p>
                         </motion.div>
@@ -339,15 +339,17 @@ const FlashcardComponent = ({
                           Question:
                         </motion.h3>
                         
-                        <motion.p 
+                        <motion.div 
                           custom={1}
                           variants={contentVariants}
                           initial="hidden"
                           animate="visible"
-                          className="text-app-blue-dark dark:text-blue-300 text-lg"
+                          className="p-5 bg-white dark:bg-gray-700/90 rounded-lg shadow-md border border-gray-100 dark:border-gray-600"
                         >
-                          {flashcard.question}
-                        </motion.p>
+                          <p className="text-app-blue-dark dark:text-blue-200 text-lg">
+                            {flashcard.question}
+                          </p>
+                        </motion.div>
                         
                         {hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped ? (
                           <motion.div 
@@ -355,12 +357,46 @@ const FlashcardComponent = ({
                             variants={contentVariants}
                             initial="hidden"
                             animate="visible"
-                            className="mt-4"
+                            className="mt-6"
                           >
                             <WriteAnswer 
                               onSubmit={handleAnswerSubmit} 
                               correctAnswer={flashcard.answer || ""}
                             />
+                          </motion.div>
+                        ) : (!hasWriteAnswerEnabled && !isFlipped) ? (
+                          <motion.div
+                            custom={2}
+                            variants={contentVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="mt-6"
+                          >
+                            <motion.div
+                              variants={buttonVariants}
+                              initial="initial"
+                              whileHover="hover"
+                              whileTap="tap"
+                            >
+                              <Button
+                                onClick={onFlip}
+                                className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white py-3 text-base relative overflow-hidden group"
+                              >
+                                <motion.span 
+                                  className="absolute inset-0 bg-white/10"
+                                  initial={{ scaleX: 0 }}
+                                  animate={{ scaleX: [0, 1, 0] }}
+                                  transition={{ 
+                                    duration: 1.5, 
+                                    repeat: Infinity,
+                                    repeatType: "loop"
+                                  }}
+                                  style={{ transformOrigin: 'left' }}
+                                />
+                                <Eye className="h-5 w-5 mr-2" />
+                                Voir la réponse
+                              </Button>
+                            </motion.div>
                           </motion.div>
                         ) : null}
                       </div>
@@ -368,7 +404,7 @@ const FlashcardComponent = ({
                   </div>
 
                   <div className="mt-6">
-                    {(!isFlipped || !showAnswerButtons) && !hasWriteAnswerEnabled && (
+                    {(isFlipped && !showAnswerButtons && !hasSubmittedAnswer) && (
                       <motion.div
                         variants={buttonVariants}
                         initial="initial"
@@ -390,7 +426,7 @@ const FlashcardComponent = ({
                             }}
                             style={{ transformOrigin: 'left' }}
                           />
-                          {isFlipped ? 'Retour à la question' : 'Voir la réponse'}
+                          Retour à la question
                         </Button>
                       </motion.div>
                     )}

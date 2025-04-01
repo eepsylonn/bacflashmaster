@@ -1,9 +1,10 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { CheckCircle2, XCircle, Send, Sparkles } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useToast } from '@/hooks/use-toast';
 
 interface WriteAnswerProps {
   onSubmit: (answer: string, isCorrect: boolean) => void;
@@ -15,9 +16,17 @@ const WriteAnswer = ({ onSubmit, correctAnswer }: WriteAnswerProps) => {
   const [submitted, setSubmitted] = useState<boolean>(false);
   const [isCorrect, setIsCorrect] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const { toast } = useToast();
   
   const handleSubmit = () => {
-    if (!answer.trim()) return;
+    if (!answer.trim()) {
+      toast({
+        title: "Réponse vide",
+        description: "Veuillez écrire une réponse avant de valider",
+        variant: "destructive"
+      });
+      return;
+    }
     
     // Vérification simpliste - si la réponse contient un mot clé de la bonne réponse
     const userAnswer = answer.toLowerCase().trim();
@@ -44,6 +53,15 @@ const WriteAnswer = ({ onSubmit, correctAnswer }: WriteAnswerProps) => {
     // Reset typing animation after a delay
     setTimeout(() => setIsTyping(false), 500);
   };
+
+  useEffect(() => {
+    return () => {
+      // Reset state on unmount
+      setAnswer('');
+      setSubmitted(false);
+      setIsCorrect(false);
+    };
+  }, []);
   
   return (
     <div className="space-y-4">
@@ -53,6 +71,7 @@ const WriteAnswer = ({ onSubmit, correctAnswer }: WriteAnswerProps) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.3 }}
             className="space-y-3"
           >
             <div className="relative">
