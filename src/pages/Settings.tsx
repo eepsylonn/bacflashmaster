@@ -27,7 +27,8 @@ import {
   ChevronDown, 
   ChevronUp, 
   Sparkles,
-  Check
+  Check,
+  FileText // Add FileText to replace BookOpenText
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
@@ -614,7 +615,7 @@ const Settings = () => {
                             <p className="text-sm text-muted-foreground">Possibilité d'écrire vos réponses avant de vérifier</p>
                           </div>
                           <div className="flex items-center space-x-2">
-                            <BookOpenText className="h-4 w-4 text-gray-500" />
+                            <FileText className="h-4 w-4 text-gray-500" />
                             <Switch 
                               id="write-answers"
                               checked={writeAnswers}

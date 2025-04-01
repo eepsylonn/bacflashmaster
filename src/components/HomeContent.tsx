@@ -1,9 +1,8 @@
-
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useDiplome } from '@/contexts/DiplomeContext';
-import { Brain, BookOpen, Award, TrendingUp, History, ArrowRight, Calendar, Medal, Zap, LightbulbIcon, BookOpenText, FileText } from 'lucide-react';
+import { Brain, BookOpen, Award, TrendingUp, History, ArrowRight, Calendar, Medal, Zap, LightbulbIcon, FileText, GraduationCap } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const HomeContent = () => {
@@ -207,7 +206,7 @@ const HomeContent = () => {
               
               <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div className="flex items-start p-3 bg-white rounded-lg shadow-sm">
-                  <BookOpenText className="h-5 w-5 text-amber-600 mt-0.5 mr-3" />
+                  <FileText className="h-5 w-5 text-amber-600 mt-0.5 mr-3" />
                   <div>
                     <h4 className="font-medium text-sm">{diplomeName} : Les sujets probables</h4>
                     <p className="text-xs text-gray-600 mt-1">Consultez les thèmes prioritaires à réviser cette année.</p>

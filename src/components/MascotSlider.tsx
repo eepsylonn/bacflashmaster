@@ -36,8 +36,8 @@ const MascotSlider = React.forwardRef<
           className="block h-10 w-10 rounded-full bg-transparent shadow-none ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:opacity-50 hover:scale-110"
         >
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-            <div className="w-14 h-14 flex items-center justify-center"> {/* Increased size from w-10 h-10 */}
-              <Mascot size="md" animation="pulse" />
+            <div className="w-16 h-16 flex items-center justify-center"> {/* Increased size from w-14 h-14 */}
+              <Mascot size="lg" animation="pulse" /> {/* Changed from md to lg */}
             </div>
           </div>
         </SliderPrimitive.Thumb>
