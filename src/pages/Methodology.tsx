@@ -290,6 +290,32 @@ const fichesMatieres: Record<string, Record<string, FicheType[]>> = {
           "   • Conférences: trade show, exhibition, booth, keynote speech, panel discussion",
           "   • Networking: business card, contact, referral, connection, professional network"
         ]
+      },
+      {
+        title: "Maîtrise du vocabulaire et des expressions idiomatiques",
+        content: [
+          "1. Enrichissement lexical méthodique:",
+          "   • Organisez votre apprentissage par champs lexicaux thématiques",
+          "   • Créez des fiches avec synonymes, antonymes et exemples d'usage",
+          "   • Établissez des liens entre les mots de la même famille",
+          "   • Apprenez le vocabulaire en contexte plutôt qu'isolément",
+          "   • Utilisez des applications de répétition espacée pour mémoriser durablement",
+          "2. Expressions idiomatiques essentielles:",
+          "   • Identifiez les expressions les plus fréquentes dans le monde des affaires",
+          "   • Classez-les par situation: négociation, présentation, réunion, etc.",
+          "   • Attention aux faux amis entre votre langue maternelle et l'anglais",
+          "   • Pratiquez ces expressions dans des jeux de rôle ou simulations",
+          "3. Vocabulaire spécifique aux sections du TOEIC:",
+          "   • Pour les photos: description physique, postures, vêtements, environnement",
+          "   • Pour les QCM: termes de comparaison, probabilité, certitude, opinion",
+          "   • Pour les dialogues: salutations, présentations, arrangements, excuses",
+          "   • Pour les textes longs: terminologie business, juridique, marketing",
+          "4. Stratégies d'apprentissage actif:",
+          "   • Créez votre dictionnaire personnel des mots nouveaux rencontrés",
+          "   • Réutilisez activement le vocabulaire appris dans vos productions orales et écrites",
+          "   • Lisez régulièrement des articles en anglais dans votre domaine professionnel",
+          "   • Regardez des vidéos sous-titrées en anglais pour associer prononciation et orthographe"
+        ]
       }
     ]
   },
@@ -453,33 +479,4 @@ const fichesMatieres: Record<string, Record<string, FicheType[]>> = {
           "   • Questions d'inférence: déduisez logiquement à partir des informations du texte",
           "   • Questions sur le ton ou l'intention: analysez le vocabulaire et la structure",
           "   • Questions sur la structure: identifiez les étapes du raisonnement",
-          "3. Identification des pièges courants:",
-          "   • Options trop générales ou trop spécifiques par rapport au texte",
-          "   • Propositions partiellement vraies mais incomplètes",
-          "   • Options contenant des exagérations ou des généralisations abusives",
-          "   • Confusions entre corrélation et causalité",
-          "   • Réponses plausibles mais non soutenues par le texte",
-          "4. Techniques pour les textes argumentatifs:",
-          "   • Identifiez la position de l'auteur: est-il neutre, critique, favorable?",
-          "   • Repérez les concessions et contre-arguments",
-          "   • Distinguez les arguments principaux des exemples illustratifs",
-          "   • Suivez l'évolution du raisonnement: présentation, analyse, conclusion",
-          "5. Analyse critique:",
-          "   • Évaluez la solidité des arguments présentés",
-          "   • Identifiez les présupposés et les implications",
-          "   • Repérez les éventuels biais ou failles logiques",
-          "   • Distinguez les faits vérifiables des opinions subjectives",
-          "6. Gestion du temps:",
-          "   • Adaptez votre vitesse de lecture à la difficulté du texte",
-          "   • Accordez plus de temps aux questions complexes d'interprétation",
-          "   • Si une question vous bloque, marquez-la et revenez-y plus tard",
-          "   • Prévoyez du temps pour vérifier vos réponses"
-        ]
-      },
-      {
-        title: "Maîtrise du vocabulaire et des expressions idiomatiques",
-        content: [
-          "1. Enrichissement lexical méthodique:",
-          "   • Organisez votre apprentissage par champs lexicaux thématiques",
-          "   • Créez des fiches avec synonymes, antonymes et exemples d'usage",
-          "   • Établissez des
+          "3. Identification des
