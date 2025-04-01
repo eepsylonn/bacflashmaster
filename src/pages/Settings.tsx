@@ -28,13 +28,16 @@ import {
   ChevronUp, 
   Globe, 
   BookmarkCheck,
-  Check
+  Check,
+  Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 import { BacSpecialite } from '@/types';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Settings = () => {
+  const isMobile = useIsMobile();
   const { diplome, setDiplome, showDiplomeSelector } = useDiplome();
   const { selectedSpecialities, setSelectedSpecialities } = useUserPreferences();
   const [selectedDiplome, setSelectedDiplome] = useState<string>(diplome || '');
@@ -47,21 +50,110 @@ const Settings = () => {
   const [showMoreDiplomas, setShowMoreDiplomas] = useState<boolean>(false);
   const { toast } = useToast();
 
-  // Liste des spécialités pour le baccalauréat
-  const bacSpecialities: BacSpecialite[] = [
-    'Mathématiques',
-    'Physique-Chimie',
-    'SVT',
-    'SES',
-    'HGGSP',
-    'Humanités-Littérature-Philosophie',
-    'NSI',
-    'Arts',
-    'Mathématiques expertes',
-    'Mathématiques complémentaires',
-    'LVC',
-    'Latin/Grec'
+  // Liste des spécialités pour le baccalauréat avec descriptions et icônes
+  const bacSpecialitiesData: {
+    id: BacSpecialite;
+    description: string;
+    category: string;
+    icon: string;
+    color: string;
+  }[] = [
+    {
+      id: 'Mathématiques',
+      description: 'Algèbre, géométrie, analyse et probabilités',
+      category: 'Sciences',
+      icon: '📊',
+      color: 'bg-blue-100 border-blue-300'
+    },
+    {
+      id: 'Physique-Chimie',
+      description: 'Lois physiques et réactions chimiques',
+      category: 'Sciences',
+      icon: '⚗️',
+      color: 'bg-purple-100 border-purple-300'
+    },
+    {
+      id: 'SVT',
+      description: 'Sciences de la vie et de la Terre',
+      category: 'Sciences',
+      icon: '🌿',
+      color: 'bg-green-100 border-green-300'
+    },
+    {
+      id: 'SES',
+      description: 'Économie, sociologie et science politique',
+      category: 'Sciences sociales',
+      icon: '📈',
+      color: 'bg-yellow-100 border-yellow-300'
+    },
+    {
+      id: 'HGGSP',
+      description: 'Histoire-géographie, géopolitique et sciences politiques',
+      category: 'Sciences humaines',
+      icon: '🌍',
+      color: 'bg-orange-100 border-orange-300'
+    },
+    {
+      id: 'Humanités-Littérature-Philosophie',
+      description: 'Littérature, philosophie et sciences humaines',
+      category: 'Lettres',
+      icon: '📚',
+      color: 'bg-pink-100 border-pink-300'
+    },
+    {
+      id: 'NSI',
+      description: 'Numérique et sciences informatiques',
+      category: 'Sciences',
+      icon: '💻',
+      color: 'bg-indigo-100 border-indigo-300'
+    },
+    {
+      id: 'Arts',
+      description: 'Arts plastiques, musique, théâtre, cinéma',
+      category: 'Arts',
+      icon: '🎨',
+      color: 'bg-violet-100 border-violet-300'
+    },
+    {
+      id: 'Mathématiques expertes',
+      description: 'Approfondissement en mathématiques (Terminale)',
+      category: 'Options',
+      icon: '🔢',
+      color: 'bg-blue-100 border-blue-300'
+    },
+    {
+      id: 'Mathématiques complémentaires',
+      description: 'Mathématiques supplémentaires (Terminale)',
+      category: 'Options',
+      icon: '➗',
+      color: 'bg-sky-100 border-sky-300'
+    },
+    {
+      id: 'LVC',
+      description: 'Troisième langue vivante',
+      category: 'Langues',
+      icon: '🗣️',
+      color: 'bg-teal-100 border-teal-300'
+    },
+    {
+      id: 'Latin/Grec',
+      description: 'Langues et cultures de l'Antiquité',
+      category: 'Langues',
+      icon: '🏛️',
+      color: 'bg-amber-100 border-amber-300'
+    }
   ];
+
+  // Grouper les spécialités par catégorie
+  const groupedSpecialities = bacSpecialitiesData.reduce((acc, item) => {
+    if (!acc[item.category]) {
+      acc[item.category] = [];
+    }
+    acc[item.category].push(item);
+    return acc;
+  }, {} as Record<string, typeof bacSpecialitiesData>);
+  
+  const categories = Object.keys(groupedSpecialities);
 
   useEffect(() => {
     setSelectedDiplome(diplome || '');
@@ -194,37 +286,40 @@ const Settings = () => {
               <CardContent className="p-0">
                 <Tabs defaultValue="diplome" className="w-full">
                   <TabsList className="w-full grid grid-cols-4 rounded-none h-auto">
-                    <TabsTrigger value="diplome" className="py-2">
-                      <div className="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-y-0 sm:space-x-1">
-                        <BookOpen className="h-4 w-4" /> 
-                        <span className="text-xs sm:text-sm">Diplôme</span>
-                      </div>
-                    </TabsTrigger>
-                    <TabsTrigger value="apparence" className="py-2">
-                      <div className="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-y-0 sm:space-x-1">
-                        <Palette className="h-4 w-4" /> 
-                        <span className="text-xs sm:text-sm">Apparence</span>
-                      </div>
-                    </TabsTrigger>
-                    <TabsTrigger value="etude" className="py-2">
-                      <div className="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-y-0 sm:space-x-1">
-                        <PenTool className="h-4 w-4" /> 
-                        <span className="text-xs sm:text-sm">Étude</span>
-                      </div>
-                    </TabsTrigger>
-                    <TabsTrigger value="notification" className="py-2">
-                      <div className="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-y-0 sm:space-x-1">
-                        <BellRing className="h-4 w-4" /> 
-                        <span className="text-xs sm:text-sm">Notif.</span>
-                      </div>
-                    </TabsTrigger>
+                    {['diplome', 'apparence', 'etude', 'notification'].map((tab, index) => {
+                      const labels = ['Diplôme', 'Apparence', 'Étude', 'Notif.'];
+                      const icons = [<BookOpen className="h-4 w-4" />, <Palette className="h-4 w-4" />, <PenTool className="h-4 w-4" />, <BellRing className="h-4 w-4" />];
+                      
+                      return (
+                        <TabsTrigger 
+                          key={tab} 
+                          value={tab} 
+                          className="py-2 relative overflow-hidden data-[state=active]:text-app-blue-dark data-[state=active]:font-semibold"
+                        >
+                          <div className="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-y-0 sm:space-x-1">
+                            {icons[index]}
+                            <span className="text-xs sm:text-sm">{labels[index]}</span>
+                          </div>
+                          <motion.div 
+                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-app-blue-medium"
+                            initial={{ scaleX: 0 }}
+                            animate={{ 
+                              scaleX: tab === "diplome" ? 1 : 0,
+                              opacity: tab === "diplome" ? 1 : 0
+                            }}
+                            transition={{ duration: 0.3 }}
+                            data-state="active"
+                          />
+                        </TabsTrigger>
+                      );
+                    })}
                   </TabsList>
                   
                   <TabsContent value="diplome" className="pt-4 px-4 pb-6 space-y-6">
                     <div>
                       <h3 className="text-lg font-medium mb-4">Diplôme à réviser</h3>
                       
-                      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className={`grid grid-cols-1 ${isMobile ? 'grid-cols-2' : 'md:grid-cols-3'} gap-4`}>
                         {allDiplomas.map((diploma) => (
                           <motion.div 
                             key={diploma.id}
@@ -284,7 +379,7 @@ const Settings = () => {
                         </Button>
                       </div>
                       
-                      {/* Sélection des spécialités du baccalauréat */}
+                      {/* Sélection des spécialités du baccalauréat avec un design plus fun et éducatif */}
                       {selectedDiplome === 'baccalaureat' && (
                         <motion.div 
                           className="mt-6 border-t pt-4"
@@ -292,31 +387,97 @@ const Settings = () => {
                           animate={{ opacity: 1, height: 'auto' }}
                           transition={{ duration: 0.3 }}
                         >
-                          <h3 className="text-lg font-medium mb-3">Mes spécialités</h3>
-                          <p className="text-sm text-gray-500 mb-4">
-                            Sélectionnez vos spécialités pour personnaliser votre contenu d'entraînement.
-                          </p>
+                          <div className="flex items-center mb-3">
+                            <Sparkles className="h-5 w-5 text-yellow-500 mr-2" />
+                            <h3 className="text-lg font-medium">Mes spécialités</h3>
+                          </div>
                           
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                            {bacSpecialities.map((speciality) => (
-                              <div 
-                                key={speciality}
-                                className="flex items-center space-x-2"
-                              >
-                                <Checkbox 
-                                  id={`speciality-${speciality}`}
-                                  checked={selectedSpecialities.includes(speciality)}
-                                  onCheckedChange={() => toggleSpeciality(speciality)}
-                                  className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
-                                />
-                                <Label 
-                                  htmlFor={`speciality-${speciality}`}
-                                  className="cursor-pointer"
-                                >
-                                  {speciality}
-                                </Label>
+                          <div className="bg-gradient-to-r from-blue-50 to-indigo-50 p-4 rounded-lg mb-4">
+                            <p className="text-sm text-gray-700 italic">
+                              Sélectionnez vos spécialités pour personnaliser votre contenu d'entraînement. 
+                              Seules les matières du tronc commun et vos spécialités sélectionnées apparaîtront dans vos exercices.
+                            </p>
+                          </div>
+                          
+                          {categories.map((category) => (
+                            <div key={category} className="mb-4">
+                              <h4 className="text-md font-medium mb-2 bg-gray-100 py-1 px-2 rounded-md">
+                                {category}
+                              </h4>
+                              <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-2`}>
+                                {groupedSpecialities[category].map((speciality) => (
+                                  <motion.div 
+                                    key={speciality.id}
+                                    className={`p-3 rounded-lg border-2 ${
+                                      selectedSpecialities.includes(speciality.id)
+                                        ? `${speciality.color} border-opacity-100 shadow-sm`
+                                        : 'border-gray-200 hover:border-gray-300'
+                                    } transition-all`}
+                                    whileHover={{ y: -2 }}
+                                    whileTap={{ scale: 0.98 }}
+                                  >
+                                    <div className="flex items-start">
+                                      <div 
+                                        className="flex items-center justify-center mr-3"
+                                        onClick={() => toggleSpeciality(speciality.id)}
+                                      >
+                                        <Checkbox 
+                                          id={`speciality-${speciality.id}`}
+                                          checked={selectedSpecialities.includes(speciality.id)}
+                                          onCheckedChange={() => toggleSpeciality(speciality.id)}
+                                          className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
+                                        />
+                                      </div>
+                                      <div
+                                        className="flex-1 cursor-pointer"
+                                        onClick={() => toggleSpeciality(speciality.id)}
+                                      >
+                                        <div className="flex items-center">
+                                          <span className="text-2xl mr-2">{speciality.icon}</span>
+                                          <Label 
+                                            htmlFor={`speciality-${speciality.id}`}
+                                            className="font-medium"
+                                          >
+                                            {speciality.id}
+                                          </Label>
+                                        </div>
+                                        <p className="text-xs text-gray-500 mt-1">
+                                          {speciality.description}
+                                        </p>
+                                      </div>
+                                    </div>
+                                  </motion.div>
+                                ))}
                               </div>
-                            ))}
+                            </div>
+                          ))}
+                          
+                          <div className="flex justify-between mt-4">
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => setSelectedSpecialities([])}
+                              className="text-gray-600"
+                            >
+                              Tout désélectionner
+                            </Button>
+                            <Button 
+                              variant="outline" 
+                              size="sm"
+                              onClick={() => setSelectedSpecialities(bacSpecialitiesData.map(s => s.id))}
+                              className="text-app-blue-medium"
+                            >
+                              Tout sélectionner
+                            </Button>
+                          </div>
+                          
+                          {/* Affichage du nombre de spécialités sélectionnées */}
+                          <div className="mt-4 text-center text-sm">
+                            {selectedSpecialities.length === 0 ? (
+                              <p className="text-amber-600">Aucune spécialité sélectionnée (tronc commun uniquement)</p>
+                            ) : (
+                              <p className="text-green-600">{selectedSpecialities.length} spécialité{selectedSpecialities.length > 1 ? 's' : ''} sélectionnée{selectedSpecialities.length > 1 ? 's' : ''}</p>
+                            )}
                           </div>
                         </motion.div>
                       )}

@@ -11,6 +11,7 @@ import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { NiveauType, NombreQuestions } from '@/types';
 import { ChevronDown, ChevronUp, Settings } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 // Matières selon le diplôme
 const getMatieresByDiplome = (diplome: string | undefined, selectedSpecialities: string[] = []) => {
@@ -53,32 +54,13 @@ const getMatieresByDiplome = (diplome: string | undefined, selectedSpecialities:
         'Espagnol'
       ];
       
-      // Si des spécialités sont sélectionnées, les ajouter
+      // Si des spécialités sont sélectionnées, les ajouter au tronc commun
       if (selectedSpecialities && selectedSpecialities.length > 0) {
         return [...troncCommun, ...selectedSpecialities];
       }
       
-      // Sinon, retourner toutes les matières
-      return [
-        'Philosophie',
-        'Français',
-        'Histoire-Géographie',
-        'EMC',
-        'Anglais',
-        'Espagnol',
-        'Mathématiques',
-        'Physique-Chimie',
-        'SVT',
-        'SES',
-        'HGGSP',
-        'Humanités-Littérature-Philosophie',
-        'NSI',
-        'Arts',
-        'Mathématiques expertes',
-        'Mathématiques complémentaires',
-        'LVC',
-        'Latin/Grec'
-      ];
+      // Sinon, retourner seulement le tronc commun
+      return troncCommun;
     default:
       return [
         'Philosophie',
@@ -157,11 +139,12 @@ const TrainingSelector = ({
   const { diplome } = useDiplome();
   const { selectedSpecialities } = useUserPreferences();
   const [showAllSubjects, setShowAllSubjects] = useState(false);
+  const isMobile = useIsMobile();
   
   // Obtenir les matières selon le diplôme sélectionné
   const matieres = getMatieresByDiplome(diplome, selectedSpecialities);
-  const visibleMatieres = showAllSubjects ? matieres : matieres.slice(0, 6);
-  const hasMoreSubjects = matieres.length > 6;
+  const visibleMatieres = showAllSubjects ? matieres : matieres.slice(0, isMobile ? 4 : 6);
+  const hasMoreSubjects = matieres.length > (isMobile ? 4 : 6);
   
   // Obtenir les niveaux selon le diplôme
   const niveaux = getNiveauByDiplome(diplome);
@@ -196,14 +179,14 @@ const TrainingSelector = ({
           <label className="block text-sm font-medium text-gray-700">
             Matière
           </label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className={`grid ${isMobile ? 'grid-cols-2' : 'sm:grid-cols-2 md:grid-cols-3'} gap-2`}>
             {visibleMatieres.map((m) => (
               <motion.button
                 key={m}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setMatiere(m)}
-                className={`p-3 h-14 rounded-lg text-center text-sm transition-all flex items-center justify-center ${
+                className={`p-3 h-14 rounded-lg text-center text-xs sm:text-sm transition-all flex items-center justify-center ${
                   matiere === m
                     ? 'bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white font-medium shadow-md'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -272,7 +255,11 @@ const TrainingSelector = ({
             >
               <TabsList className="grid grid-cols-3 w-full">
                 {niveaux.map((niv) => (
-                  <TabsTrigger key={niv.value} value={niv.value}>
+                  <TabsTrigger 
+                    key={niv.value} 
+                    value={niv.value}
+                    className="relative data-[state=active]:before:absolute data-[state=active]:before:content-[''] data-[state=active]:before:bottom-0 data-[state=active]:before:left-0 data-[state=active]:before:right-0 data-[state=active]:before:h-0.5 data-[state=active]:before:bg-app-blue-medium data-[state=active]:before:animate-pulse data-[state=active]:text-app-blue-dark data-[state=active]:font-semibold"
+                  >
                     {niv.label}
                   </TabsTrigger>
                 ))}
