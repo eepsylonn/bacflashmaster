@@ -21,6 +21,7 @@ const Exam = () => {
     flipCard,
     markCorrect,
     markIncorrect,
+    nextQuestion,
     examMode,
     showResult,
     currentResult,
@@ -128,6 +129,7 @@ const Exam = () => {
                   onFlip={flipCard}
                   onCorrect={markCorrect}
                   onIncorrect={markIncorrect}
+                  onNext={nextQuestion}
                   showAnswerButtons={isFlipped}
                 />
               )}

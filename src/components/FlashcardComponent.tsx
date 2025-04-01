@@ -116,22 +116,24 @@ const FlashcardComponent = ({
                         <h3 className="text-lg font-semibold text-gray-700 mb-1">Réponse:</h3>
                         <p className="text-app-blue-dark">{flashcard.answer || "Pas de réponse disponible"}</p>
                         
-                        <div className="mt-4 flex space-x-2">
-                          <Button
-                            onClick={onCorrect}
-                            className="flex-1 bg-green-500 hover:bg-green-600 text-white"
-                          >
-                            <ThumbsUp className="h-4 w-4 mr-2" />
-                            Correct
-                          </Button>
-                          <Button
-                            onClick={onIncorrect}
-                            className="flex-1 bg-red-500 hover:bg-red-600 text-white"
-                          >
-                            <ThumbsDown className="h-4 w-4 mr-2" />
-                            Incorrect
-                          </Button>
-                        </div>
+                        {showAnswerButtons && (
+                          <div className="mt-4 flex space-x-2">
+                            <Button
+                              onClick={onCorrect}
+                              className="flex-1 bg-green-500 hover:bg-green-600 text-white"
+                            >
+                              <ThumbsUp className="h-4 w-4 mr-2" />
+                              Correct
+                            </Button>
+                            <Button
+                              onClick={onIncorrect}
+                              className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+                            >
+                              <ThumbsDown className="h-4 w-4 mr-2" />
+                              Incorrect
+                            </Button>
+                          </div>
+                        )}
                       </div>
                     ) : (
                       <div className="space-y-4">
@@ -151,7 +153,7 @@ const FlashcardComponent = ({
                   </div>
 
                   <div className="mt-6">
-                    {!isFlipped && (
+                    {(!isFlipped || !showAnswerButtons) && (
                       <Button
                         onClick={onFlip}
                         className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white"
