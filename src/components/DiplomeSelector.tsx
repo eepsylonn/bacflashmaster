@@ -67,6 +67,13 @@ const diplomes = [
 
 const DiplomeSelector = ({ onSelectDiplome, isOpen, setIsOpen }: DiplomeSelectorProps) => {
   const isMobile = useIsMobile();
+  const [isFirstSelection, setIsFirstSelection] = useState(true);
+  
+  useEffect(() => {
+    // Vérifier si c'est la première sélection
+    const hasSelectedDiplome = localStorage.getItem('diplomeSelected') === 'true';
+    setIsFirstSelection(!hasSelectedDiplome);
+  }, []);
   
   const handleSelectDiplome = (diplomeId: string) => {
     localStorage.setItem('diplomeSelected', 'true');
@@ -75,8 +82,19 @@ const DiplomeSelector = ({ onSelectDiplome, isOpen, setIsOpen }: DiplomeSelector
     setIsOpen(false);
   };
   
+  // Fonction qui gère la tentative de fermeture du dialog
+  const handleOpenChange = (open: boolean) => {
+    // Si l'utilisateur n'a jamais sélectionné de diplôme, on ne permet pas de fermer le dialog
+    if (isFirstSelection && !open) {
+      // Ne rien faire, empêche la fermeture
+      return;
+    }
+    // Sinon, on permet la fermeture normale
+    setIsOpen(open);
+  };
+  
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen} modal={true}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange} modal={true}>
       <DialogContent className="p-0 border-0 max-w-md mx-auto backdrop-blur-md">
         <Card className="border-2 border-app-blue-light overflow-hidden shadow-xl">
           <div className="bg-gradient-to-r from-app-blue-dark to-indigo-800 text-white p-4 sm:p-6">

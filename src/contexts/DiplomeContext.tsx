@@ -37,6 +37,7 @@ export function DiplomeProvider({ children }: { children: ReactNode }) {
         setShowSpecialitySelector(true);
       }
     } else {
+      // Si aucun diplôme n'a été sélectionné, montrer le sélecteur de diplôme automatiquement
       setIsFirstOpen(true);
       setIsSelectorOpen(true);
     }
@@ -49,9 +50,12 @@ export function DiplomeProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('diplomeSelected', 'true');
       setIsFirstOpen(false);
       
-      // Si le diplôme est baccalauréat, montrer le sélecteur de spécialités
-      if (newDiplome === 'baccalaureat' && localStorage.getItem('hasSelectedSpecialities') !== 'true') {
-        setShowSpecialitySelector(true);
+      // Si le diplôme est baccalauréat, montrer automatiquement le sélecteur de spécialités
+      if (newDiplome === 'baccalaureat') {
+        setIsSelectorOpen(false); // Fermer le sélecteur de diplôme d'abord
+        setTimeout(() => {
+          setShowSpecialitySelector(true); // Puis ouvrir le sélecteur de spécialités avec un léger délai
+        }, 300);
       }
     }
   };
