@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, DiplomeType } from '@/types';
+import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, NiveauType, DiplomeType } from '@/types';
 import { getFlashcards } from '@/data/flashcards';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
@@ -8,7 +8,7 @@ import { useDiplome } from '@/contexts/DiplomeContext';
 
 export const useFlashcards = () => {
   const [matiere, setMatiere] = useState<string | undefined>(undefined);
-  const [niveau, setNiveau] = useState<'premiere' | 'terminale' | undefined>(undefined);
+  const [niveau, setNiveau] = useState<NiveauType | undefined>(undefined);
   const [nombreQuestions, setNombreQuestions] = useState<NombreQuestions>(20);
   const [currentQuestions, setCurrentQuestions] = useState<Flashcard[]>([]);
   const [answeredQuestions, setAnsweredQuestions] = useState<AnsweredQuestion[]>([]);

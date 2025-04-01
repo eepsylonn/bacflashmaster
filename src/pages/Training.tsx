@@ -71,7 +71,7 @@ const Training = () => {
                 matiere={matiere}
                 setMatiere={setMatiere}
                 niveau={niveau}
-                setNiveau={(newNiveau: NiveauType) => setNiveau(newNiveau)}
+                setNiveau={setNiveau}
                 nombreQuestions={nombreQuestions}
                 setNombreQuestions={setNombreQuestions}
                 onStartTraining={startTraining}
