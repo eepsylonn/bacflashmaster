@@ -11,6 +11,7 @@ import { emcFlashcards } from './emcFlashcards';
 import { englishFlashcards } from './englishFlashcards';
 import { spanishFlashcards } from './spanishFlashcards';
 import { mathFlashcards } from './mathFlashcards';
+import { physiqueChimieFlashcards } from './physiqueChimieFlashcards';
 
 // Export all flashcards for use in other files
 export { getFlashcards } from './flashcards';
@@ -29,6 +30,7 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...emcFlashcards,
     ...englishFlashcards,
     ...spanishFlashcards,
-    ...mathFlashcards
+    ...mathFlashcards,
+    ...physiqueChimieFlashcards
   ];
 };
