@@ -104,40 +104,61 @@ export const useFlashcards = () => {
   };
 
   const markCorrect = () => {
-    setScore(score + 1);
-    if (currentIndex < currentQuestions.length) {
-      setAnsweredQuestions(prev => [
-        ...prev, 
-        { 
-          flashcard: currentQuestions[currentIndex],
-          isCorrect: true
-        }
-      ]);
-    }
-
-    // If we're at the last question, store the answer for later
+    // If it's the last question, store the answer for later
     if (currentIndex === currentQuestions.length - 1) {
       setPendingAnswer({ isCorrect: true });
+      // Immediately add the correct answer to the score and answered questions
+      setScore(score + 1);
+      if (currentIndex < currentQuestions.length) {
+        setAnsweredQuestions(prev => [
+          ...prev, 
+          { 
+            flashcard: currentQuestions[currentIndex],
+            isCorrect: true
+          }
+        ]);
+      }
     } else {
+      // For other questions, proceed as normal
+      setScore(score + 1);
+      if (currentIndex < currentQuestions.length) {
+        setAnsweredQuestions(prev => [
+          ...prev, 
+          { 
+            flashcard: currentQuestions[currentIndex],
+            isCorrect: true
+          }
+        ]);
+      }
       nextQuestion();
     }
   };
 
   const markIncorrect = () => {
-    if (currentIndex < currentQuestions.length) {
-      setAnsweredQuestions(prev => [
-        ...prev, 
-        { 
-          flashcard: currentQuestions[currentIndex],
-          isCorrect: false
-        }
-      ]);
-    }
-
-    // If we're at the last question, store the answer for later
+    // If it's the last question, store the answer for later
     if (currentIndex === currentQuestions.length - 1) {
       setPendingAnswer({ isCorrect: false });
+      // Add the incorrect answer to answered questions (don't change score)
+      if (currentIndex < currentQuestions.length) {
+        setAnsweredQuestions(prev => [
+          ...prev, 
+          { 
+            flashcard: currentQuestions[currentIndex],
+            isCorrect: false
+          }
+        ]);
+      }
     } else {
+      // For other questions, proceed as normal
+      if (currentIndex < currentQuestions.length) {
+        setAnsweredQuestions(prev => [
+          ...prev, 
+          { 
+            flashcard: currentQuestions[currentIndex],
+            isCorrect: false
+          }
+        ]);
+      }
       nextQuestion();
     }
   };
@@ -166,17 +187,9 @@ export const useFlashcards = () => {
   };
 
   const finishTraining = () => {
-    // If there's a pending answer from the last question, process it
-    if (pendingAnswer) {
-      if (pendingAnswer.isCorrect) {
-        setScore(prevScore => prevScore + 1);
-      }
-      // Reset the pending answer
-      setPendingAnswer(null);
-    }
-    
-    // Calculate with the final score which may have been updated
-    const finalScore = pendingAnswer?.isCorrect ? score + 1 : score;
+    // Use the current score which includes the correct final answer if applicable
+    // No need to process pendingAnswer since we already updated the score in markCorrect
+    const finalScore = score;
     const pourcentage = (finalScore / currentQuestions.length) * 100;
     const note = (finalScore / currentQuestions.length) * 20;
     
@@ -200,6 +213,9 @@ export const useFlashcards = () => {
     
     setCurrentResult(result);
     setShowResult(true);
+    
+    // Reset the pending answer
+    setPendingAnswer(null);
   };
 
   const continueAfterResult = () => {

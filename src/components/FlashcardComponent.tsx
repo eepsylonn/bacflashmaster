@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -521,69 +522,71 @@ const FlashcardComponent = ({
                                 <p className="font-medium">{flashcard.answer || "Pas de réponse disponible"}</p>
                               </motion.div>
                               
-                              <motion.div
-                                initial={{ opacity: 0, y: 10 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: 0.5, duration: 0.4 }}
-                                className="flex space-x-2 mt-4"
-                              >
-                                <motion.div 
-                                  className="flex-1"
-                                  variants={buttonVariants}
-                                  initial="initial"
-                                  whileHover="hover"
-                                  whileTap="tap"
-                                >
-                                  <Button
-                                    onClick={handleCorrect}
-                                    className="w-full bg-green-500 hover:bg-green-600 text-white py-3 text-base"
+                              <AnimatePresence>
+                                {!answeredLastQuestion ? (
+                                  <motion.div
+                                    initial={{ opacity: 0, y: 10 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    exit={{ opacity: 0, y: -10 }}
+                                    transition={{ delay: 0.5, duration: 0.4 }}
+                                    className="flex space-x-2 mt-4"
                                   >
-                                    <ThumbsUp className="h-5 w-5 mr-2" />
-                                    Correct
-                                  </Button>
-                                </motion.div>
-                                <motion.div 
-                                  className="flex-1"
-                                  variants={buttonVariants}
-                                  initial="initial"
-                                  whileHover="hover"
-                                  whileTap="tap"
-                                >
-                                  <Button
-                                    onClick={handleIncorrect}
-                                    className="w-full bg-red-500 hover:bg-red-600 text-white py-3 text-base"
+                                    <motion.div 
+                                      className="flex-1"
+                                      variants={buttonVariants}
+                                      initial="initial"
+                                      whileHover="hover"
+                                      whileTap="tap"
+                                    >
+                                      <Button
+                                        onClick={handleCorrect}
+                                        className="w-full bg-green-500 hover:bg-green-600 text-white py-3 text-base"
+                                      >
+                                        <ThumbsUp className="h-5 w-5 mr-2" />
+                                        Correct
+                                      </Button>
+                                    </motion.div>
+                                    <motion.div 
+                                      className="flex-1"
+                                      variants={buttonVariants}
+                                      initial="initial"
+                                      whileHover="hover"
+                                      whileTap="tap"
+                                    >
+                                      <Button
+                                        onClick={handleIncorrect}
+                                        className="w-full bg-red-500 hover:bg-red-600 text-white py-3 text-base"
+                                      >
+                                        <ThumbsDown className="h-5 w-5 mr-2" />
+                                        Incorrect
+                                      </Button>
+                                    </motion.div>
+                                  </motion.div>
+                                ) : (
+                                  <motion.div 
+                                    className="w-full mt-4"
+                                    initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    transition={{ delay: 0.3, duration: 0.4, type: "spring" }}
+                                    variants={buttonVariants}
+                                    whileHover="hover"
+                                    whileTap="tap"
+                                    animate={{ 
+                                      scale: [1, 1.05, 1],
+                                      y: [10, 0]
+                                    }}
+                                    key="finish-button"
                                   >
-                                    <ThumbsDown className="h-5 w-5 mr-2" />
-                                    Incorrect
-                                  </Button>
-                                </motion.div>
-                              </motion.div>
-                              
-                              {isLastQuestion && (
-                                <motion.div 
-                                  className="w-full mt-4"
-                                  variants={buttonVariants}
-                                  initial="initial"
-                                  whileHover="hover"
-                                  whileTap="tap"
-                                  animate={{ 
-                                    scale: [1, 1.05, 1],
-                                    y: [10, 0]
-                                  }}
-                                  transition={{ 
-                                    scale: { repeat: 3, duration: 0.5 },
-                                    y: { duration: 0.3 }
-                                  }}
-                                >
-                                  <Button
-                                    onClick={finishTraining}
-                                    className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-4 text-lg shadow-lg"
-                                  >
-                                    <CheckSquare2 className="h-5 w-5 mr-2" />
-                                    Finir le test
-                                  </Button>
-                                </motion.div>
-                              )}
+                                    <Button
+                                      onClick={finishTraining}
+                                      className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-4 text-lg shadow-lg"
+                                    >
+                                      <CheckSquare2 className="h-5 w-5 mr-2" />
+                                      Finir le test
+                                    </Button>
+                                  </motion.div>
+                                )}
+                              </AnimatePresence>
                             </motion.div>
                           </div>
                         </motion.div>
