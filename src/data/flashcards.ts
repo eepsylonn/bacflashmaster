@@ -302,6 +302,7 @@ export const getFlashcards = (
     filteredFlashcards = filteredFlashcards.filter(card => card.matiere === matiere);
   }
 
+  // Now niveau can be 'both' as it's part of NiveauType
   if (niveau && niveau !== 'both') {
     filteredFlashcards = filteredFlashcards.filter(card => card.niveau === niveau);
   }
