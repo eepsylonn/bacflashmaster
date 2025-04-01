@@ -46,28 +46,49 @@ const History = () => {
           
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <Tabs defaultValue="all" value={filter} onValueChange={(v) => setFilter(v as any)}>
-              <TabsList className="w-full mb-6">
-                <TabsTrigger value="all" className="flex-1">
+              <TabsList className="w-full mb-6 p-1 rounded-lg overflow-hidden grid grid-cols-3">
+                <TabsTrigger value="all">
                   Tout
                 </TabsTrigger>
-                <TabsTrigger value="entrainement" className="flex-1">
+                <TabsTrigger value="entrainement">
                   Entraînements
                 </TabsTrigger>
-                <TabsTrigger value="examen" className="flex-1">
+                <TabsTrigger value="examen">
                   Examens
                 </TabsTrigger>
               </TabsList>
               
               <TabsContent value="all" className="space-y-4">
-                <HistoryList history={filteredHistory} onItemClick={handleItemClick} />
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <HistoryList history={filteredHistory} onItemClick={handleItemClick} />
+                </motion.div>
               </TabsContent>
               
               <TabsContent value="entrainement" className="space-y-4">
-                <HistoryList history={filteredHistory} onItemClick={handleItemClick} />
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <HistoryList history={filteredHistory} onItemClick={handleItemClick} />
+                </motion.div>
               </TabsContent>
               
               <TabsContent value="examen" className="space-y-4">
-                <HistoryList history={filteredHistory} onItemClick={handleItemClick} />
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  <HistoryList history={filteredHistory} onItemClick={handleItemClick} />
+                </motion.div>
               </TabsContent>
             </Tabs>
             

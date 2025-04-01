@@ -39,18 +39,35 @@ const TabsTrigger = React.forwardRef<
     </span>
     {props["data-state"] === "active" && (
       <motion.div
-        className="absolute inset-0 rounded-sm bg-background shadow-sm"
+        className="absolute inset-0 rounded-sm bg-background shadow-md"
         layoutId="tab-indicator"
         transition={{ 
           type: "spring", 
-          bounce: 0.15, 
-          duration: 0.5 
+          bounce: 0.2, 
+          duration: 0.6 
+        }}
+        initial={{ opacity: 0 }}
+        animate={{ 
+          opacity: 1,
+          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" 
         }}
         style={{ 
           position: "absolute",
-          zIndex: -1
+          zIndex: 0
         }}
-      />
+      >
+        <motion.div 
+          className="absolute inset-0 bg-gradient-to-r from-app-blue-light/40 to-indigo-400/40 rounded-sm"
+          animate={{
+            opacity: [0.5, 0.8, 0.5],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
+      </motion.div>
     )}
   </TabsPrimitive.Trigger>
 ))

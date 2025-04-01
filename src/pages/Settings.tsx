@@ -9,8 +9,8 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
-import { Settings as SettingsIcon, Save, RotateCcw, BookOpen, PenTool, BellRing, Palette, EyeOff, Sun, Moon, GraduationCap, BookOpenText } from 'lucide-react';
-import { motion } from 'framer-motion';
+import { Settings as SettingsIcon, Save, RotateCcw, BookOpen, PenTool, BellRing, Palette, EyeOff, Sun, Moon, GraduationCap, BookOpenText, ChevronDown, ChevronUp, Globe, BookmarkCheck } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 
 const Settings = () => {
@@ -22,6 +22,7 @@ const Settings = () => {
   const [cardsPerDay, setCardsPerDay] = useState<number>(Number(localStorage.getItem('cardsPerDay') || 20));
   const [hideAnsweredCards, setHideAnsweredCards] = useState<boolean>(localStorage.getItem('hideAnsweredCards') === 'true');
   const [writeAnswers, setWriteAnswers] = useState<boolean>(localStorage.getItem('writeAnswers') === 'true');
+  const [showMoreDiplomas, setShowMoreDiplomas] = useState<boolean>(false);
   const { toast } = useToast();
 
   useEffect(() => {
@@ -68,6 +69,63 @@ const Settings = () => {
     window.location.reload();
   };
 
+  // Liste complète des diplômes disponibles
+  const mainDiplomas = [
+    {
+      id: 'baccalaureat',
+      title: 'Baccalauréat',
+      description: 'Programme de Première et Terminale',
+      icon: <GraduationCap className="h-5 w-5" />
+    },
+    {
+      id: 'toeic',
+      title: 'TOEIC',
+      description: 'Test d\'anglais international',
+      icon: <BookOpen className="h-5 w-5" />
+    },
+    {
+      id: 'tage-mage',
+      title: 'TAGE MAGE',
+      description: 'Test d\'aptitude aux études de gestion',
+      icon: <PenTool className="h-5 w-5" />
+    }
+  ];
+
+  const extraDiplomas = [
+    {
+      id: 'toefl',
+      title: 'TOEFL',
+      description: 'Test d\'anglais langue étrangère',
+      icon: <Globe className="h-5 w-5" />
+    },
+    {
+      id: 'ielts',
+      title: 'IELTS',
+      description: 'Système international de test de langue anglaise',
+      icon: <BookmarkCheck className="h-5 w-5" />
+    },
+    {
+      id: 'cambridge',
+      title: 'Cambridge',
+      description: 'Examens d\'anglais de Cambridge',
+      icon: <BookOpen className="h-5 w-5" />
+    },
+    {
+      id: 'gmat',
+      title: 'GMAT',
+      description: 'Test d\'admission aux études de gestion',
+      icon: <PenTool className="h-5 w-5" />
+    },
+    {
+      id: 'brevet',
+      title: 'Brevet',
+      description: 'Diplôme national du brevet',
+      icon: <GraduationCap className="h-5 w-5" />
+    }
+  ];
+
+  const allDiplomas = [...mainDiplomas, ...(showMoreDiplomas ? extraDiplomas : [])];
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 dark:text-white">
       <Header />
@@ -92,22 +150,30 @@ const Settings = () => {
               
               <CardContent className="p-0">
                 <Tabs defaultValue="diplome" className="w-full">
-                  <TabsList className="w-full grid grid-cols-4 rounded-none">
-                    <TabsTrigger value="diplome" className="flex flex-col sm:flex-row items-center justify-center gap-1 h-auto py-2">
-                      <BookOpen className="h-4 w-4" /> 
-                      <span className="text-xs sm:text-sm">Diplôme</span>
+                  <TabsList className="w-full grid grid-cols-4 rounded-none h-auto">
+                    <TabsTrigger value="diplome" className="py-2">
+                      <div className="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-y-0 sm:space-x-1">
+                        <BookOpen className="h-4 w-4" /> 
+                        <span className="text-xs sm:text-sm">Diplôme</span>
+                      </div>
                     </TabsTrigger>
-                    <TabsTrigger value="apparence" className="flex flex-col sm:flex-row items-center justify-center gap-1 h-auto py-2">
-                      <Palette className="h-4 w-4" /> 
-                      <span className="text-xs sm:text-sm">Apparence</span>
+                    <TabsTrigger value="apparence" className="py-2">
+                      <div className="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-y-0 sm:space-x-1">
+                        <Palette className="h-4 w-4" /> 
+                        <span className="text-xs sm:text-sm">Apparence</span>
+                      </div>
                     </TabsTrigger>
-                    <TabsTrigger value="etude" className="flex flex-col sm:flex-row items-center justify-center gap-1 h-auto py-2">
-                      <PenTool className="h-4 w-4" /> 
-                      <span className="text-xs sm:text-sm">Étude</span>
+                    <TabsTrigger value="etude" className="py-2">
+                      <div className="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-y-0 sm:space-x-1">
+                        <PenTool className="h-4 w-4" /> 
+                        <span className="text-xs sm:text-sm">Étude</span>
+                      </div>
                     </TabsTrigger>
-                    <TabsTrigger value="notification" className="flex flex-col sm:flex-row items-center justify-center gap-1 h-auto py-2">
-                      <BellRing className="h-4 w-4" /> 
-                      <span className="text-xs sm:text-sm">Notif.</span>
+                    <TabsTrigger value="notification" className="py-2">
+                      <div className="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-y-0 sm:space-x-1">
+                        <BellRing className="h-4 w-4" /> 
+                        <span className="text-xs sm:text-sm">Notif.</span>
+                      </div>
                     </TabsTrigger>
                   </TabsList>
                   
@@ -116,55 +182,57 @@ const Settings = () => {
                       <h3 className="text-lg font-medium mb-4">Diplôme à réviser</h3>
                       
                       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                        {['baccalaureat', 'toeic', 'tage-mage'].map((diplomeName) => {
-                          const diplomeInfo = {
-                            'baccalaureat': {
-                              title: 'Baccalauréat',
-                              description: 'Programme de Première et Terminale',
-                              icon: <GraduationCap className="h-5 w-5" />
-                            },
-                            'toeic': {
-                              title: 'TOEIC',
-                              description: 'Test d\'anglais international',
-                              icon: <BookOpen className="h-5 w-5" />
-                            },
-                            'tage-mage': {
-                              title: 'TAGE MAGE',
-                              description: 'Test d\'aptitude aux études de gestion',
-                              icon: <PenTool className="h-5 w-5" />
-                            }
-                          }[diplomeName];
-                          
-                          return (
-                            <motion.div 
-                              key={diplomeName}
-                              whileHover={{ scale: 1.02 }}
-                              whileTap={{ scale: 0.98 }}
-                              className={`border-2 rounded-lg p-4 cursor-pointer transition-all ${selectedDiplome === diplomeName ? 'border-app-blue-medium bg-app-blue-light/10' : 'border-gray-200 hover:border-gray-300'}`}
-                              onClick={() => setSelectedDiplome(diplomeName)}
-                            >
-                              <div className="flex flex-col items-center text-center">
-                                <div className={`h-12 w-12 rounded-full flex items-center justify-center mb-2 ${selectedDiplome === diplomeName ? 'bg-app-blue-medium text-white' : 'bg-gray-100 text-gray-600'}`}>
-                                  {diplomeInfo.icon}
-                                </div>
-                                <h4 className="font-semibold">{diplomeInfo.title}</h4>
-                                <p className="text-sm text-gray-500 mt-1">{diplomeInfo.description}</p>
+                        {allDiplomas.map((diploma) => (
+                          <motion.div 
+                            key={diploma.id}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
+                            transition={{ duration: 0.3 }}
+                            whileHover={{ scale: 1.02 }}
+                            whileTap={{ scale: 0.98 }}
+                            className={`border-2 rounded-lg p-4 cursor-pointer transition-all relative ${selectedDiplome === diploma.id ? 'border-app-blue-medium bg-app-blue-light/10' : 'border-gray-200 hover:border-gray-300'}`}
+                            onClick={() => setSelectedDiplome(diploma.id)}
+                          >
+                            <div className="flex flex-col items-center text-center">
+                              <div className={`h-12 w-12 rounded-full flex items-center justify-center mb-2 ${selectedDiplome === diploma.id ? 'bg-app-blue-medium text-white' : 'bg-gray-100 text-gray-600'}`}>
+                                {diploma.icon}
                               </div>
-                              
-                              {selectedDiplome === diplomeName && (
-                                <motion.div
-                                  initial={{ scale: 0 }}
-                                  animate={{ scale: 1 }}
-                                  className="absolute bottom-0 right-0 bg-app-blue-medium text-white rounded-full p-1"
-                                  style={{ width: 20, height: 20, right: 8, bottom: 8 }}
-                                ></motion.div>
-                              )}
-                            </motion.div>
-                          );
-                        })}
+                              <h4 className="font-semibold">{diploma.title}</h4>
+                              <p className="text-sm text-gray-500 mt-1">{diploma.description}</p>
+                            </div>
+                            
+                            {selectedDiplome === diploma.id && (
+                              <motion.div
+                                initial={{ scale: 0 }}
+                                animate={{ scale: 1 }}
+                                className="absolute bottom-0 right-0 bg-app-blue-medium text-white rounded-full p-1 flex items-center justify-center"
+                                style={{ width: 20, height: 20, right: 8, bottom: 8 }}
+                              />
+                            )}
+                          </motion.div>
+                        ))}
                       </div>
                       
-                      <div className="mt-4">
+                      <div className="mt-4 space-y-2">
+                        <Button 
+                          onClick={() => setShowMoreDiplomas(!showMoreDiplomas)}
+                          variant="outline" 
+                          className="w-full flex items-center justify-center"
+                        >
+                          {showMoreDiplomas ? (
+                            <>
+                              <ChevronUp className="h-4 w-4 mr-2" />
+                              Afficher moins
+                            </>
+                          ) : (
+                            <>
+                              <ChevronDown className="h-4 w-4 mr-2" />
+                              Afficher plus de diplômes
+                            </>
+                          )}
+                        </Button>
+                        
                         <Button 
                           onClick={showDiplomeSelector}
                           variant="outline" 
@@ -233,15 +301,15 @@ const Settings = () => {
                           <Slider
                             id="cards-per-day"
                             min={5}
-                            max={50}
+                            max={100}
                             step={5}
                             value={[cardsPerDay]}
                             onValueChange={(values) => setCardsPerDay(values[0])}
                           />
                           <div className="flex justify-between text-sm text-gray-500">
                             <span>5</span>
-                            <span>25</span>
                             <span>50</span>
+                            <span>100</span>
                           </div>
                         </div>
                         

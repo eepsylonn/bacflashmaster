@@ -1,7 +1,7 @@
 
 import { Progress } from '@/components/ui/progress';
 import { motion, AnimatePresence } from 'framer-motion';
-import { CheckCircle, XCircle } from 'lucide-react';
+import { CheckCircle, XCircle, Award } from 'lucide-react';
 
 interface TrainingProgressProps {
   currentIndex: number;
@@ -12,9 +12,10 @@ interface TrainingProgressProps {
 const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgressProps) => {
   const progress = Math.round((currentIndex / totalQuestions) * 100);
   const incorrect = currentIndex - score;
+  const successRate = currentIndex > 0 ? Math.round((score / currentIndex) * 100) : 0;
   
   return (
-    <div className="mb-8">
+    <div className="mb-8 relative">
       <div className="flex justify-between items-center mb-2">
         <motion.div 
           className="text-gray-700 font-medium"
@@ -34,7 +35,7 @@ const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgr
         </motion.div>
       </div>
       
-      <div className="mb-4">
+      <div className="mb-4 relative">
         <motion.div
           initial={{ scaleX: 0 }}
           animate={{ scaleX: 1 }}
@@ -43,6 +44,43 @@ const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgr
         >
           <Progress value={progress} className="h-3" />
         </motion.div>
+        
+        {progress > 0 && progress < 100 && (
+          <motion.div 
+            className="absolute top-0 h-3 flex items-center justify-center"
+            initial={{ opacity: 0 }}
+            animate={{ 
+              opacity: 1, 
+              left: `${progress}%`,
+            }}
+            style={{ transform: 'translateX(-50%)' }}
+          >
+            <motion.div 
+              className="w-5 h-5 bg-app-blue-medium rounded-full border-2 border-white flex items-center justify-center"
+              animate={{ 
+                scale: [1, 1.2, 1],
+              }}
+              transition={{ 
+                duration: 1.5, 
+                repeat: Infinity, 
+                ease: "easeInOut" 
+              }}
+            >
+              <motion.div 
+                className="w-2 h-2 bg-white rounded-full"
+                animate={{ 
+                  scale: [1, 0.8, 1],
+                }}
+                transition={{ 
+                  duration: 1.5, 
+                  repeat: Infinity, 
+                  ease: "easeInOut",
+                  delay: 0.2
+                }}
+              />
+            </motion.div>
+          </motion.div>
+        )}
       </div>
       
       <div className="flex justify-between">
@@ -74,13 +112,26 @@ const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgr
       <AnimatePresence>
         {currentIndex > 0 && (
           <motion.div 
-            className="flex justify-center mt-3"
+            className="flex justify-center mt-3 items-center"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
           >
-            <div className="text-sm text-gray-500">
-              Taux de réussite: <span className="font-medium">{Math.round((score / currentIndex) * 100)}%</span>
+            <Award className={`h-4 w-4 mr-1 ${successRate >= 70 ? 'text-yellow-500' : 'text-gray-400'}`} />
+            <div className="text-sm text-gray-600">
+              Taux de réussite: 
+              <motion.span 
+                className={`font-medium ml-1 ${
+                  successRate >= 80 ? 'text-green-600' : 
+                  successRate >= 60 ? 'text-blue-600' : 
+                  successRate >= 40 ? 'text-orange-600' : 'text-red-600'
+                }`}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                key={successRate}
+              >
+                {successRate}%
+              </motion.span>
             </div>
           </motion.div>
         )}

@@ -2,7 +2,7 @@
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import DiplomeSelector from '@/components/DiplomeSelector';
 
-type DiplomeType = 'baccalaureat' | 'toeic' | 'tage-mage' | undefined;
+type DiplomeType = 'baccalaureat' | 'toeic' | 'tage-mage' | 'toefl' | 'ielts' | 'cambridge' | 'gmat' | 'brevet' | undefined;
 
 interface DiplomeContextType {
   diplome: DiplomeType;

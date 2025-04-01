@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Card } from '@/components/ui/card';
 import { motion } from 'framer-motion';
-import { GraduationCap, BookOpenCheck, BrainCircuit } from 'lucide-react';
+import { GraduationCap, BookOpenCheck, BrainCircuit, Globe, Library, BookmarkCheck } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
 import Mascot from '@/components/Mascot';
@@ -32,6 +32,36 @@ const diplomes = [
     nom: 'TAGE MAGE', 
     icon: <BrainCircuit className="h-6 w-6" />,
     description: 'Test d\'aptitude aux études de gestion'
+  },
+  { 
+    id: 'toefl',
+    nom: 'TOEFL', 
+    icon: <Globe className="h-6 w-6" />,
+    description: 'Test d\'anglais langue étrangère'
+  },
+  { 
+    id: 'ielts',
+    nom: 'IELTS', 
+    icon: <BookmarkCheck className="h-6 w-6" />,
+    description: 'Système international de test de langue anglaise'
+  },
+  { 
+    id: 'cambridge',
+    nom: 'Cambridge', 
+    icon: <Library className="h-6 w-6" />,
+    description: 'Examens d\'anglais de Cambridge'
+  },
+  { 
+    id: 'gmat',
+    nom: 'GMAT', 
+    icon: <BrainCircuit className="h-6 w-6" />,
+    description: 'Test d\'admission aux études de gestion'
+  },
+  { 
+    id: 'brevet',
+    nom: 'Brevet', 
+    icon: <GraduationCap className="h-6 w-6" />,
+    description: 'Diplôme national du brevet'
   }
 ];
 
@@ -59,11 +89,14 @@ const DiplomeSelector = ({ onSelectDiplome, isOpen, setIsOpen }: DiplomeSelector
             </p>
           </div>
           
-          <div className="p-4 sm:p-6">
+          <div className="p-4 sm:p-6 max-h-[60vh] overflow-y-auto">
             <div className="grid gap-3 sm:gap-4">
-              {diplomes.map((diplome) => (
+              {diplomes.map((diplome, index) => (
                 <motion.button
                   key={diplome.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.3, delay: index * 0.05 }}
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className="p-3 sm:p-4 rounded-lg bg-white border-2 border-gray-200 hover:border-app-blue-medium flex items-center transition-all"
