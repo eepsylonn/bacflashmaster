@@ -5,6 +5,7 @@ import { Card } from '@/components/ui/card';
 import { motion } from 'framer-motion';
 import { GraduationCap, BookOpenCheck, BrainCircuit } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { cn } from '@/lib/utils';
 
 interface DiplomeSelectorProps {
   onSelectDiplome: (diplome: string) => void;
@@ -45,7 +46,7 @@ const DiplomeSelector = ({ onSelectDiplome, isOpen, setIsOpen }: DiplomeSelector
   
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen} modal={true}>
-      <DialogContent className="p-0 border-0 max-w-md mx-auto" overlayClassName="backdrop-blur-md">
+      <DialogContent className="p-0 border-0 max-w-md mx-auto backdrop-blur-md">
         <Card className="border-2 border-app-blue-light overflow-hidden shadow-xl">
           <div className="bg-gradient-to-r from-app-blue-dark to-indigo-800 text-white p-4 sm:p-6">
             <div className="flex items-center justify-center mb-4">
