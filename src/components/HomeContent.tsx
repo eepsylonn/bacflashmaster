@@ -1,3 +1,4 @@
+
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -103,7 +104,7 @@ const HomeContent = () => {
                       Entraînement
                     </Link>
                   </Button>
-                  <Button asChild variant="outline" className="border-white text-white hover:bg-white/10">
+                  <Button asChild variant="outline" className="border-white text-white hover:bg-white/10 bg-gradient-to-r from-amber-500 to-pink-500 border-none">
                     <Link to="/examen" className="flex items-center">
                       <History className="h-4 w-4 mr-2" />
                       Examen

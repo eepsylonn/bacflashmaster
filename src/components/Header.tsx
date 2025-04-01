@@ -5,6 +5,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { Settings } from 'lucide-react';
 
 const Header = () => {
   const location = useLocation();
@@ -20,7 +21,6 @@ const Header = () => {
     { value: '/examen', label: 'Examen' },
     { value: '/historique', label: 'Historique' },
     { value: '/statistiques', label: 'Statistiques' },
-    { value: '/reglages', label: 'Réglages' }
   ];
   
   // Effet pour définir l'onglet actif en fonction de la route
@@ -191,6 +191,29 @@ const Header = () => {
           </div>
         </div>
       </div>
+      
+      {/* Bouton Réglages flottant */}
+      <motion.div 
+        className="fixed bottom-6 right-6 z-50"
+        initial={{ scale: 0, rotate: -180 }}
+        animate={{ scale: 1, rotate: 0 }}
+        transition={{ type: "spring", stiffness: 260, damping: 20 }}
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+      >
+        <Link 
+          to="/reglages" 
+          className="flex items-center justify-center w-14 h-14 rounded-full bg-gradient-to-r from-amber-400 to-pink-500 text-white shadow-lg hover:shadow-xl transition-shadow"
+          aria-label="Réglages"
+        >
+          <motion.div
+            animate={{ rotate: activeTab === '/reglages' ? 180 : 0 }}
+            transition={{ duration: 0.5 }}
+          >
+            <Settings className="h-6 w-6" />
+          </motion.div>
+        </Link>
+      </motion.div>
       
       {/* Ajouter des styles pour cacher la scrollbar */}
       <style>
