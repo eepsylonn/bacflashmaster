@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ThumbsUp, ThumbsDown, ArrowRight, CheckCircle, XCircle, Sparkles, Eye, Flag } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, ArrowRight, CheckCircle, XCircle, Sparkles, Eye, Flag, CheckSquare2 } from 'lucide-react';
 import { Flashcard } from '@/types';
 import Mascot from '@/components/Mascot';
 import WriteAnswer from '@/components/WriteAnswer';
@@ -37,6 +37,7 @@ const FlashcardComponent = ({
   const [answerCorrectness, setAnswerCorrectness] = useState<boolean | null>(null);
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [showAnswer, setShowAnswer] = useState<boolean>(false);
+  const [answeredLastQuestion, setAnsweredLastQuestion] = useState<boolean>(false);
   
   // Vérifier si l'option d'écrire les réponses est activée
   useEffect(() => {
@@ -59,6 +60,7 @@ const FlashcardComponent = ({
     setAnswerCorrectness(null);
     setShowConfetti(false);
     setShowAnswer(false);
+    setAnsweredLastQuestion(false);
   }, [flashcard]);
   
   // Gestionnaire pour la soumission de réponse écrite
@@ -97,6 +99,22 @@ const FlashcardComponent = ({
     
     if (finishTraining) {
       finishTraining();
+    }
+  };
+
+  // Gestionnaire pour marquer une réponse comme correcte et enregistrer qu'on a répondu à la dernière question
+  const handleCorrect = () => {
+    onCorrect();
+    if (isLastQuestion) {
+      setAnsweredLastQuestion(true);
+    }
+  };
+
+  // Gestionnaire pour marquer une réponse comme incorrecte et enregistrer qu'on a répondu à la dernière question
+  const handleIncorrect = () => {
+    onIncorrect();
+    if (isLastQuestion) {
+      setAnsweredLastQuestion(true);
     }
   };
 
@@ -338,38 +356,60 @@ const FlashcardComponent = ({
                             </motion.div>
                           </div>
                         ) : (
-                          <div className="flex space-x-2">
-                            <motion.div 
-                              className="flex-1"
-                              variants={buttonVariants}
-                              initial="initial"
-                              whileHover="hover"
-                              whileTap="tap"
-                            >
-                              <Button
-                                onClick={onCorrect}
-                                className="w-full bg-green-500 hover:bg-green-600 text-white py-3 text-base"
+                          <>
+                            {isLastQuestion && answeredLastQuestion ? (
+                              <motion.div 
+                                className="w-full mb-4"
+                                variants={buttonVariants}
+                                initial="initial"
+                                whileHover="hover"
+                                whileTap="tap"
+                                animate={{ scale: [1, 1.05, 1] }}
+                                transition={{ repeat: 3, duration: 0.5 }}
                               >
-                                <ThumbsUp className="h-5 w-5 mr-2" />
-                                Correct
-                              </Button>
-                            </motion.div>
-                            <motion.div 
-                              className="flex-1"
-                              variants={buttonVariants}
-                              initial="initial"
-                              whileHover="hover"
-                              whileTap="tap"
-                            >
-                              <Button
-                                onClick={onIncorrect}
-                                className="w-full bg-red-500 hover:bg-red-600 text-white py-3 text-base"
-                              >
-                                <ThumbsDown className="h-5 w-5 mr-2" />
-                                Incorrect
-                              </Button>
-                            </motion.div>
-                          </div>
+                                <Button
+                                  onClick={finishTraining}
+                                  className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-4 text-lg shadow-lg"
+                                >
+                                  <CheckSquare2 className="h-5 w-5 mr-2" />
+                                  Finir le test
+                                </Button>
+                              </motion.div>
+                            ) : (
+                              <div className="flex space-x-2">
+                                <motion.div 
+                                  className="flex-1"
+                                  variants={buttonVariants}
+                                  initial="initial"
+                                  whileHover="hover"
+                                  whileTap="tap"
+                                >
+                                  <Button
+                                    onClick={handleCorrect}
+                                    className="w-full bg-green-500 hover:bg-green-600 text-white py-3 text-base"
+                                  >
+                                    <ThumbsUp className="h-5 w-5 mr-2" />
+                                    Correct
+                                  </Button>
+                                </motion.div>
+                                <motion.div 
+                                  className="flex-1"
+                                  variants={buttonVariants}
+                                  initial="initial"
+                                  whileHover="hover"
+                                  whileTap="tap"
+                                >
+                                  <Button
+                                    onClick={handleIncorrect}
+                                    className="w-full bg-red-500 hover:bg-red-600 text-white py-3 text-base"
+                                  >
+                                    <ThumbsDown className="h-5 w-5 mr-2" />
+                                    Incorrect
+                                  </Button>
+                                </motion.div>
+                              </div>
+                            )}
+                          </>
                         )}
                       </motion.div>
                     )}
@@ -545,7 +585,7 @@ const FlashcardComponent = ({
               </div>
 
               <div className="mt-6">
-                {(isFlipped && !showAnswerButtons && !hasSubmittedAnswer) && (
+                {(isFlipped && !showAnswerButtons && !hasSubmittedAnswer && !answeredLastQuestion) && (
                   <motion.div
                     variants={buttonVariants}
                     initial="initial"
@@ -568,6 +608,27 @@ const FlashcardComponent = ({
                         style={{ transformOrigin: 'left' }}
                       />
                       Retour à la question
+                    </Button>
+                  </motion.div>
+                )}
+                
+                {/* Bouton "Finir le test" pour la dernière question après avoir répondu */}
+                {(isFlipped && isLastQuestion && answeredLastQuestion && !hasSubmittedAnswer) && (
+                  <motion.div 
+                    className="w-full"
+                    variants={buttonVariants}
+                    initial="initial"
+                    whileHover="hover"
+                    whileTap="tap"
+                    animate={{ scale: [1, 1.05, 1] }}
+                    transition={{ repeat: 3, duration: 0.5 }}
+                  >
+                    <Button
+                      onClick={finishTraining}
+                      className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-4 text-lg shadow-lg"
+                    >
+                      <CheckSquare2 className="h-5 w-5 mr-2" />
+                      Finir le test
                     </Button>
                   </motion.div>
                 )}
