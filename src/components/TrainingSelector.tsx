@@ -7,20 +7,7 @@ import { MascotSlider } from '@/components/MascotSlider';
 import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
 import { useDiplome } from '@/contexts/DiplomeContext';
-
-// Importation manuelle des types requis
-type NiveauType = 'premiere' | 'terminale' | 'intermediaire' | 'avance';
-type NombreQuestions = 5 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;
-
-interface TrainingSelectorProps {
-  matiere: string | undefined;
-  setMatiere: (matiere: string) => void;
-  niveau: NiveauType | undefined;
-  setNiveau: (niveau: NiveauType | undefined) => void;
-  nombreQuestions: NombreQuestions;
-  setNombreQuestions: (nombreQuestions: NombreQuestions) => void;
-  onStartTraining: () => void;
-}
+import { NiveauType, NombreQuestions } from '@/types';
 
 // Matières selon le diplôme
 const getMatieresByDiplome = (diplome: string | undefined) => {
@@ -46,7 +33,17 @@ const getMatieresByDiplome = (diplome: string | undefined) => {
   }
 };
 
-const questionOptions: NombreQuestions[] = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+const questionOptions: NombreQuestions[] = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200];
+
+interface TrainingSelectorProps {
+  matiere: string | undefined;
+  setMatiere: (matiere: string) => void;
+  niveau: NiveauType | undefined;
+  setNiveau: (niveau: NiveauType | undefined) => void;
+  nombreQuestions: NombreQuestions;
+  setNombreQuestions: (nombreQuestions: NombreQuestions) => void;
+  onStartTraining: () => void;
+}
 
 const TrainingSelector = ({
   matiere,
