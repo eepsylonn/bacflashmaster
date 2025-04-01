@@ -9,7 +9,7 @@ import Mascot from '@/components/Mascot';
 import { useDiplome } from '@/contexts/DiplomeContext';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { NiveauType, NombreQuestions } from '@/types';
-import { ChevronDown, ChevronUp, Settings } from 'lucide-react';
+import { ChevronDown, ChevronUp, Settings, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -152,6 +152,16 @@ const TrainingSelector = ({
   const niveaux = getNiveauByDiplome(diplome);
   const defaultNiveau = niveaux[0]?.value || "both";
   
+  // Déterminer si le niveau doit être verrouillé sur "première"
+  const isFrenchBac = diplome === 'baccalaureat' && matiere === 'Français';
+  
+  // Forcer le niveau à "première" si c'est le français du bac
+  useEffect(() => {
+    if (isFrenchBac && niveau !== 'premiere') {
+      setNiveau('premiere');
+    }
+  }, [isFrenchBac, niveau, setNiveau]);
+  
   // Mettre à jour le nombre de questions lorsque le slider change
   useEffect(() => {
     const index = sliderValue[0];
@@ -195,6 +205,9 @@ const TrainingSelector = ({
                 }`}
               >
                 {m}
+                {m === 'Français' && diplome === 'baccalaureat' && (
+                  <Lock className="ml-1 h-3 w-3 opacity-70" />
+                )}
               </motion.button>
             ))}
           </div>
@@ -240,12 +253,23 @@ const TrainingSelector = ({
         
         {niveaux.length > 0 && (
           <div className="space-y-2">
-            <label className="block text-sm font-medium text-gray-700">
+            <label className="block text-sm font-medium text-gray-700 flex items-center">
               Niveau
+              {isFrenchBac && (
+                <span className="ml-2 flex items-center text-xs text-amber-600">
+                  <Lock className="mr-1 h-3 w-3" />
+                  Verrouillé sur Première pour le Français
+                </span>
+              )}
             </label>
             <Tabs 
-              defaultValue={niveau || defaultNiveau} 
+              defaultValue={isFrenchBac ? 'premiere' : (niveau || defaultNiveau)} 
               onValueChange={(value) => {
+                if (isFrenchBac) {
+                  // Ne rien faire si c'est le français du bac
+                  return;
+                }
+                
                 if (value === "both") {
                   setNiveau(undefined);
                 } else {
@@ -259,9 +283,15 @@ const TrainingSelector = ({
                   <TabsTrigger 
                     key={niv.value} 
                     value={niv.value}
-                    className="relative data-[state=active]:before:absolute data-[state=active]:before:content-[''] data-[state=active]:before:bottom-0 data-[state=active]:before:left-0 data-[state=active]:before:right-0 data-[state=active]:before:h-0.5 data-[state=active]:before:bg-app-blue-medium data-[state=active]:before:animate-pulse data-[state=active]:text-app-blue-dark data-[state=active]:font-semibold"
+                    disabled={isFrenchBac && niv.value !== 'premiere'}
+                    className={`relative data-[state=active]:before:absolute data-[state=active]:before:content-[''] data-[state=active]:before:bottom-0 data-[state=active]:before:left-0 data-[state=active]:before:right-0 data-[state=active]:before:h-0.5 data-[state=active]:before:bg-app-blue-medium data-[state=active]:before:animate-pulse data-[state=active]:text-app-blue-dark data-[state=active]:font-semibold ${
+                      isFrenchBac && niv.value !== 'premiere' ? 'cursor-not-allowed' : ''
+                    }`}
                   >
                     {niv.label}
+                    {isFrenchBac && niv.value !== 'premiere' && (
+                      <Lock className="ml-1 h-3 w-3 opacity-70" />
+                    )}
                   </TabsTrigger>
                 ))}
               </TabsList>
