@@ -25,20 +25,22 @@ TabsList.displayName = TabsPrimitive.List.displayName
 const TabsTrigger = React.forwardRef<
   React.ElementRef<typeof TabsPrimitive.Trigger>,
   React.ComponentPropsWithoutRef<typeof TabsPrimitive.Trigger>
->(({ className, ...props }, ref) => (
+>(({ className, children, ...props }, ref) => (
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "relative inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+      "relative inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-foreground",
       className
     )}
     {...props}
   >
-    {props.children}
-    <TabsPrimitive.Indicator className="z-10">
+    <div className="relative">
+      {children}
+      {/* The motion div is shown only when the tab is active */}
       <motion.div
-        className="absolute inset-0 z-10 rounded-sm bg-background shadow-sm"
         layoutId="tab-indicator"
+        className="absolute inset-0 rounded-sm bg-background shadow-sm -z-10"
+        initial={false}
         transition={{ 
           type: "spring", 
           bounce: 0.15, 
@@ -47,11 +49,19 @@ const TabsTrigger = React.forwardRef<
         style={{ 
           position: "absolute", 
           width: "100%", 
-          height: "100%", 
+          height: "100%",
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+        }}
+        data-state={props["data-state"]}
+        // Only show for active tabs
+        animate={{
+          opacity: props["data-state"] === "active" ? 1 : 0,
         }}
       />
-    </TabsPrimitive.Indicator>
-    <span className="relative z-20">{props.children}</span>
+    </div>
   </TabsPrimitive.Trigger>
 ))
 TabsTrigger.displayName = TabsPrimitive.Trigger.displayName
