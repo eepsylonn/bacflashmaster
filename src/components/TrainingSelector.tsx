@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -145,13 +146,18 @@ const TrainingSelector = ({
   const niveaux = getNiveauByDiplome(diplome);
   const defaultNiveau = niveaux[0]?.value || "both";
   
+  // Check for both special cases: French (locked to "premiere") and Philosophy (locked to "terminale")
   const isFrenchBac = diplome === 'baccalaureat' && matiere === 'Français';
+  const isPhiloBac = diplome === 'baccalaureat' && matiere === 'Philosophie';
   
   useEffect(() => {
+    // Force level to "premiere" for French, and "terminale" for Philosophy
     if (isFrenchBac && niveau !== 'premiere') {
       setNiveau('premiere');
+    } else if (isPhiloBac && niveau !== 'terminale') {
+      setNiveau('terminale');
     }
-  }, [isFrenchBac, niveau, setNiveau]);
+  }, [isFrenchBac, isPhiloBac, niveau, setNiveau]);
   
   useEffect(() => {
     const index = sliderValue[0];
@@ -247,11 +253,21 @@ const TrainingSelector = ({
                   Verrouillé sur Première pour le Français
                 </span>
               )}
+              {isPhiloBac && (
+                <span className="ml-2 flex items-center text-xs text-amber-600">
+                  <Lock className="mr-1 h-3 w-3" />
+                  Verrouillé sur Terminale pour la Philosophie
+                </span>
+              )}
             </label>
             <Tabs 
-              defaultValue={isFrenchBac ? 'premiere' : (niveau || defaultNiveau)} 
+              defaultValue={
+                isFrenchBac ? 'premiere' : 
+                isPhiloBac ? 'terminale' : 
+                (niveau || defaultNiveau)
+              } 
               onValueChange={(value) => {
-                if (isFrenchBac) {
+                if (isFrenchBac || isPhiloBac) {
                   return;
                 }
                 
@@ -268,13 +284,13 @@ const TrainingSelector = ({
                   <TabsTrigger 
                     key={niv.value} 
                     value={niv.value}
-                    disabled={isFrenchBac && niv.value !== 'premiere'}
+                    disabled={(isFrenchBac && niv.value !== 'premiere') || (isPhiloBac && niv.value !== 'terminale')}
                     className={`relative data-[state=active]:before:absolute data-[state=active]:before:content-[''] data-[state=active]:before:bottom-0 data-[state=active]:before:left-0 data-[state=active]:before:right-0 data-[state=active]:before:h-0.5 data-[state=active]:before:bg-app-blue-medium data-[state=active]:before:animate-pulse data-[state=active]:text-app-blue-dark data-[state=active]:font-semibold ${
-                      isFrenchBac && niv.value !== 'premiere' ? 'cursor-not-allowed' : ''
+                      (isFrenchBac && niv.value !== 'premiere') || (isPhiloBac && niv.value !== 'terminale') ? 'cursor-not-allowed' : ''
                     }`}
                   >
                     {niv.label}
-                    {isFrenchBac && niv.value !== 'premiere' && (
+                    {((isFrenchBac && niv.value !== 'premiere') || (isPhiloBac && niv.value !== 'terminale')) && (
                       <Lock className="ml-1 h-3 w-3 opacity-70" />
                     )}
                   </TabsTrigger>
