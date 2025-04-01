@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -571,11 +570,6 @@ const FlashcardComponent = ({
                                     variants={buttonVariants}
                                     whileHover="hover"
                                     whileTap="tap"
-                                    animate={{ 
-                                      scale: [1, 1.05, 1],
-                                      y: [10, 0]
-                                    }}
-                                    key="finish-button"
                                   >
                                     <Button
                                       onClick={finishTraining}
