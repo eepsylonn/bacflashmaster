@@ -1,3 +1,4 @@
+
 import { Flashcard } from '@/types';
 
 // Questions and answers for French for the baccalaureate
@@ -722,6 +723,167 @@ export const frenchFlashcards: Flashcard[] = [
     id: 'fr-88',
     question: 'À qui La Fontaine a-t-il dédié son premier recueil de Fables?',
     answer: 'Au Dauphin, le fils de Louis XIV.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  // Ajout de 20 nouvelles questions pour le français baccalauréat
+  {
+    id: 'fr-89',
+    question: 'Qu\'est-ce que le courant des Lumières?',
+    answer: 'Mouvement intellectuel du XVIIIe siècle qui prône la raison, le progrès, la liberté et s\'oppose à l\'obscurantisme et aux superstitions. Ses représentants principaux sont Voltaire, Rousseau, Diderot et Montesquieu.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-90',
+    question: 'Qu\'est-ce que l\'Encyclopédie et qui en sont les principaux auteurs?',
+    answer: 'Ouvrage collectif dirigé par Diderot et d\'Alembert au XVIIIe siècle, visant à rassembler et diffuser les connaissances et savoirs de l\'époque dans une perspective critique et progressiste.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-91',
+    question: 'Qu\'est-ce qu\'un registre littéraire?',
+    answer: 'C\'est un ensemble de procédés stylistiques visant à produire un effet particulier et à susciter une émotion spécifique chez le lecteur (pathétique, comique, tragique, lyrique, épique, etc.).',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-92',
+    question: 'Quels sont les principaux registres littéraires?',
+    answer: 'Comique, tragique, pathétique, lyrique, épique, satirique, fantastique, réaliste, didactique et polémique.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-93',
+    question: 'Qu\'est-ce que le registre lyrique?',
+    answer: 'Expression des sentiments et émotions personnels, utilisation du "je", thèmes comme l\'amour, la nature, la fuite du temps, la mort, et usage d\'images et de musicalité.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-94',
+    question: 'Qu\'est-ce que l\'écriture d\'invention au baccalauréat?',
+    answer: 'Exercice qui consiste à produire un texte en s\'inspirant d\'un ou plusieurs textes du corpus, en respectant des consignes précises (genre, registre, tonalité) et en mobilisant la culture littéraire.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-95',
+    question: 'Qu\'est-ce qu\'un incipit?',
+    answer: 'Premières lignes ou premier paragraphe d\'une œuvre littéraire, qui a pour fonction d\'informer le lecteur, de capter son attention et d\'installer l\'univers du récit.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-96',
+    question: 'Qu\'est-ce qu\'un épilogue?',
+    answer: 'Dernière partie d\'une œuvre littéraire qui conclut l\'histoire, souvent en évoquant le devenir des personnages après les événements principaux du récit.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-97',
+    question: 'Qu\'est-ce que la métalepse?',
+    answer: 'Procédé narratif qui consiste à transgresser les niveaux de narration, comme quand un narrateur s\'adresse directement au lecteur ou quand un personnage prend conscience de sa condition fictive.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-98',
+    question: 'Quelle est la différence entre une autobiographie et des mémoires?',
+    answer: 'Une autobiographie est centrée sur la vie personnelle de l\'auteur, tandis que les mémoires s\'attachent davantage aux événements historiques auxquels l\'auteur a assisté ou participé.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-99',
+    question: 'Qu\'est-ce qu\'un auteur engagé?',
+    answer: 'Écrivain qui utilise son œuvre pour défendre des valeurs, dénoncer des injustices ou promouvoir des changements sociaux et politiques, comme Sartre, Camus ou Hugo.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-100',
+    question: 'Quelles sont les caractéristiques du théâtre de l\'absurde?',
+    answer: 'Remise en question des conventions théâtrales, absence de logique dans l\'intrigue, dialogues décousus, personnages déshumanisés, thèmes de l\'incommunicabilité et de l\'absurdité de la condition humaine. Principaux représentants: Ionesco, Beckett.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-101',
+    question: 'Quelles sont les caractéristiques du Nouveau Roman?',
+    answer: 'Courant littéraire des années 1950-60 refusant les conventions romanesques traditionnelles: absence de héros, d\'intrigue linéaire, descriptions minutieuses, rejet de la psychologie. Principaux représentants: Robbe-Grillet, Sarraute, Butor.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-102',
+    question: 'Qu\'est-ce que l\'autofiction?',
+    answer: 'Genre littéraire qui mêle autobiographie et fiction, où l\'auteur raconte des événements de sa vie mais se permet de les modifier ou de les inventer. Exemples: Doubrovsky, Ernaux, Angot.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-103',
+    question: 'Qu\'est-ce qu\'un dystopie?',
+    answer: 'Récit de fiction dépeignant une société imaginaire oppressive ou totalitaire, présentée comme une contre-utopie. Exemples: "1984" d\'Orwell, "Le Meilleur des mondes" de Huxley, "Fahrenheit 451" de Bradbury.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-104',
+    question: 'Quelles sont les principales figures de style liées à l\'analogie?',
+    answer: 'La comparaison, la métaphore, l\'allégorie, la personnification, le symbole.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-105',
+    question: 'Qu\'est-ce que la versification?',
+    answer: 'Ensemble des règles régissant la composition des vers: mesure (nombre de syllabes), rythme, césure, enjambement, rimes et strophes.',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-106',
+    question: 'Qu\'est-ce qu\'un chiasme?',
+    answer: 'Figure de style qui consiste à croiser des éléments selon le schéma ABBA, comme dans "Il faut manger pour vivre et non pas vivre pour manger" (Molière).',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-107',
+    question: 'Citez les principales œuvres de Victor Hugo.',
+    answer: '"Notre-Dame de Paris", "Les Misérables" (romans); "Hernani", "Ruy Blas" (théâtre); "Les Contemplations", "La Légende des siècles" (poésie).',
+    matiere: 'Français',
+    niveau: 'premiere',
+    diplome: 'baccalaureat'
+  },
+  {
+    id: 'fr-108',
+    question: 'Qu\'est-ce que le romantisme noir?',
+    answer: 'Courant du romantisme explorant les aspects sombres et irrationnels de l\'existence: le fantastique, le macabre, l\'horreur, la folie, la mort. Représentants: Mary Shelley, Edgar Allan Poe, et en France: Nodier, Gautier.',
     matiere: 'Français',
     niveau: 'premiere',
     diplome: 'baccalaureat'
