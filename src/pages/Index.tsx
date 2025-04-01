@@ -4,13 +4,10 @@ import Header from '@/components/Header';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { motion } from 'framer-motion';
-import { BookOpen, Award, History, BarChart3 } from 'lucide-react';
+import { BookOpen, Award, History, BarChart3, Settings } from 'lucide-react';
 import DiplomeSelector from '@/components/DiplomeSelector';
 import { useDiplome } from '@/contexts/DiplomeContext';
 import Mascot from '@/components/Mascot';
-
-// Import des polices Google Fonts dans index.html
-// <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
 
 const Index = () => {
   const { diplome, setDiplome } = useDiplome();
@@ -43,10 +40,9 @@ const Index = () => {
               initial={{ opacity: 0, y: -10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5 }}
-              className="flex items-center justify-center mb-3"
+              className="mb-3"
             >
-              <Mascot size="lg" animation="bounce" />
-              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-blue-dark to-indigo-600 ml-4">
+              <h1 className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-app-blue-dark to-indigo-600">
                 Révise ton {diplome === 'baccalaureat' ? 'Bac' : diplome === 'toeic' ? 'TOEIC' : diplome === 'tage-mage' ? 'TAGE MAGE' : 'examen'}
               </h1>
             </motion.div>
@@ -142,6 +138,27 @@ const Index = () => {
                   </p>
                   <Button className="w-full bg-amber-500 hover:bg-amber-600 text-white">
                     Voir les statistiques
+                  </Button>
+                </div>
+              </motion.div>
+            </Link>
+            
+            <Link to="/reglages" className="block md:col-span-2">
+              <motion.div
+                whileHover={{ scale: 1.05, y: -5 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-white rounded-2xl overflow-hidden shadow-lg border-2 border-gray-300 h-full"
+              >
+                <div className="bg-gradient-to-r from-gray-500 to-gray-600 p-4 text-white flex items-center">
+                  <Settings className="h-8 w-8 mr-3" />
+                  <h2 className="text-2xl font-bold">Réglages</h2>
+                </div>
+                <div className="p-6">
+                  <p className="text-gray-600 mb-4">
+                    Personnalise ton expérience et configure tes paramètres d'études.
+                  </p>
+                  <Button className="w-full bg-gray-500 hover:bg-gray-600 text-white">
+                    Modifier les réglages
                   </Button>
                 </div>
               </motion.div>

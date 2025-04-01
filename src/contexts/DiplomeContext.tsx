@@ -34,6 +34,7 @@ export function DiplomeProvider({ children }: { children: ReactNode }) {
     if (newDiplome) {
       localStorage.setItem('diplomeType', newDiplome);
       localStorage.setItem('diplomeSelected', 'true');
+      setIsFirstOpen(false);
     }
   };
   

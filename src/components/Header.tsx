@@ -4,19 +4,22 @@ import { Link } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('/');
   const tabsContainerRef = useRef<HTMLDivElement>(null);
+  const isMobile = useIsMobile();
   
   const tabs = [
     { value: '/', label: 'Accueil' },
     { value: '/entrainement', label: 'Entraînement' },
     { value: '/examen', label: 'Examen' },
     { value: '/historique', label: 'Historique' },
-    { value: '/statistiques', label: 'Statistiques' }
+    { value: '/statistiques', label: 'Statistiques' },
+    { value: '/reglages', label: 'Réglages' }
   ];
   
   // Effet pour définir l'onglet actif en fonction de la route
@@ -24,7 +27,7 @@ const Header = () => {
     const path = location.pathname;
     setActiveTab(path);
     
-    // Faites défiler vers l'onglet actif
+    // Faire défiler vers l'onglet actif
     const activeTabElement = document.querySelector(`[data-path="${path}"]`);
     if (activeTabElement && tabsContainerRef.current) {
       const containerWidth = tabsContainerRef.current.offsetWidth;
@@ -50,9 +53,9 @@ const Header = () => {
                 animate={{ rotate: [0, 10, 0, -10, 0] }}
                 transition={{ duration: 1, repeat: Infinity, repeatDelay: 3 }}
               >
-                <Mascot animation="none" size="md" />
+                <Mascot animation="none" size={isMobile ? "sm" : "md"} />
               </motion.div>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500 font-extrabold text-3xl md:text-4xl">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500 font-extrabold text-2xl md:text-4xl">
                 <motion.span 
                   className="inline-block origin-bottom"
                   animate={{ 
@@ -141,7 +144,7 @@ const Header = () => {
           {/* Onglets avec défilement horizontal */}
           <div 
             ref={tabsContainerRef}
-            className="overflow-x-auto scrollbar-hide max-w-full"
+            className="overflow-x-auto scrollbar-hide max-w-full pb-1"
             style={{ 
               scrollbarWidth: 'none', 
               msOverflowStyle: 'none',
@@ -154,7 +157,7 @@ const Header = () => {
                   key={tab.value}
                   data-path={tab.value}
                   onClick={() => navigate(tab.value)}
-                  className={`relative px-4 py-2 rounded-md text-sm transition-all min-w-[100px] whitespace-nowrap
+                  className={`relative px-3 py-2 rounded-md text-sm transition-all ${isMobile ? 'min-w-[80px]' : 'min-w-[100px]'} whitespace-nowrap
                     ${activeTab === tab.value 
                       ? 'text-white font-medium' 
                       : 'text-white/70 hover:text-white hover:bg-white/10'}`}
