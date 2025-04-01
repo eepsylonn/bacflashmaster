@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, NiveauType, DiplomeType } from '@/types';
 import { getFlashcards } from '@/data/flashcards';
@@ -104,62 +103,41 @@ export const useFlashcards = () => {
   };
 
   const markCorrect = () => {
-    // If it's the last question, store the answer for later
-    if (currentIndex === currentQuestions.length - 1) {
-      setPendingAnswer({ isCorrect: true });
-      // Immediately add the correct answer to the score and answered questions
-      setScore(score + 1);
-      if (currentIndex < currentQuestions.length) {
-        setAnsweredQuestions(prev => [
-          ...prev, 
-          { 
-            flashcard: currentQuestions[currentIndex],
-            isCorrect: true
-          }
-        ]);
-      }
-    } else {
-      // For other questions, proceed as normal
-      setScore(score + 1);
-      if (currentIndex < currentQuestions.length) {
-        setAnsweredQuestions(prev => [
-          ...prev, 
-          { 
-            flashcard: currentQuestions[currentIndex],
-            isCorrect: true
-          }
-        ]);
-      }
+    setScore(score + 1);
+    if (currentIndex < currentQuestions.length) {
+      setAnsweredQuestions(prev => [
+        ...prev, 
+        { 
+          flashcard: currentQuestions[currentIndex],
+          isCorrect: true
+        }
+      ]);
+    }
+    if (currentIndex < currentQuestions.length - 1) {
       nextQuestion();
+    } else {
+      if (pendingAnswer) {
+        setPendingAnswer({ isCorrect: true });
+      }
     }
   };
 
   const markIncorrect = () => {
-    // If it's the last question, store the answer for later
-    if (currentIndex === currentQuestions.length - 1) {
-      setPendingAnswer({ isCorrect: false });
-      // Add the incorrect answer to answered questions (don't change score)
-      if (currentIndex < currentQuestions.length) {
-        setAnsweredQuestions(prev => [
-          ...prev, 
-          { 
-            flashcard: currentQuestions[currentIndex],
-            isCorrect: false
-          }
-        ]);
-      }
-    } else {
-      // For other questions, proceed as normal
-      if (currentIndex < currentQuestions.length) {
-        setAnsweredQuestions(prev => [
-          ...prev, 
-          { 
-            flashcard: currentQuestions[currentIndex],
-            isCorrect: false
-          }
-        ]);
-      }
+    if (currentIndex < currentQuestions.length) {
+      setAnsweredQuestions(prev => [
+        ...prev, 
+        { 
+          flashcard: currentQuestions[currentIndex],
+          isCorrect: false
+        }
+      ]);
+    }
+    if (currentIndex < currentQuestions.length - 1) {
       nextQuestion();
+    } else {
+      if (pendingAnswer) {
+        setPendingAnswer({ isCorrect: false });
+      }
     }
   };
 
@@ -187,19 +165,19 @@ export const useFlashcards = () => {
   };
 
   const finishTraining = () => {
-    // Use the current score which includes the correct final answer if applicable
-    // No need to process pendingAnswer since we already updated the score in markCorrect
-    const finalScore = score;
-    const pourcentage = (finalScore / currentQuestions.length) * 100;
-    const note = (finalScore / currentQuestions.length) * 20;
+    const correctAnswers = answeredQuestions.filter(q => q.isCorrect).length;
+    const totalQuestions = currentQuestions.length;
+    
+    const pourcentage = Math.min(Math.max((correctAnswers / totalQuestions) * 100, 0), 100);
+    const note = (correctAnswers / totalQuestions) * 20;
     
     const result: TrainingResult = {
       id: Date.now().toString(),
       date: new Date().toISOString(),
       matiere: examMode ? 'Tous les sujets' : (matiere || 'Inconnue'),
       niveau: niveau || 'premiere',
-      nombreQuestions: currentQuestions.length,
-      score: finalScore,
+      nombreQuestions: totalQuestions,
+      score: correctAnswers,
       pourcentage,
       note,
       questions: answeredQuestions,
@@ -214,7 +192,6 @@ export const useFlashcards = () => {
     setCurrentResult(result);
     setShowResult(true);
     
-    // Reset the pending answer
     setPendingAnswer(null);
   };
 
