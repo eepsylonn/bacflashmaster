@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, NiveauType, DiplomeType } from '@/types';
 import { getFlashcards } from '@/data/flashcards';
@@ -22,6 +23,7 @@ export const useFlashcards = () => {
   const { toast } = useToast();
   const navigate = useNavigate();
   const { diplome } = useDiplome();
+  const [pendingAnswer, setPendingAnswer] = useState<{isCorrect: boolean} | null>(null);
 
   useEffect(() => {
     const savedHistory = localStorage.getItem('trainingHistory');
@@ -70,6 +72,7 @@ export const useFlashcards = () => {
     setExamMode(false);
     setShowResult(false);
     setCurrentResult(null);
+    setPendingAnswer(null);
   };
 
   const startExam = () => {
@@ -93,6 +96,7 @@ export const useFlashcards = () => {
     setTraining(false);
     setShowResult(false);
     setCurrentResult(null);
+    setPendingAnswer(null);
   };
 
   const flipCard = () => {
@@ -110,7 +114,13 @@ export const useFlashcards = () => {
         }
       ]);
     }
-    nextQuestion();
+
+    // If we're at the last question, store the answer for later
+    if (currentIndex === currentQuestions.length - 1) {
+      setPendingAnswer({ isCorrect: true });
+    } else {
+      nextQuestion();
+    }
   };
 
   const markIncorrect = () => {
@@ -123,7 +133,13 @@ export const useFlashcards = () => {
         }
       ]);
     }
-    nextQuestion();
+
+    // If we're at the last question, store the answer for later
+    if (currentIndex === currentQuestions.length - 1) {
+      setPendingAnswer({ isCorrect: false });
+    } else {
+      nextQuestion();
+    }
   };
 
   const nextQuestion = () => {
@@ -150,8 +166,19 @@ export const useFlashcards = () => {
   };
 
   const finishTraining = () => {
-    const pourcentage = (score / currentQuestions.length) * 100;
-    const note = (score / currentQuestions.length) * 20;
+    // If there's a pending answer from the last question, process it
+    if (pendingAnswer) {
+      if (pendingAnswer.isCorrect) {
+        setScore(prevScore => prevScore + 1);
+      }
+      // Reset the pending answer
+      setPendingAnswer(null);
+    }
+    
+    // Calculate with the final score which may have been updated
+    const finalScore = pendingAnswer?.isCorrect ? score + 1 : score;
+    const pourcentage = (finalScore / currentQuestions.length) * 100;
+    const note = (finalScore / currentQuestions.length) * 20;
     
     const result: TrainingResult = {
       id: Date.now().toString(),
@@ -159,7 +186,7 @@ export const useFlashcards = () => {
       matiere: examMode ? 'Tous les sujets' : (matiere || 'Inconnue'),
       niveau: niveau || 'premiere',
       nombreQuestions: currentQuestions.length,
-      score,
+      score: finalScore,
       pourcentage,
       note,
       questions: answeredQuestions,
@@ -199,6 +226,7 @@ export const useFlashcards = () => {
     trainingHistory,
     showResult,
     currentResult,
+    pendingAnswer,
     startTraining,
     startExam,
     flipCard,

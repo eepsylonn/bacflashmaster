@@ -93,7 +93,9 @@ const FlashcardComponent = ({
       onCorrect();
     } else if (answerCorrectness === false) {
       onIncorrect();
-    } else if (finishTraining) {
+    }
+    
+    if (finishTraining) {
       finishTraining();
     }
   };
@@ -422,6 +424,7 @@ const FlashcardComponent = ({
                           initial="initial"
                           whileHover="hover"
                           whileTap="tap"
+                          className="mb-0"
                         >
                           <Button
                             onClick={handleShowAnswer}
@@ -449,10 +452,10 @@ const FlashcardComponent = ({
                     <AnimatePresence>
                       {showAnswer && !isFlipped && (
                         <motion.div
-                          className="mt-4"
                           variants={answerVariants}
                           initial="hidden"
                           animate="visible"
+                          className="mt-4"
                         >
                           <div className="relative overflow-hidden">
                             <motion.div 
