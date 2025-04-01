@@ -1,3 +1,4 @@
+
 import { Flashcard, DiplomeType } from '@/types';
 
 // Fonction pour générer un ID unique
@@ -730,4 +731,159 @@ const sesTerminale: Flashcard[] = [
   },
   {
     id: generateId(),
-    question: "
+    question: "Quels sont les instruments de la politique monétaire?",
+    answer: "Taux d'intérêt directeurs, opérations d'open market, réserves obligatoires, programmes d'achats d'actifs (quantitative easing), forward guidance",
+    matiere: "SES",
+    niveau: "terminale"
+  },
+];
+
+// TOEIC Flashcards
+const toeicFlashcards: Flashcard[] = [
+  {
+    id: generateId(),
+    question: "What is the difference between 'affect' and 'effect'?",
+    answer: "'Affect' is typically a verb meaning 'to influence', while 'effect' is typically a noun meaning 'result' or 'consequence'",
+    matiere: "TOEIC",
+    niveau: "premiere",
+    diplome: "toeic"
+  },
+  {
+    id: generateId(),
+    question: "How do you respond to 'How do you do?'",
+    answer: "The traditional response is 'How do you do?' in return, though 'Pleased to meet you' or 'Nice to meet you' are also acceptable",
+    matiere: "TOEIC",
+    niveau: "premiere",
+    diplome: "toeic"
+  },
+  {
+    id: generateId(),
+    question: "What does 'quarterly' mean in a business context?",
+    answer: "Occurring four times a year or every three months",
+    matiere: "TOEIC",
+    niveau: "terminale",
+    diplome: "toeic"
+  },
+  {
+    id: generateId(),
+    question: "What is the difference between 'lay' and 'lie'?",
+    answer: "'Lay' means to put something down (requires an object), while 'lie' means to recline or rest (no object required)",
+    matiere: "TOEIC",
+    niveau: "terminale",
+    diplome: "toeic"
+  },
+];
+
+// TAGE MAGE Flashcards
+const tageMageFlashcards: Flashcard[] = [
+  {
+    id: generateId(),
+    question: "Qu'est-ce que le raisonnement par analogie?",
+    answer: "Un type de raisonnement qui consiste à transposer les caractéristiques d'une situation connue à une situation similaire",
+    matiere: "TAGE MAGE",
+    niveau: "premiere",
+    diplome: "tage-mage"
+  },
+  {
+    id: generateId(),
+    question: "Comment calculer rapidement 15% d'un nombre?",
+    answer: "Calculez 10% (diviser par 10) puis ajoutez la moitié de ce résultat",
+    matiere: "TAGE MAGE",
+    niveau: "premiere",
+    diplome: "tage-mage"
+  },
+  {
+    id: generateId(),
+    question: "Quelle est la différence entre corrélation et causalité?",
+    answer: "La corrélation indique une relation ou association entre deux variables, tandis que la causalité implique qu'une variable est directement responsable du changement dans l'autre",
+    matiere: "TAGE MAGE",
+    niveau: "terminale",
+    diplome: "tage-mage"
+  },
+  {
+    id: generateId(),
+    question: "Qu'est-ce qu'un syllogisme?",
+    answer: "Un raisonnement déductif composé de deux prémisses et d'une conclusion qui découle logiquement de ces prémisses",
+    matiere: "TAGE MAGE",
+    niveau: "terminale",
+    diplome: "tage-mage"
+  },
+];
+
+// Combine all flashcards into a single export
+const allFlashcards: Flashcard[] = [
+  ...mathPremiere,
+  ...mathTerminale,
+  ...physiqueChimiePremiere,
+  ...physiqueChimieTerminale,
+  ...svtPremiere,
+  ...svtTerminale,
+  ...histGeoPremiereHistoire,
+  ...histGeoPremiereGeo,
+  ...histGeoTerminaleHistoire,
+  ...histGeoTerminaleGeo,
+  ...francaisPremiere,
+  ...philoTerminale,
+  ...anglaisPremiere,
+  ...anglaisTerminale,
+  ...sesPremiere,
+  ...sesTerminale,
+  ...toeicFlashcards,
+  ...tageMageFlashcards,
+];
+
+export const getFlashcards = (
+  matiere?: string,
+  niveau?: 'premiere' | 'terminale',
+  count?: number,
+  diplome?: DiplomeType
+): Flashcard[] => {
+  let filteredCards = [...allFlashcards];
+  
+  // Filter by diplome if provided
+  if (diplome) {
+    if (diplome === 'baccalaureat') {
+      // For baccalaureat, exclude cards with diplome property
+      filteredCards = filteredCards.filter(card => !card.diplome);
+    } else {
+      // For other diplomes, only include cards with matching diplome
+      filteredCards = filteredCards.filter(card => card.diplome === diplome);
+    }
+  }
+  
+  // Apply additional filters
+  if (matiere) {
+    filteredCards = filteredCards.filter(card => card.matiere === matiere);
+  }
+  
+  if (niveau) {
+    filteredCards = filteredCards.filter(card => card.niveau === niveau);
+  }
+  
+  // Shuffle the cards
+  const shuffledCards = [...filteredCards].sort(() => Math.random() - 0.5);
+  
+  // Return requested number or all
+  return count ? shuffledCards.slice(0, count) : shuffledCards;
+};
+
+export const getMatieres = (diplome?: DiplomeType): string[] => {
+  let filteredCards = [...allFlashcards];
+  
+  // Filter by diplome if provided
+  if (diplome) {
+    if (diplome === 'baccalaureat') {
+      // For baccalaureat, exclude cards with diplome property
+      filteredCards = filteredCards.filter(card => !card.diplome);
+    } else {
+      // For other diplomes, only include cards with matching diplome
+      filteredCards = filteredCards.filter(card => card.diplome === diplome);
+    }
+  }
+  
+  const matieres = new Set<string>();
+  filteredCards.forEach(card => matieres.add(card.matiere));
+  return Array.from(matieres);
+};
+
+export default allFlashcards;
