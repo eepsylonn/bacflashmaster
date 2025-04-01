@@ -7,6 +7,7 @@ import { historyPremiereFlashcards } from './historyPremiereFlashcards';
 import { historyTerminaleFlashcards } from './historyTerminaleFlashcards';
 import { geographyFlashcards } from './geographyFlashcards';
 import { detailedGeographyFlashcards } from './geographyDetailedFlashcards';
+import { emcFlashcards } from './emcFlashcards';
 
 // Export all flashcards for use in other files
 export { getFlashcards } from './flashcards';
@@ -21,6 +22,7 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...historyPremiereFlashcards,
     ...historyTerminaleFlashcards,
     ...geographyFlashcards,
-    ...detailedGeographyFlashcards
+    ...detailedGeographyFlashcards,
+    ...emcFlashcards
   ];
 };
