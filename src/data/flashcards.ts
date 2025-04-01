@@ -344,17 +344,22 @@ export const getFlashcards = (
   limit?: number,
   diplome?: string
 ): Flashcard[] => {
-  let filteredFlashcards = allFlashcards;
+  // Start with an empty array to avoid combining cards prematurely
+  let filteredFlashcards: Flashcard[] = [];
+  
+  // First, filter by diploma
+  const byDiplome = diplome 
+    ? allFlashcards.filter(card => card.diplome === diplome)
+    : allFlashcards;
 
-  if (diplome) {
-    filteredFlashcards = filteredFlashcards.filter(card => card.diplome === diplome);
-  }
-
+  // Then filter by matiere if specified
   if (matiere) {
-    filteredFlashcards = filteredFlashcards.filter(card => card.matiere === matiere);
+    filteredFlashcards = byDiplome.filter(card => card.matiere === matiere);
+  } else {
+    filteredFlashcards = byDiplome;
   }
 
-  // Now niveau can be 'both' as it's part of NiveauType
+  // Filter by niveau - critical part that was causing the issue
   if (niveau && niveau !== 'both') {
     filteredFlashcards = filteredFlashcards.filter(card => card.niveau === niveau);
   }
@@ -363,9 +368,26 @@ export const getFlashcards = (
   filteredFlashcards.sort(() => Math.random() - 0.5);
 
   // Limit the number of flashcards
-  if (limit) {
+  if (limit && limit > 0 && filteredFlashcards.length > limit) {
     filteredFlashcards = filteredFlashcards.slice(0, limit);
   }
 
   return filteredFlashcards;
 };
+
+// Combine all flashcards into one array for general access
+// This section doesn't affect the filtering above since we're building the filtered array from scratch
+const allFlashcards = [
+  ...flashcardsData,
+  ...philosophyFlashcards,
+  ...historyPremiereFlashcards,
+  ...historyTerminaleFlashcards,
+  ...physiqueChimiePremiereFlashcards,
+  ...physiqueChimieTerminaleFlashcards,
+  ...geographiePremiereFlashcards,
+  ...geographieTerminaleFlashcards,
+  ...emcPremiereFlashcards,
+  ...emcTerminaleFlashcards,
+  ...anglaisPremiereFlashcards,
+  ...anglaisTerminaleFlashcards
+];
