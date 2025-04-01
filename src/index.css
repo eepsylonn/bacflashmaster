@@ -43,6 +43,10 @@
     --sidebar-accent-foreground: 240 5.9% 10%;
     --sidebar-border: 220 13% 91%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+    
+    --app-blue-light: rgb(120, 170, 255);
+    --app-blue-medium: rgb(50, 115, 220);
+    --app-blue-dark: rgb(25, 75, 180);
   }
 
   .dark {
@@ -91,6 +95,46 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .text-gradient-title {
+    @apply bg-gradient-to-r from-yellow-300 via-yellow-200 to-yellow-300 inline-block text-transparent bg-clip-text;
+  }
+  
+  .delay-75 {
+    animation-delay: 0.075s;
+  }
+  .delay-100 {
+    animation-delay: 0.1s;
+  }
+  .delay-125 {
+    animation-delay: 0.125s;
+  }
+  .delay-150 {
+    animation-delay: 0.15s;
+  }
+  .delay-175 {
+    animation-delay: 0.175s;
+  }
+  .delay-200 {
+    animation-delay: 0.2s;
+  }
+  .delay-225 {
+    animation-delay: 0.225s;
+  }
+  .delay-250 {
+    animation-delay: 0.25s;
+  }
+  .delay-275 {
+    animation-delay: 0.275s;
+  }
+  .delay-300 {
+    animation-delay: 0.3s;
+  }
+  .delay-325 {
+    animation-delay: 0.325s;
   }
 }
 

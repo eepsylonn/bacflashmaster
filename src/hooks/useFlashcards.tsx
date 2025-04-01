@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Flashcard, TrainingResult, NombreQuestions } from '@/types';
 import { getFlashcards } from '@/data/flashcards';
@@ -12,6 +13,7 @@ export const useFlashcards = () => {
   const [isFlipped, setIsFlipped] = useState(false);
   const [score, setScore] = useState(0);
   const [training, setTraining] = useState<boolean>(false);
+  const [examMode, setExamMode] = useState<boolean>(false);
   const [trainingHistory, setTrainingHistory] = useState<TrainingResult[]>([]);
   const { toast } = useToast();
 
@@ -61,6 +63,29 @@ export const useFlashcards = () => {
     setIsFlipped(false);
     setScore(0);
     setTraining(true);
+    setExamMode(false);
+  };
+
+  // Start a new exam
+  const startExam = () => {
+    // Get 200 random questions from all subjects
+    const questions = getFlashcards(undefined, undefined, 200);
+    
+    if (questions.length === 0) {
+      toast({
+        title: "Aucune question disponible",
+        description: "Aucune question n'est disponible pour l'examen",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setCurrentQuestions(questions);
+    setCurrentIndex(0);
+    setIsFlipped(false);
+    setScore(0);
+    setExamMode(true);
+    setTraining(false);
   };
 
   // Flip the current flashcard
@@ -89,7 +114,7 @@ export const useFlashcards = () => {
     }
   };
 
-  // Finish the training session
+  // Finish the training or exam session
   const finishTraining = () => {
     const pourcentage = (score / currentQuestions.length) * 100;
     const note = (score / currentQuestions.length) * 20;
@@ -97,7 +122,7 @@ export const useFlashcards = () => {
     const result: TrainingResult = {
       id: Date.now().toString(),
       date: new Date().toISOString(),
-      matiere: matiere || 'Inconnue',
+      matiere: examMode ? 'Tous les sujets' : (matiere || 'Inconnue'),
       niveau: niveau || 'premiere',
       nombreQuestions: currentQuestions.length,
       score,
@@ -110,9 +135,10 @@ export const useFlashcards = () => {
     setTrainingHistory(newHistory);
     
     setTraining(false);
+    setExamMode(false);
     
     toast({
-      title: "Entraînement terminé",
+      title: examMode ? "Examen terminé" : "Entraînement terminé",
       description: `Votre note est de ${note.toFixed(2)}/20`,
     });
   };
@@ -129,8 +155,10 @@ export const useFlashcards = () => {
     isFlipped,
     score,
     training,
+    examMode,
     trainingHistory,
     startTraining,
+    startExam,
     flipCard,
     markCorrect,
     markIncorrect,

@@ -7,7 +7,6 @@ import FlashcardComponent from '@/components/FlashcardComponent';
 import TrainingProgress from '@/components/TrainingProgress';
 import { useFlashcards } from '@/hooks/useFlashcards';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 
 const Training = () => {
   const location = useLocation();
@@ -40,12 +39,25 @@ const Training = () => {
   }, [location.search, setMatiere]);
 
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-indigo-50">
       <Header />
       
-      <main className="flex-grow py-8">
+      <main className="flex-grow py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-3xl font-bold mb-8 text-center">Entraînement</h1>
+          <h1 className="text-4xl font-bold mb-8 text-center text-app-blue-dark">
+            <span className="animate-bounce inline-block">E</span>
+            <span className="animate-bounce inline-block delay-75">n</span>
+            <span className="animate-bounce inline-block delay-100">t</span>
+            <span className="animate-bounce inline-block delay-125">r</span>
+            <span className="animate-bounce inline-block delay-150">a</span>
+            <span className="animate-bounce inline-block delay-175">î</span>
+            <span className="animate-bounce inline-block delay-200">n</span>
+            <span className="animate-bounce inline-block delay-225">e</span>
+            <span className="animate-bounce inline-block delay-250">m</span>
+            <span className="animate-bounce inline-block delay-275">e</span>
+            <span className="animate-bounce inline-block delay-300">n</span>
+            <span className="animate-bounce inline-block delay-325">t</span>
+          </h1>
           
           {!training ? (
             <div className="max-w-md mx-auto">
