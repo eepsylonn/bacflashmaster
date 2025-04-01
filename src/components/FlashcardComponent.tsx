@@ -78,7 +78,7 @@ const FlashcardComponent = ({
   return (
     <div className="p-4">
       <div className="relative mx-auto max-w-2xl perspective-1000">
-        <div className="flashcard-container w-full" style={{ minHeight: '250px' }}>
+        <div className="flashcard-container w-full" style={{ minHeight: '320px' }}>
           <AnimatePresence initial={false} mode="wait">
             <motion.div
               key={isFlipped ? 'back' : 'front'}
@@ -86,13 +86,14 @@ const FlashcardComponent = ({
               animate={{ rotateY: 0, opacity: 1 }}
               exit={{ rotateY: isFlipped ? 90 : -90, opacity: 0 }}
               transition={{ duration: 0.4, ease: 'easeInOut' }}
-              style={{ width: '100%', minHeight: '250px' }}
+              style={{ width: '100%', minHeight: '320px' }}
               className="w-full"
             >
               <Card
                 className={`flashcard-${isFlipped ? 'back' : 'front'} p-6 w-full shadow-lg border-2 ${
                   isFlipped ? 'border-indigo-300 bg-gradient-to-br from-indigo-50 to-blue-50' : 'border-app-blue-light'
                 }`}
+                style={{ minHeight: '320px' }}
               >
                 <div className="flex flex-col h-full">
                   <div className="flex justify-between items-center mb-4">
@@ -113,7 +114,24 @@ const FlashcardComponent = ({
                     {isFlipped ? (
                       <div className="space-y-4">
                         <h3 className="text-lg font-semibold text-gray-700 mb-1">Réponse:</h3>
-                        <p className="text-app-blue-dark">{flashcard.answer}</p>
+                        <p className="text-app-blue-dark">{flashcard.answer || "Pas de réponse disponible"}</p>
+                        
+                        <div className="mt-4 flex space-x-2">
+                          <Button
+                            onClick={onCorrect}
+                            className="flex-1 bg-green-500 hover:bg-green-600 text-white"
+                          >
+                            <ThumbsUp className="h-4 w-4 mr-2" />
+                            Correct
+                          </Button>
+                          <Button
+                            onClick={onIncorrect}
+                            className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+                          >
+                            <ThumbsDown className="h-4 w-4 mr-2" />
+                            Incorrect
+                          </Button>
+                        </div>
                       </div>
                     ) : (
                       <div className="space-y-4">
@@ -124,7 +142,7 @@ const FlashcardComponent = ({
                           <div className="mt-4">
                             <WriteAnswer 
                               onSubmit={handleAnswerSubmit} 
-                              correctAnswer={flashcard.answer}
+                              correctAnswer={flashcard.answer || ""}
                             />
                           </div>
                         )}
@@ -133,15 +151,7 @@ const FlashcardComponent = ({
                   </div>
 
                   <div className="mt-6">
-                    {isFlipped ? (
-                      <Button
-                        className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700"
-                        onClick={handleNextQuestion}
-                      >
-                        Passer à la question suivante
-                        <ArrowRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    ) : (
+                    {!isFlipped && (
                       <Button
                         onClick={onFlip}
                         className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white"

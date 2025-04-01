@@ -34,7 +34,7 @@ const TabsTrigger = React.forwardRef<
     )}
     {...props}
   >
-    <span className="relative z-10">
+    <span className="relative z-10 flex items-center justify-center">
       {props.children}
     </span>
     {props["data-state"] === "active" && (

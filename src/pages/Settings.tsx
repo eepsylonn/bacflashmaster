@@ -93,21 +93,21 @@ const Settings = () => {
               <CardContent className="p-0">
                 <Tabs defaultValue="diplome" className="w-full">
                   <TabsList className="w-full grid grid-cols-4 rounded-none">
-                    <TabsTrigger value="diplome" className="flex flex-row items-center justify-center gap-1">
+                    <TabsTrigger value="diplome" className="flex flex-col sm:flex-row items-center justify-center gap-1 h-auto py-2">
                       <BookOpen className="h-4 w-4" /> 
-                      <span className="hidden sm:inline">Diplôme</span>
+                      <span className="text-xs sm:text-sm">Diplôme</span>
                     </TabsTrigger>
-                    <TabsTrigger value="apparence" className="flex flex-row items-center justify-center gap-1">
+                    <TabsTrigger value="apparence" className="flex flex-col sm:flex-row items-center justify-center gap-1 h-auto py-2">
                       <Palette className="h-4 w-4" /> 
-                      <span className="hidden sm:inline">Apparence</span>
+                      <span className="text-xs sm:text-sm">Apparence</span>
                     </TabsTrigger>
-                    <TabsTrigger value="etude" className="flex flex-row items-center justify-center gap-1">
+                    <TabsTrigger value="etude" className="flex flex-col sm:flex-row items-center justify-center gap-1 h-auto py-2">
                       <PenTool className="h-4 w-4" /> 
-                      <span className="hidden sm:inline">Étude</span>
+                      <span className="text-xs sm:text-sm">Étude</span>
                     </TabsTrigger>
-                    <TabsTrigger value="notification" className="flex flex-row items-center justify-center gap-1">
+                    <TabsTrigger value="notification" className="flex flex-col sm:flex-row items-center justify-center gap-1 h-auto py-2">
                       <BellRing className="h-4 w-4" /> 
-                      <span className="hidden sm:inline">Notifications</span>
+                      <span className="text-xs sm:text-sm">Notif.</span>
                     </TabsTrigger>
                   </TabsList>
                   
@@ -150,6 +150,15 @@ const Settings = () => {
                                 <h4 className="font-semibold">{diplomeInfo.title}</h4>
                                 <p className="text-sm text-gray-500 mt-1">{diplomeInfo.description}</p>
                               </div>
+                              
+                              {selectedDiplome === diplomeName && (
+                                <motion.div
+                                  initial={{ scale: 0 }}
+                                  animate={{ scale: 1 }}
+                                  className="absolute bottom-0 right-0 bg-app-blue-medium text-white rounded-full p-1"
+                                  style={{ width: 20, height: 20, right: 8, bottom: 8 }}
+                                ></motion.div>
+                              )}
                             </motion.div>
                           );
                         })}

@@ -8,6 +8,7 @@ import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
 import { useDiplome } from '@/contexts/DiplomeContext';
 import { NiveauType, NombreQuestions } from '@/types';
+import { ChevronDown, ChevronUp } from 'lucide-react';
 
 // Matières selon le diplôme
 const getMatieresByDiplome = (diplome: string | undefined) => {
@@ -33,7 +34,7 @@ const getMatieresByDiplome = (diplome: string | undefined) => {
   }
 };
 
-const questionOptions: NombreQuestions[] = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 200];
+const questionOptions: NombreQuestions[] = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
 interface TrainingSelectorProps {
   matiere: string | undefined;
@@ -56,9 +57,12 @@ const TrainingSelector = ({
 }: TrainingSelectorProps) => {
   const [sliderValue, setSliderValue] = useState<number[]>([questionOptions.indexOf(nombreQuestions)]);
   const { diplome } = useDiplome();
+  const [showAllSubjects, setShowAllSubjects] = useState(false);
   
   // Obtenir les matières selon le diplôme sélectionné
   const matieres = getMatieresByDiplome(diplome);
+  const visibleMatieres = showAllSubjects ? matieres : matieres.slice(0, 6);
+  const hasMoreSubjects = matieres.length > 6;
   
   // Mettre à jour le nombre de questions lorsque le slider change
   useEffect(() => {
@@ -81,7 +85,7 @@ const TrainingSelector = ({
             Matière
           </label>
           <div className="grid grid-cols-2 gap-2">
-            {matieres.map((m) => (
+            {visibleMatieres.map((m) => (
               <motion.button
                 key={m}
                 whileHover={{ scale: 1.05 }}
@@ -97,6 +101,26 @@ const TrainingSelector = ({
               </motion.button>
             ))}
           </div>
+          
+          {hasMoreSubjects && (
+            <Button 
+              variant="outline" 
+              onClick={() => setShowAllSubjects(!showAllSubjects)} 
+              className="w-full mt-2 text-app-blue-dark border-app-blue-light hover:bg-app-blue-light/10"
+            >
+              {showAllSubjects ? (
+                <>
+                  <span>Afficher moins</span>
+                  <ChevronUp className="ml-1 h-4 w-4" />
+                </>
+              ) : (
+                <>
+                  <span>Afficher plus</span>
+                  <ChevronDown className="ml-1 h-4 w-4" />
+                </>
+              )}
+            </Button>
+          )}
         </div>
         
         {diplome === 'baccalaureat' && (
@@ -116,13 +140,13 @@ const TrainingSelector = ({
               className="w-full"
             >
               <TabsList className="grid grid-cols-3 w-full">
-                <TabsTrigger value="premiere" className="data-[state=active]:bg-app-blue-medium data-[state=active]:text-white">
+                <TabsTrigger value="premiere">
                   Première
                 </TabsTrigger>
-                <TabsTrigger value="terminale" className="data-[state=active]:bg-app-blue-medium data-[state=active]:text-white">
+                <TabsTrigger value="terminale">
                   Terminale
                 </TabsTrigger>
-                <TabsTrigger value="both" className="data-[state=active]:bg-app-blue-medium data-[state=active]:text-white">
+                <TabsTrigger value="both">
                   Les deux
                 </TabsTrigger>
               </TabsList>
