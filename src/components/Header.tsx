@@ -1,202 +1,201 @@
-
-import { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import Mascot from '@/components/Mascot';
-import { useIsMobile } from '@/hooks/use-mobile';
+import { useDiplome } from '@/contexts/DiplomeContext';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select"
+import { useState } from 'react';
+import { Menu, X } from 'lucide-react';
 
-const Header = () => {
+export default function Header() {
   const location = useLocation();
-  const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState('/');
-  const tabsContainerRef = useRef<HTMLDivElement>(null);
-  const isMobile = useIsMobile();
-  
-  const tabs = [
-    { value: '/', label: 'Accueil' },
-    { value: '/methodologie', label: 'Fiches' },
-    { value: '/entrainement', label: 'Entraînement' },
-    { value: '/examen', label: 'Examen' },
-    { value: '/historique', label: 'Historique' },
-    { value: '/statistiques', label: 'Statistiques' },
-    { value: '/reglages', label: 'Réglages' }
-  ];
-  
-  // Effet pour définir l'onglet actif en fonction de la route
-  useEffect(() => {
-    const path = location.pathname;
-    setActiveTab(path);
-    
-    // Faire défiler vers l'onglet actif sans animation
-    const activeTabElement = document.querySelector(`[data-path="${path}"]`);
-    if (activeTabElement && tabsContainerRef.current) {
-      const containerWidth = tabsContainerRef.current.offsetWidth;
-      const tabPosition = (activeTabElement as HTMLElement).offsetLeft;
-      const tabWidth = (activeTabElement as HTMLElement).offsetWidth;
-      
-      // Calculer la position de défilement pour centrer l'onglet
-      const scrollPosition = tabPosition - (containerWidth / 2) + (tabWidth / 2);
-      
-      // Utiliser scrollLeft au lieu de scrollTo pour éviter l'animation
-      tabsContainerRef.current.scrollLeft = scrollPosition;
-    }
-  }, [location.pathname]);
-  
+  const { diplome, setDiplome } = useDiplome();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen(!isMobileMenuOpen);
+  };
+
   return (
-    <header className="relative">
-      {/* Fond avec gradient */}
-      <div className="bg-gradient-to-r from-app-blue-dark to-indigo-800 text-white py-5 shadow-lg">
-        <div className="container px-4 mx-auto">
-          {/* Logo et titre */}
-          <div className="flex justify-center items-center mb-5">
-            <Link to="/" className="text-3xl font-bold flex items-center gap-2 group">
-              <motion.div
-                initial={{ rotate: 0 }}
-                animate={{ rotate: [0, 10, 0, -10, 0] }}
-                transition={{ duration: 1, repeat: Infinity, repeatDelay: 3 }}
-              >
-                <Mascot animation="none" size={isMobile ? "sm" : "md"} />
-              </motion.div>
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500 font-extrabold text-2xl md:text-4xl">
-                <motion.span 
-                  className="inline-block origin-bottom"
-                  animate={{ 
-                    y: [0, -3, 0],
-                    transition: { delay: 0, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
-                  }}
-                >
-                  F
-                </motion.span>
-                <motion.span 
-                  className="inline-block origin-bottom"
-                  animate={{ 
-                    y: [0, -3, 0],
-                    transition: { delay: 0.1, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
-                  }}
-                >
-                  l
-                </motion.span>
-                <motion.span 
-                  className="inline-block origin-bottom"
-                  animate={{ 
-                    y: [0, -3, 0],
-                    transition: { delay: 0.2, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
-                  }}
-                >
-                  a
-                </motion.span>
-                <motion.span 
-                  className="inline-block origin-bottom"
-                  animate={{ 
-                    y: [0, -3, 0],
-                    transition: { delay: 0.3, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
-                  }}
-                >
-                  s
-                </motion.span>
-                <motion.span 
-                  className="inline-block origin-bottom"
-                  animate={{ 
-                    y: [0, -3, 0],
-                    transition: { delay: 0.4, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
-                  }}
-                >
-                  h
-                </motion.span>
-                <motion.span 
-                  className="inline-block origin-bottom"
-                  animate={{ 
-                    y: [0, -3, 0],
-                    transition: { delay: 0.5, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
-                  }}
-                >
-                  B
-                </motion.span>
-                <motion.span 
-                  className="inline-block origin-bottom"
-                  animate={{ 
-                    y: [0, -3, 0],
-                    transition: { delay: 0.6, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
-                  }}
-                >
-                  a
-                </motion.span>
-                <motion.span 
-                  className="inline-block origin-bottom"
-                  animate={{ 
-                    y: [0, -3, 0],
-                    transition: { delay: 0.7, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
-                  }}
-                >
-                  c
-                </motion.span>
-                <motion.span 
-                  className="inline-block origin-bottom"
-                  animate={{ 
-                    y: [0, -3, 0],
-                    transition: { delay: 0.8, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
-                  }}
-                >
-                  '
-                </motion.span>
-              </span>
-            </Link>
-          </div>
+    <header className="border-b border-gray-200 bg-white sticky top-0 z-10">
+      <div className="container mx-auto px-4 py-3">
+        <div className="flex items-center justify-between">
+          <Link to="/" className="flex items-center space-x-2">
+            <span className="font-bold text-lg text-app-blue-dark">Flashcards</span>
+          </Link>
           
-          {/* Onglets avec défilement horizontal */}
-          <div 
-            ref={tabsContainerRef}
-            className="overflow-x-auto scrollbar-hide max-w-full pb-1"
-            style={{ 
-              scrollbarWidth: 'none', 
-              msOverflowStyle: 'none',
-              WebkitOverflowScrolling: 'touch' 
-            }}
-          >
-            <div className="flex space-x-1 p-1 bg-white/10 rounded-lg min-w-max mx-auto" style={{ width: 'fit-content' }}>
-              {tabs.map((tab) => (
-                <button
-                  key={tab.value}
-                  data-path={tab.value}
-                  onClick={() => navigate(tab.value)}
-                  className={`relative px-3 py-2 rounded-md text-sm transition-all ${isMobile ? 'min-w-[80px]' : 'min-w-[100px]'} whitespace-nowrap
-                    ${activeTab === tab.value 
-                      ? 'text-white font-medium' 
-                      : 'text-white/70 hover:text-white hover:bg-white/10'}`}
-                >
-                  {activeTab === tab.value && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute inset-0 bg-white/20 rounded-md"
-                      initial={false}
-                      transition={{ 
-                        type: "spring", 
-                        stiffness: 500, 
-                        damping: 30,
-                        layout: { duration: 0.2 } 
-                      }}
-                    />
-                  )}
-                  <span className="relative z-10">{tab.label}</span>
-                </button>
-              ))}
+          <nav className="hidden md:flex items-center space-x-1">
+            <Link
+              to="/"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors relative ${
+                location.pathname === '/' 
+                  ? 'text-app-blue-dark' 
+                  : 'text-gray-600 hover:text-app-blue-medium hover:bg-gray-100'
+              }`}
+            >
+              Accueil
+              {location.pathname === '/' && (
+                <motion.div
+                  layoutId="navIndicator"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-app-blue-dark"
+                  initial={false}
+                  transition={{ type: 'spring', duration: 0.3 }}
+                />
+              )}
+            </Link>
+
+            <Link
+              to="/methodologie"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors relative ${
+                location.pathname === '/methodologie' 
+                  ? 'text-app-blue-dark' 
+                  : 'text-gray-600 hover:text-app-blue-medium hover:bg-gray-100'
+              }`}
+            >
+              Fiches
+              {location.pathname === '/methodologie' && (
+                <motion.div
+                  layoutId="navIndicator"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-app-blue-dark"
+                  initial={false}
+                  transition={{ type: 'spring', duration: 0.3 }}
+                />
+              )}
+            </Link>
+            
+            <Link
+              to="/entrainement"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors relative ${
+                location.pathname === '/entrainement' 
+                  ? 'text-app-blue-dark' 
+                  : 'text-gray-600 hover:text-app-blue-medium hover:bg-gray-100'
+              }`}
+            >
+              Entraînement
+              {location.pathname === '/entrainement' && (
+                <motion.div
+                  layoutId="navIndicator"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-app-blue-dark"
+                  initial={false}
+                  transition={{ type: 'spring', duration: 0.3 }}
+                />
+              )}
+            </Link>
+            
+            <Link
+              to="/examen"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors relative ${
+                location.pathname === '/examen'
+                  ? 'text-app-blue-dark'
+                  : 'text-gray-600 hover:text-app-blue-medium hover:bg-gray-100'
+              }`}
+            >
+              Examen
+              {location.pathname === '/examen' && (
+                <motion.div
+                  layoutId="navIndicator"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-app-blue-dark"
+                  initial={false}
+                  transition={{ type: 'spring', duration: 0.3 }}
+                />
+              )}
+            </Link>
+            
+            <Link
+              to="/historique"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors relative ${
+                location.pathname === '/historique'
+                  ? 'text-app-blue-dark'
+                  : 'text-gray-600 hover:text-app-blue-medium hover:bg-gray-100'
+              }`}
+            >
+              Historique
+              {location.pathname === '/historique' && (
+                <motion.div
+                  layoutId="navIndicator"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-app-blue-dark"
+                  initial={false}
+                  transition={{ type: 'spring', duration: 0.3 }}
+                />
+              )}
+            </Link>
+            
+            <Link
+              to="/statistiques"
+              className={`px-3 py-2 rounded-md text-sm font-medium transition-colors relative ${
+                location.pathname === '/statistiques'
+                  ? 'text-app-blue-dark'
+                  : 'text-gray-600 hover:text-app-blue-medium hover:bg-gray-100'
+              }`}
+            >
+              Statistiques
+              {location.pathname === '/statistiques' && (
+                <motion.div
+                  layoutId="navIndicator"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-app-blue-dark"
+                  initial={false}
+                  transition={{ type: 'spring', duration: 0.3 }}
+                />
+              )}
+            </Link>
+          </nav>
+          
+          <div className="flex items-center space-x-4">
+            <Select value={diplome} onValueChange={setDiplome}>
+              <SelectTrigger className="w-[180px] text-sm">
+                <SelectValue placeholder="Sélectionner un diplôme" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="baccalaureat">Baccalauréat</SelectItem>
+                <SelectItem value="toeic">TOEIC</SelectItem>
+                <SelectItem value="tage-mage">TAGE MAGE</SelectItem>
+              </SelectContent>
+            </Select>
+            
+            <div className="md:hidden">
+              <button onClick={toggleMobileMenu} className="text-gray-600 hover:text-app-blue-dark focus:outline-none">
+                {isMobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+              </button>
             </div>
           </div>
         </div>
       </div>
-      
-      {/* Ajouter des styles pour cacher la scrollbar */}
-      <style>
-        {`
-          /* For Webkit browsers like Chrome/Safari */
-          .scrollbar-hide::-webkit-scrollbar {
-            display: none;
-          }
-        `}
-      </style>
+
+      {/* Mobile Menu */}
+      {isMobileMenuOpen && (
+        <motion.div
+          initial={{ opacity: 0, y: -10 }}
+          animate={{ opacity: 1, y: 0 }}
+          exit={{ opacity: 0, y: -10 }}
+          transition={{ duration: 0.2 }}
+          className="md:hidden bg-white border-b border-gray-200 py-2"
+        >
+          <div className="container mx-auto px-4 flex flex-col space-y-2">
+            <Link to="/" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-app-blue-medium hover:bg-gray-100">
+              Accueil
+            </Link>
+            <Link to="/methodologie" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-app-blue-medium hover:bg-gray-100">
+              Fiches
+            </Link>
+            <Link to="/entrainement" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-app-blue-medium hover:bg-gray-100">
+              Entraînement
+            </Link>
+            <Link to="/examen" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-app-blue-medium hover:bg-gray-100">
+              Examen
+            </Link>
+            <Link to="/historique" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-app-blue-medium hover:bg-gray-100">
+              Historique
+            </Link>
+            <Link to="/statistiques" className="block px-3 py-2 rounded-md text-sm font-medium text-gray-600 hover:text-app-blue-medium hover:bg-gray-100">
+              Statistiques
+            </Link>
+          </div>
+        </motion.div>
+      )}
     </header>
   );
-};
-
-export default Header;
+}

@@ -1,3 +1,4 @@
+
 import { Flashcard, NiveauType, DiplomeType } from '@/types';
 
 // Mock flashcard data
@@ -165,10 +166,9 @@ const flashcardsData: Flashcard[] = [
 ];
 
 // Function to get flashcards based on criteria
-// Add a type assertion to make the function accept the broader NiveauType
 export const getFlashcards = (
   matiere?: string, 
-  niveau?: any, // Using 'any' here to bypass the type checking temporarily
+  niveau?: NiveauType, // Accepte désormais correctement NiveauType
   limit?: number,
   diplome?: string
 ): Flashcard[] => {

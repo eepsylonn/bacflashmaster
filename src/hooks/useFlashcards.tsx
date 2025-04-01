@@ -23,7 +23,6 @@ export const useFlashcards = () => {
   const navigate = useNavigate();
   const { diplome } = useDiplome();
 
-  // Load training history from localStorage
   useEffect(() => {
     const savedHistory = localStorage.getItem('trainingHistory');
     if (savedHistory) {
@@ -36,14 +35,12 @@ export const useFlashcards = () => {
     }
   }, []);
 
-  // Save training history to localStorage
   useEffect(() => {
     if (trainingHistory.length > 0) {
       localStorage.setItem('trainingHistory', JSON.stringify(trainingHistory));
     }
   }, [trainingHistory]);
 
-  // Start a new training session
   const startTraining = () => {
     if (!matiere) {
       toast({
@@ -54,8 +51,7 @@ export const useFlashcards = () => {
       return;
     }
 
-    // Utiliser 'any' pour contourner l'erreur de type temporairement
-    const questions = getFlashcards(matiere, niveau as any, nombreQuestions, diplome);
+    const questions = getFlashcards(matiere, niveau, nombreQuestions, diplome);
     if (questions.length === 0) {
       toast({
         title: "Aucune question disponible",
@@ -76,9 +72,7 @@ export const useFlashcards = () => {
     setCurrentResult(null);
   };
 
-  // Start a new exam
   const startExam = () => {
-    // Get 200 random questions from all subjects, with both levels if it's baccalaureat
     const questions = getFlashcards(undefined, undefined, 200, diplome);
     
     if (questions.length === 0) {
@@ -101,15 +95,12 @@ export const useFlashcards = () => {
     setCurrentResult(null);
   };
 
-  // Flip the current flashcard
   const flipCard = () => {
     setIsFlipped(!isFlipped);
   };
 
-  // Mark the current question as correct
   const markCorrect = () => {
     setScore(score + 1);
-    // Ajouter à la liste des questions répondues
     if (currentIndex < currentQuestions.length) {
       setAnsweredQuestions(prev => [
         ...prev, 
@@ -122,9 +113,7 @@ export const useFlashcards = () => {
     nextQuestion();
   };
 
-  // Mark the current question as incorrect
   const markIncorrect = () => {
-    // Ajouter à la liste des questions répondues
     if (currentIndex < currentQuestions.length) {
       setAnsweredQuestions(prev => [
         ...prev, 
@@ -137,7 +126,6 @@ export const useFlashcards = () => {
     nextQuestion();
   };
 
-  // Go to the next question
   const nextQuestion = () => {
     if (currentIndex < currentQuestions.length - 1) {
       setCurrentIndex(currentIndex + 1);
@@ -147,11 +135,10 @@ export const useFlashcards = () => {
     }
   };
 
-  // Calculer le taux d'amélioration par rapport à la moyenne passée
   const calculateImprovementRate = (pourcentage: number, matiere: string) => {
     const relevantHistory = trainingHistory
       .filter(item => (item.matiere === matiere || matiere === 'Tous les sujets'))
-      .slice(0, 5); // Utilise jusqu'à 5 derniers résultats
+      .slice(0, 5);
 
     if (relevantHistory.length === 0) return null;
 
@@ -162,7 +149,6 @@ export const useFlashcards = () => {
     return ((pourcentage - averagePercentage) / averagePercentage) * 100;
   };
 
-  // Finish the training or exam session
   const finishTraining = () => {
     const pourcentage = (score / currentQuestions.length) * 100;
     const note = (score / currentQuestions.length) * 20;
@@ -180,25 +166,20 @@ export const useFlashcards = () => {
       diplome: diplome as DiplomeType
     };
 
-    // Add to history and keep only the last 10 entries
     const newHistory = [result, ...trainingHistory].slice(0, 10);
     setTrainingHistory(newHistory);
     
-    // Calculer le taux d'amélioration
     const improvementRate = calculateImprovementRate(pourcentage, result.matiere);
     
-    // Définir le résultat actuel et afficher la page de résultats
     setCurrentResult(result);
     setShowResult(true);
   };
 
-  // Continuer après avoir vu le résultat
   const continueAfterResult = () => {
     setShowResult(false);
     setTraining(false);
     setExamMode(false);
     
-    // Retourner à la page d'accueil
     navigate('/');
   };
 
