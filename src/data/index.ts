@@ -4,8 +4,6 @@ import { getFlashcards } from './flashcards';
 import { philosophyFlashcards } from './philosophyFlashcards';
 import { historyPremiereFlashcards } from './historyPremiereFlashcards';
 import { historyTerminaleFlashcards } from './historyTerminaleFlashcards';
-import { physiqueChimiePremiereFlashcards } from './physiqueChimiePremiereFlashcards';
-import { physiqueChimieTerminaleFlashcards } from './physiqueChimieTerminaleFlashcards';
 
 // Export all flashcards for use in other files
 export { getFlashcards } from './flashcards';
@@ -17,8 +15,6 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...baseFlashcards,
     ...philosophyFlashcards,
     ...historyPremiereFlashcards,
-    ...historyTerminaleFlashcards,
-    ...physiqueChimiePremiereFlashcards,
-    ...physiqueChimieTerminaleFlashcards
+    ...historyTerminaleFlashcards
   ];
 };

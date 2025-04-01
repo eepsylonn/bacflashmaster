@@ -2,8 +2,6 @@ import { Flashcard, NiveauType, DiplomeType } from '@/types';
 import { philosophyFlashcards } from './philosophyFlashcards';
 import { historyPremiereFlashcards } from './historyPremiereFlashcards';
 import { historyTerminaleFlashcards } from './historyTerminaleFlashcards';
-import { physiqueChimiePremiereFlashcards } from './physiqueChimiePremiereFlashcards';
-import { physiqueChimieTerminaleFlashcards } from './physiqueChimieTerminaleFlashcards';
 
 // Mock flashcard data for the base subjects
 const flashcardsData: Flashcard[] = [
@@ -290,17 +288,16 @@ const flashcardsData: Flashcard[] = [
 ];
 
 // Combine the history flashcards from both levels
-const historyFlashcards = [...historyPremiereFlashcards, ...historyTerminaleFlashcards];
-
-// Combine all physique-chimie flashcards
-const physiqueChimieFlashcards = [...physiqueChimiePremiereFlashcards, ...physiqueChimieTerminaleFlashcards];
+const historyFlashcards = [
+    ...historyPremiereFlashcards,
+    ...historyTerminaleFlashcards
+];
 
 // Combine the base flashcards with the subject-specific flashcards
 const allFlashcards = [
-  ...flashcardsData, 
-  ...philosophyFlashcards, 
-  ...historyFlashcards,
-  ...physiqueChimieFlashcards
+    ...flashcardsData,
+    ...philosophyFlashcards,
+    ...historyFlashcards
 ];
 
 // Function to get flashcards based on criteria
