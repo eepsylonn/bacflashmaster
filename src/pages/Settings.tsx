@@ -435,35 +435,15 @@ const Settings = () => {
                             </div>
                             
                             <Button 
-                              variant="ghost" 
+                              variant="default" 
                               onClick={openSpecialityPopup} 
-                              className="w-full mt-2 text-app-blue-dark hover:bg-app-blue-light/10 p-1 h-8"
+                              className="w-full mt-2 bg-gradient-to-r from-app-blue-medium to-purple-600 hover:from-app-blue-dark hover:to-purple-700 text-white shadow-md transform transition-all hover:-translate-y-1 py-2 rounded-xl h-auto overflow-hidden group"
                             >
-                              <>
-                                <span>Afficher plus</span>
-                                <ChevronDown className="ml-1 h-4 w-4" />
-                              </>
+                              <div className="absolute inset-0 bg-white opacity-0 group-hover:opacity-10 transition-opacity" />
+                              <span className="mr-2">Voir plus</span>
+                              <span className="animate-pulse">✨</span>
                             </Button>
                             
-                          </div>
-                          
-                          <div className="flex justify-between mt-4">
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => setSelectedSpecialities([])}
-                              className="text-gray-600"
-                            >
-                              Tout désélectionner
-                            </Button>
-                            <Button 
-                              variant="outline" 
-                              size="sm"
-                              onClick={() => setSelectedSpecialities(bacSpecialitiesData.map(s => s.id))}
-                              className="text-app-blue-medium"
-                            >
-                              Tout sélectionner
-                            </Button>
                           </div>
                           
                           <div className="mt-4 text-center text-sm">

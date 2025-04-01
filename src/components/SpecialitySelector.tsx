@@ -121,13 +121,16 @@ const SpecialitySelector = ({ isOpen, onClose }: SpecialitySelectorProps) => {
     }
   };
 
-  const selectAll = () => {
-    setSelectedSpecialities(specialitiesData.map(s => s.id));
-  };
+  // Group specialities by category
+  const specialitiesByCategory = specialitiesData.reduce((acc, speciality) => {
+    if (!acc[speciality.category]) {
+      acc[speciality.category] = [];
+    }
+    acc[speciality.category].push(speciality);
+    return acc;
+  }, {} as Record<string, typeof specialitiesData>);
 
-  const deselectAll = () => {
-    setSelectedSpecialities([]);
-  };
+  const categories = Object.keys(specialitiesByCategory);
 
   return (
     <Dialog open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -153,71 +156,57 @@ const SpecialitySelector = ({ isOpen, onClose }: SpecialitySelectorProps) => {
             </div>
           </div>
 
-          <div className="space-y-4">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {specialitiesData.map((speciality) => (
-                <motion.div 
-                  key={speciality.id}
-                  className={`p-3 rounded-lg border-2 ${
-                    selectedSpecialities.includes(speciality.id)
-                      ? `${speciality.color} border-opacity-100 shadow-sm`
-                      : 'border-gray-200 hover:border-gray-300'
-                  } transition-all`}
-                  whileHover={{ y: -2 }}
-                  whileTap={{ scale: 0.98 }}
-                >
-                  <div className="flex items-start">
-                    <div 
-                      className="flex items-center justify-center mr-3"
-                      onClick={() => toggleSpeciality(speciality.id)}
+          <div className="space-y-6">
+            {categories.map(category => (
+              <div key={category} className="space-y-3">
+                <h3 className="text-md font-semibold text-gray-700 border-b pb-1">{category}</h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {specialitiesByCategory[category].map((speciality) => (
+                    <motion.div 
+                      key={speciality.id}
+                      className={`p-3 rounded-lg border-2 ${
+                        selectedSpecialities.includes(speciality.id)
+                          ? `${speciality.color} border-opacity-100 shadow-sm`
+                          : 'border-gray-200 hover:border-gray-300'
+                      } transition-all`}
+                      whileHover={{ y: -2 }}
+                      whileTap={{ scale: 0.98 }}
                     >
-                      <Checkbox 
-                        id={`speciality-popup-${speciality.id}`}
-                        checked={selectedSpecialities.includes(speciality.id)}
-                        onCheckedChange={() => toggleSpeciality(speciality.id)}
-                        className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
-                      />
-                    </div>
-                    <div
-                      className="flex-1 cursor-pointer"
-                      onClick={() => toggleSpeciality(speciality.id)}
-                    >
-                      <div className="flex items-center">
-                        <span className="text-2xl mr-2">{speciality.icon}</span>
-                        <Label 
-                          htmlFor={`speciality-popup-${speciality.id}`}
-                          className="font-medium"
+                      <div className="flex items-start">
+                        <div 
+                          className="flex items-center justify-center mr-3"
+                          onClick={() => toggleSpeciality(speciality.id)}
                         >
-                          {speciality.id}
-                        </Label>
+                          <Checkbox 
+                            id={`speciality-popup-${speciality.id}`}
+                            checked={selectedSpecialities.includes(speciality.id)}
+                            onCheckedChange={() => toggleSpeciality(speciality.id)}
+                            className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
+                          />
+                        </div>
+                        <div
+                          className="flex-1 cursor-pointer"
+                          onClick={() => toggleSpeciality(speciality.id)}
+                        >
+                          <div className="flex items-center">
+                            <span className="text-2xl mr-2">{speciality.icon}</span>
+                            <Label 
+                              htmlFor={`speciality-popup-${speciality.id}`}
+                              className="font-medium"
+                            >
+                              {speciality.id}
+                            </Label>
+                          </div>
+                          <p className="text-xs text-gray-500 mt-1">
+                            {speciality.description}
+                          </p>
+                        </div>
                       </div>
-                      <p className="text-xs text-gray-500 mt-1">
-                        {speciality.description}
-                      </p>
-                    </div>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </div>
-          
-          <div className="flex justify-between mt-6">
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={deselectAll}
-              className="text-gray-600"
-            >
-              Tout désélectionner
-            </Button>
-            <Button 
-              variant="outline" 
-              size="sm"
-              onClick={selectAll}
-              className="text-app-blue-medium"
-            >
-              Tout sélectionner
-            </Button>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            ))}
           </div>
           
           <div className="mt-4 text-center text-sm">
@@ -232,7 +221,7 @@ const SpecialitySelector = ({ isOpen, onClose }: SpecialitySelectorProps) => {
         <DialogFooter>
           <Button 
             onClick={onClose}
-            className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white"
+            className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white hover:from-app-blue-dark hover:to-indigo-700 transform transition-all hover:shadow-lg"
           >
             <Check className="h-4 w-4 mr-2" />
             Valider mes spécialités

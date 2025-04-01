@@ -1,5 +1,6 @@
 
 import { Flashcard, NiveauType, DiplomeType } from '@/types';
+import { frenchFlashcards } from './frenchFlashcards';
 
 // Mock flashcard data
 const flashcardsData: Flashcard[] = [
@@ -285,6 +286,9 @@ const flashcardsData: Flashcard[] = [
   }
 ];
 
+// Combine the base flashcards with the French flashcards
+const allFlashcards = [...flashcardsData, ...frenchFlashcards];
+
 // Function to get flashcards based on criteria
 export const getFlashcards = (
   matiere?: string, 
@@ -292,7 +296,7 @@ export const getFlashcards = (
   limit?: number,
   diplome?: string
 ): Flashcard[] => {
-  let filteredFlashcards = flashcardsData;
+  let filteredFlashcards = allFlashcards;
 
   if (diplome) {
     filteredFlashcards = filteredFlashcards.filter(card => card.diplome === diplome);
