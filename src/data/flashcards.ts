@@ -2,7 +2,8 @@
 import { Flashcard, NiveauType, DiplomeType } from '@/types';
 import { frenchFlashcards } from './frenchFlashcards';
 import { philosophyFlashcards } from './philosophyFlashcards';
-import { historyFlashcards } from './historyFlashcards';
+import { historyPremiereFlashcards } from './historyPremiereFlashcards';
+import { historyTerminaleFlashcards } from './historyTerminaleFlashcards';
 import { geographyFlashcards } from './geographyFlashcards';
 
 // Mock flashcard data for the base subjects
@@ -288,6 +289,9 @@ const flashcardsData: Flashcard[] = [
     diplome: 'gmat'
   }
 ];
+
+// Combine all history flashcards
+const historyFlashcards = [...historyPremiereFlashcards, ...historyTerminaleFlashcards];
 
 // Combine the base flashcards with the subject-specific flashcards
 const allFlashcards = [...flashcardsData, ...frenchFlashcards, ...philosophyFlashcards, ...historyFlashcards, ...geographyFlashcards];
