@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ThumbsUp, ThumbsDown, ArrowRight } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, ArrowRight, CheckCircle, XCircle, Sparkles } from 'lucide-react';
 import { Flashcard } from '@/types';
 import Mascot from '@/components/Mascot';
 import WriteAnswer from '@/components/WriteAnswer';
@@ -31,6 +31,7 @@ const FlashcardComponent = ({
   const [hasWriteAnswerEnabled, setHasWriteAnswerEnabled] = useState<boolean>(false);
   const [hasSubmittedAnswer, setHasSubmittedAnswer] = useState<boolean>(false);
   const [answerCorrectness, setAnswerCorrectness] = useState<boolean | null>(null);
+  const [showConfetti, setShowConfetti] = useState<boolean>(false);
   
   // Vérifier si l'option d'écrire les réponses est activée
   useEffect(() => {
@@ -51,12 +52,17 @@ const FlashcardComponent = ({
   useEffect(() => {
     setHasSubmittedAnswer(false);
     setAnswerCorrectness(null);
+    setShowConfetti(false);
   }, [flashcard]);
   
   // Gestionnaire pour la soumission de réponse écrite
   const handleAnswerSubmit = (answer: string, isCorrect: boolean) => {
     setHasSubmittedAnswer(true);
     setAnswerCorrectness(isCorrect);
+    
+    if (isCorrect) {
+      setShowConfetti(true);
+    }
     
     // On retourne automatiquement la carte pour voir la réponse
     if (!isFlipped) {
@@ -75,25 +81,115 @@ const FlashcardComponent = ({
     }
   };
 
+  // Animation variants
+  const cardVariants = {
+    hidden: (isBack: boolean) => ({
+      rotateY: isBack ? -90 : 90,
+      opacity: 0,
+    }),
+    visible: {
+      rotateY: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.3,
+        type: "tween",
+        ease: "easeOut"
+      }
+    },
+    exit: (isBack: boolean) => ({
+      rotateY: isBack ? 90 : -90,
+      opacity: 0,
+      transition: {
+        duration: 0.3
+      }
+    })
+  };
+
+  // Button animation variants
+  const buttonVariants = {
+    initial: { scale: 1 },
+    hover: { scale: 1.05, boxShadow: "0 5px 15px rgba(0,0,0,0.1)" },
+    tap: { scale: 0.95 }
+  };
+
+  // Content animation variants
+  const contentVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: (custom: number) => ({
+      opacity: 1,
+      y: 0,
+      transition: {
+        delay: custom * 0.1,
+        duration: 0.4
+      }
+    })
+  };
+
   return (
     <div className="p-4">
+      {showConfetti && (
+        <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
+          <div className="confetti-container">
+            {[...Array(50)].map((_, i) => {
+              const size = Math.random() * 10 + 5;
+              const left = Math.random() * 100;
+              const animationDuration = Math.random() * 3 + 2;
+              
+              return (
+                <motion.div
+                  key={i}
+                  className="absolute"
+                  style={{
+                    width: size,
+                    height: size,
+                    borderRadius: size / 2,
+                    backgroundColor: `hsl(${Math.random() * 360}, 90%, 65%)`,
+                    left: `${left}%`,
+                    top: -20,
+                  }}
+                  initial={{ y: -20 }}
+                  animate={{
+                    y: window.innerHeight + 50,
+                    x: Math.sin(Math.random() * 5) * 150,
+                    rotate: Math.random() * 360 * 2
+                  }}
+                  transition={{
+                    duration: animationDuration,
+                    ease: "easeOut",
+                    delay: Math.random() * 0.5
+                  }}
+                  onAnimationComplete={() => {
+                    if (i === 49) {
+                      setShowConfetti(false);
+                    }
+                  }}
+                />
+              );
+            })}
+          </div>
+        </div>
+      )}
+      
       <div className="relative mx-auto max-w-2xl perspective-1000">
-        <div className="flashcard-container w-full" style={{ minHeight: '450px' }}>
+        <div className="flashcard-container w-full" style={{ minHeight: '500px' }}>
           <AnimatePresence initial={false} mode="wait">
             <motion.div
               key={isFlipped ? 'back' : 'front'}
-              initial={{ rotateY: isFlipped ? -90 : 90, opacity: 0 }}
-              animate={{ rotateY: 0, opacity: 1 }}
-              exit={{ rotateY: isFlipped ? 90 : -90, opacity: 0 }}
-              transition={{ duration: 0.3, ease: 'easeInOut' }}
-              style={{ width: '100%', minHeight: '450px' }}
+              custom={isFlipped}
+              variants={cardVariants}
+              initial="hidden"
+              animate="visible"
+              exit="exit"
+              style={{ width: '100%', minHeight: '500px' }}
               className="w-full absolute inset-0"
             >
               <Card
                 className={`flashcard-${isFlipped ? 'back' : 'front'} p-6 w-full shadow-lg border-2 ${
-                  isFlipped ? 'border-indigo-300 bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900 dark:to-blue-900 dark:border-indigo-600' : 'border-app-blue-light dark:border-app-blue-medium bg-white dark:bg-gray-800'
+                  isFlipped 
+                    ? 'border-indigo-300 bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900 dark:to-blue-900 dark:border-indigo-600' 
+                    : 'border-app-blue-light dark:border-app-blue-medium bg-white dark:bg-gray-800'
                 }`}
-                style={{ minHeight: '450px' }}
+                style={{ minHeight: '500px' }}
               >
                 <div className="flex flex-col h-full">
                   <div className="flex justify-between items-center mb-4">
@@ -107,62 +203,196 @@ const FlashcardComponent = ({
                         </span>
                       )}
                     </div>
-                    <Mascot size="sm" animation={isFlipped ? 'bounce' : 'none'} />
+                    <motion.div
+                      animate={isFlipped ? { y: [0, -10, 0] } : {}}
+                      transition={{ repeat: isFlipped ? Infinity : 0, duration: 1.5 }}
+                    >
+                      <Mascot size="sm" animation={isFlipped ? 'bounce' : 'none'} />
+                    </motion.div>
                   </div>
 
                   <div className="flex-grow flex flex-col justify-center">
                     {isFlipped ? (
                       <div className="space-y-4">
-                        <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2 bg-yellow-100 dark:bg-yellow-800 p-3 rounded-lg shadow">Réponse:</h3>
-                        <div className="text-app-blue-dark dark:text-blue-300 text-lg p-4 bg-white dark:bg-gray-700 rounded-lg shadow-md border border-gray-100 dark:border-gray-600">
-                          <p className="font-medium">{flashcard.answer || "Pas de réponse disponible"}</p>
-                        </div>
+                        <motion.div
+                          custom={0}
+                          variants={contentVariants}
+                          initial="hidden"
+                          animate="visible"
+                          className="relative"
+                        >
+                          <motion.div 
+                            className="absolute -right-2 -top-2 z-10"
+                            animate={{ rotate: [0, 15, -15, 0] }}
+                            transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+                          >
+                            <Sparkles className="h-6 w-6 text-yellow-500" />
+                          </motion.div>
+                          <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2 bg-yellow-100 dark:bg-yellow-800 p-3 rounded-lg shadow relative">
+                            Réponse:
+                          </h3>
+                        </motion.div>
                         
-                        {showAnswerButtons && (
-                          <div className="mt-6 flex space-x-2">
-                            <Button
-                              onClick={onCorrect}
-                              className="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 text-base"
-                            >
-                              <ThumbsUp className="h-5 w-5 mr-2" />
-                              Correct
-                            </Button>
-                            <Button
-                              onClick={onIncorrect}
-                              className="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 text-base"
-                            >
-                              <ThumbsDown className="h-5 w-5 mr-2" />
-                              Incorrect
-                            </Button>
-                          </div>
+                        <motion.div
+                          custom={1}
+                          variants={contentVariants}
+                          initial="hidden"
+                          animate="visible"
+                          className="text-app-blue-dark dark:text-blue-300 text-lg p-4 bg-white dark:bg-gray-700 rounded-lg shadow-md border border-gray-100 dark:border-gray-600"
+                        >
+                          <p className="font-medium">{flashcard.answer || "Pas de réponse disponible"}</p>
+                        </motion.div>
+                        
+                        {(showAnswerButtons || hasSubmittedAnswer) && (
+                          <motion.div
+                            custom={2}
+                            variants={contentVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="mt-6"
+                          >
+                            {hasSubmittedAnswer ? (
+                              <div className="mb-4">
+                                <div className={`p-3 rounded-lg ${
+                                  answerCorrectness 
+                                    ? 'bg-green-100 dark:bg-green-900/30 border border-green-200 dark:border-green-800' 
+                                    : 'bg-red-100 dark:bg-red-900/30 border border-red-200 dark:border-red-800'
+                                }`}>
+                                  <div className="flex items-center">
+                                    {answerCorrectness ? (
+                                      <CheckCircle className="h-5 w-5 text-green-600 dark:text-green-400 mr-2" />
+                                    ) : (
+                                      <XCircle className="h-5 w-5 text-red-600 dark:text-red-400 mr-2" />
+                                    )}
+                                    <span className={`font-medium ${
+                                      answerCorrectness 
+                                        ? 'text-green-800 dark:text-green-200' 
+                                        : 'text-red-800 dark:text-red-200'
+                                    }`}>
+                                      {answerCorrectness ? 'Bien joué !' : 'Pas tout à fait...'}
+                                    </span>
+                                  </div>
+                                </div>
+                                
+                                <motion.div 
+                                  className="w-full mt-4"
+                                  variants={buttonVariants}
+                                  initial="initial"
+                                  whileHover="hover"
+                                  whileTap="tap"
+                                >
+                                  <Button
+                                    onClick={handleNextQuestion}
+                                    className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white py-3 text-base"
+                                  >
+                                    <ArrowRight className="h-5 w-5 mr-2" />
+                                    Question suivante
+                                  </Button>
+                                </motion.div>
+                              </div>
+                            ) : (
+                              <div className="flex space-x-2">
+                                <motion.div 
+                                  className="flex-1"
+                                  variants={buttonVariants}
+                                  initial="initial"
+                                  whileHover="hover"
+                                  whileTap="tap"
+                                >
+                                  <Button
+                                    onClick={onCorrect}
+                                    className="w-full bg-green-500 hover:bg-green-600 text-white py-3 text-base"
+                                  >
+                                    <ThumbsUp className="h-5 w-5 mr-2" />
+                                    Correct
+                                  </Button>
+                                </motion.div>
+                                <motion.div 
+                                  className="flex-1"
+                                  variants={buttonVariants}
+                                  initial="initial"
+                                  whileHover="hover"
+                                  whileTap="tap"
+                                >
+                                  <Button
+                                    onClick={onIncorrect}
+                                    className="w-full bg-red-500 hover:bg-red-600 text-white py-3 text-base"
+                                  >
+                                    <ThumbsDown className="h-5 w-5 mr-2" />
+                                    Incorrect
+                                  </Button>
+                                </motion.div>
+                              </div>
+                            )}
+                          </motion.div>
                         )}
                       </div>
                     ) : (
                       <div className="space-y-4">
-                        <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2">Question:</h3>
-                        <p className="text-app-blue-dark dark:text-blue-300 text-lg">{flashcard.question}</p>
+                        <motion.h3 
+                          custom={0}
+                          variants={contentVariants}
+                          initial="hidden"
+                          animate="visible"
+                          className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2"
+                        >
+                          Question:
+                        </motion.h3>
                         
-                        {hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped && (
-                          <div className="mt-4">
+                        <motion.p 
+                          custom={1}
+                          variants={contentVariants}
+                          initial="hidden"
+                          animate="visible"
+                          className="text-app-blue-dark dark:text-blue-300 text-lg"
+                        >
+                          {flashcard.question}
+                        </motion.p>
+                        
+                        {hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped ? (
+                          <motion.div 
+                            custom={2}
+                            variants={contentVariants}
+                            initial="hidden"
+                            animate="visible"
+                            className="mt-4"
+                          >
                             <WriteAnswer 
                               onSubmit={handleAnswerSubmit} 
                               correctAnswer={flashcard.answer || ""}
                             />
-                          </div>
-                        )}
+                          </motion.div>
+                        ) : null}
                       </div>
                     )}
                   </div>
 
                   <div className="mt-6">
-                    {(!isFlipped || !showAnswerButtons) && (
-                      <Button
-                        onClick={onFlip}
-                        className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white py-3 text-base"
-                        disabled={hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped}
+                    {(!isFlipped || !showAnswerButtons) && !hasWriteAnswerEnabled && (
+                      <motion.div
+                        variants={buttonVariants}
+                        initial="initial"
+                        whileHover="hover"
+                        whileTap="tap"
                       >
-                        {isFlipped ? 'Retour à la question' : 'Voir la réponse'}
-                      </Button>
+                        <Button
+                          onClick={onFlip}
+                          className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white py-3 text-base relative overflow-hidden group"
+                        >
+                          <motion.span 
+                            className="absolute inset-0 bg-white/10"
+                            initial={{ scaleX: 0 }}
+                            animate={{ scaleX: [0, 1, 0] }}
+                            transition={{ 
+                              duration: 1.5, 
+                              repeat: Infinity,
+                              repeatType: "loop"
+                            }}
+                            style={{ transformOrigin: 'left' }}
+                          />
+                          {isFlipped ? 'Retour à la question' : 'Voir la réponse'}
+                        </Button>
+                      </motion.div>
                     )}
                   </div>
                 </div>

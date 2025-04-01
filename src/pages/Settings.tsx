@@ -28,7 +28,7 @@ import {
   ChevronUp, 
   Sparkles,
   Check,
-  FileText // Add FileText to replace BookOpenText
+  FileText
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
@@ -143,7 +143,9 @@ const Settings = () => {
     }
   ];
 
-  const visibleSpecialities = showMoreSpecialities ? bacSpecialitiesData : bacSpecialitiesData.slice(0, 4);
+  const visibleSpecialities = showMoreSpecialities 
+    ? bacSpecialitiesData 
+    : bacSpecialitiesData.slice(0, 4);
 
   useEffect(() => {
     setSelectedDiplome(diplome || '');
@@ -448,7 +450,7 @@ const Settings = () => {
                                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                                   {bacSpecialitiesData.slice(4).map((speciality) => (
                                     <motion.div 
-                                      key={speciality.id}
+                                      key={`more-${speciality.id}`}
                                       className={`p-3 rounded-lg border-2 ${
                                         selectedSpecialities.includes(speciality.id)
                                           ? `${speciality.color} border-opacity-100 shadow-sm`
