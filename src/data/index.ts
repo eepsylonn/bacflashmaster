@@ -9,6 +9,7 @@ import { geographyFlashcards } from './geographyFlashcards';
 import { detailedGeographyFlashcards } from './geographyDetailedFlashcards';
 import { emcFlashcards } from './emcFlashcards';
 import { englishFlashcards } from './englishFlashcards';
+import { spanishFlashcards } from './spanishFlashcards';
 
 // Export all flashcards for use in other files
 export { getFlashcards } from './flashcards';
@@ -25,6 +26,7 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...geographyFlashcards,
     ...detailedGeographyFlashcards,
     ...emcFlashcards,
-    ...englishFlashcards
+    ...englishFlashcards,
+    ...spanishFlashcards
   ];
 };
