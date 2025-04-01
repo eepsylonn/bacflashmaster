@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
@@ -6,7 +7,7 @@ import { Label } from '@/components/ui/label';
 import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { BacSpecialite } from '@/types';
 import { motion } from 'framer-motion';
-import { ChevronDown, ChevronUp, Check, Sparkles } from 'lucide-react';
+import { Check, Sparkles } from 'lucide-react';
 import Mascot from '@/components/Mascot';
 import { useIsMobile } from '@/hooks/use-mobile';
 
@@ -110,11 +111,8 @@ interface SpecialitySelectorProps {
 
 const SpecialitySelector = ({ isOpen, onClose }: SpecialitySelectorProps) => {
   const { selectedSpecialities, setSelectedSpecialities } = useUserPreferences();
-  const [showMoreSpecialities, setShowMoreSpecialities] = useState(false);
   const isMobile = useIsMobile();
   
-  const visibleSpecialities = showMoreSpecialities ? specialitiesData : specialitiesData.slice(0, 4);
-
   const toggleSpeciality = (speciality: BacSpecialite) => {
     if (selectedSpecialities.includes(speciality)) {
       setSelectedSpecialities(selectedSpecialities.filter(item => item !== speciality));
@@ -157,7 +155,7 @@ const SpecialitySelector = ({ isOpen, onClose }: SpecialitySelectorProps) => {
 
           <div className="space-y-4">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {visibleSpecialities.map((speciality) => (
+              {specialitiesData.map((speciality) => (
                 <motion.div 
                   key={speciality.id}
                   className={`p-3 rounded-lg border-2 ${
@@ -201,74 +199,6 @@ const SpecialitySelector = ({ isOpen, onClose }: SpecialitySelectorProps) => {
                 </motion.div>
               ))}
             </div>
-            
-            <Button 
-              variant="ghost" 
-              onClick={() => setShowMoreSpecialities(!showMoreSpecialities)} 
-              className="w-full mt-2 text-app-blue-dark hover:bg-app-blue-light/10 p-1 h-8"
-            >
-              {showMoreSpecialities ? (
-                <>
-                  <span>Afficher moins</span>
-                  <ChevronUp className="ml-1 h-4 w-4" />
-                </>
-              ) : (
-                <>
-                  <span>Afficher plus</span>
-                  <ChevronDown className="ml-1 h-4 w-4" />
-                </>
-              )}
-            </Button>
-
-            {showMoreSpecialities && (
-              <div className="space-y-4 mt-2">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                  {specialitiesData.slice(4).map((speciality) => (
-                    <motion.div 
-                      key={speciality.id}
-                      className={`p-3 rounded-lg border-2 ${
-                        selectedSpecialities.includes(speciality.id)
-                          ? `${speciality.color} border-opacity-100 shadow-sm`
-                          : 'border-gray-200 hover:border-gray-300'
-                      } transition-all`}
-                      whileHover={{ y: -2 }}
-                      whileTap={{ scale: 0.98 }}
-                    >
-                      <div className="flex items-start">
-                        <div 
-                          className="flex items-center justify-center mr-3"
-                          onClick={() => toggleSpeciality(speciality.id)}
-                        >
-                          <Checkbox 
-                            id={`speciality-popup-extra-${speciality.id}`}
-                            checked={selectedSpecialities.includes(speciality.id)}
-                            onCheckedChange={() => toggleSpeciality(speciality.id)}
-                            className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
-                          />
-                        </div>
-                        <div
-                          className="flex-1 cursor-pointer"
-                          onClick={() => toggleSpeciality(speciality.id)}
-                        >
-                          <div className="flex items-center">
-                            <span className="text-2xl mr-2">{speciality.icon}</span>
-                            <Label 
-                              htmlFor={`speciality-popup-extra-${speciality.id}`}
-                              className="font-medium"
-                            >
-                              {speciality.id}
-                            </Label>
-                          </div>
-                          <p className="text-xs text-gray-500 mt-1">
-                            {speciality.description}
-                          </p>
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
           
           <div className="flex justify-between mt-6">
