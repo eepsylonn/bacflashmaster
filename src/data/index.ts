@@ -4,6 +4,14 @@ import { getFlashcards } from './flashcards';
 import { philosophyFlashcards } from './philosophyFlashcards';
 import { historyPremiereFlashcards } from './historyPremiereFlashcards';
 import { historyTerminaleFlashcards } from './historyTerminaleFlashcards';
+import { physiqueChimiePremiereFlashcards } from './physiqueChimiePremiereFlashcards';
+import { physiqueChimieTerminaleFlashcards } from './physiqueChimieTerminaleFlashcards';
+import { geographiePremiereFlashcards } from './geographiePremiereFlashcards';
+import { geographieTerminaleFlashcards } from './geographieTerminaleFlashcards';
+import { emcPremiereFlashcards } from './emcPremiereFlashcards';
+import { emcTerminaleFlashcards } from './emcTerminaleFlashcards';
+import { anglaisPremiereFlashcards } from './anglaisPremiereFlashcards';
+import { anglaisTerminaleFlashcards } from './anglaisTerminaleFlashcards';
 
 // Export all flashcards for use in other files
 export { getFlashcards } from './flashcards';
@@ -15,6 +23,14 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...baseFlashcards,
     ...philosophyFlashcards,
     ...historyPremiereFlashcards,
-    ...historyTerminaleFlashcards
+    ...historyTerminaleFlashcards,
+    ...physiqueChimiePremiereFlashcards,
+    ...physiqueChimieTerminaleFlashcards,
+    ...geographiePremiereFlashcards,
+    ...geographieTerminaleFlashcards,
+    ...emcPremiereFlashcards,
+    ...emcTerminaleFlashcards,
+    ...anglaisPremiereFlashcards,
+    ...anglaisTerminaleFlashcards
   ];
 };

@@ -1,7 +1,16 @@
+
 import { Flashcard, NiveauType, DiplomeType } from '@/types';
 import { philosophyFlashcards } from './philosophyFlashcards';
 import { historyPremiereFlashcards } from './historyPremiereFlashcards';
 import { historyTerminaleFlashcards } from './historyTerminaleFlashcards';
+import { physiqueChimiePremiereFlashcards } from './physiqueChimiePremiereFlashcards';
+import { physiqueChimieTerminaleFlashcards } from './physiqueChimieTerminaleFlashcards';
+import { geographiePremiereFlashcards } from './geographiePremiereFlashcards';
+import { geographieTerminaleFlashcards } from './geographieTerminaleFlashcards';
+import { emcPremiereFlashcards } from './emcPremiereFlashcards';
+import { emcTerminaleFlashcards } from './emcTerminaleFlashcards';
+import { anglaisPremiereFlashcards } from './anglaisPremiereFlashcards';
+import { anglaisTerminaleFlashcards } from './anglaisTerminaleFlashcards';
 
 // Mock flashcard data for the base subjects
 const flashcardsData: Flashcard[] = [
@@ -293,11 +302,39 @@ const historyFlashcards = [
     ...historyTerminaleFlashcards
 ];
 
+// Combine all physique-chimie flashcards
+const physiqueChimieFlashcards = [
+    ...physiqueChimiePremiereFlashcards,
+    ...physiqueChimieTerminaleFlashcards
+];
+
+// Combine all géographie flashcards
+const geographieFlashcards = [
+    ...geographiePremiereFlashcards,
+    ...geographieTerminaleFlashcards
+];
+
+// Combine all EMC flashcards
+const emcFlashcards = [
+    ...emcPremiereFlashcards,
+    ...emcTerminaleFlashcards
+];
+
+// Combine all anglais flashcards
+const anglaisFlashcards = [
+    ...anglaisPremiereFlashcards,
+    ...anglaisTerminaleFlashcards
+];
+
 // Combine the base flashcards with the subject-specific flashcards
 const allFlashcards = [
     ...flashcardsData,
     ...philosophyFlashcards,
-    ...historyFlashcards
+    ...historyFlashcards,
+    ...physiqueChimieFlashcards,
+    ...geographieFlashcards,
+    ...emcFlashcards,
+    ...anglaisFlashcards
 ];
 
 // Function to get flashcards based on criteria
