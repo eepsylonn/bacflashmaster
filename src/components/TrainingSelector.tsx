@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -146,12 +145,10 @@ const TrainingSelector = ({
   const niveaux = getNiveauByDiplome(diplome);
   const defaultNiveau = niveaux[0]?.value || "both";
   
-  // Check for both special cases: French (locked to "premiere") and Philosophy (locked to "terminale")
   const isFrenchBac = diplome === 'baccalaureat' && matiere === 'Français';
   const isPhiloBac = diplome === 'baccalaureat' && matiere === 'Philosophie';
   
   useEffect(() => {
-    // Force level to "premiere" for French, and "terminale" for Philosophy
     if (isFrenchBac && niveau !== 'premiere') {
       setNiveau('premiere');
     } else if (isPhiloBac && niveau !== 'terminale') {
