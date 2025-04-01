@@ -154,7 +154,7 @@ const Header = () => {
               WebkitOverflowScrolling: 'touch' 
             }}
           >
-            <div className="flex space-x-1 p-1 bg-white/10 rounded-lg min-w-max mx-auto" style={{ width: 'fit-content' }}>
+            <div className="flex space-x-1 p-1 bg-white/10 rounded-lg min-w-max mx-auto relative" style={{ width: 'fit-content' }}>
               {tabs.map((tab) => (
                 <button
                   key={tab.value}
@@ -162,25 +162,31 @@ const Header = () => {
                   onClick={() => navigate(tab.value)}
                   className={`relative px-3 py-2 rounded-md text-sm transition-all ${isMobile ? 'min-w-[80px]' : 'min-w-[100px]'} whitespace-nowrap
                     ${activeTab === tab.value 
-                      ? 'text-white font-medium' 
-                      : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+                      ? 'text-white font-medium z-20' 
+                      : 'text-white/70 hover:text-white hover:bg-white/10 z-10'}`}
                 >
-                  {activeTab === tab.value && (
-                    <motion.div
-                      layoutId="activeTab"
-                      className="absolute inset-0 bg-white/20 rounded-md"
-                      initial={false}
-                      transition={{ 
-                        type: "spring", 
-                        stiffness: 500, 
-                        damping: 30,
-                        layout: { duration: 0.2 } 
-                      }}
-                    />
-                  )}
                   <span className="relative z-10">{tab.label}</span>
                 </button>
               ))}
+              
+              {/* Indicateur animé d'onglet actif */}
+              <motion.div
+                layoutId="activeTabIndicator"
+                className="absolute top-0 left-0 bg-white/20 rounded-md z-0"
+                animate={{
+                  width: document.querySelector(`[data-path="${activeTab}"]`)?.getBoundingClientRect().width,
+                  height: document.querySelector(`[data-path="${activeTab}"]`)?.getBoundingClientRect().height,
+                  x: document.querySelector(`[data-path="${activeTab}"]`)?.getBoundingClientRect().left - 
+                     (tabsContainerRef.current?.getBoundingClientRect().left || 0) + 
+                     (tabsContainerRef.current?.scrollLeft || 0)
+                }}
+                transition={{ 
+                  type: "spring", 
+                  stiffness: 500, 
+                  damping: 30,
+                  duration: 0.3 
+                }}
+              />
             </div>
           </div>
         </div>
