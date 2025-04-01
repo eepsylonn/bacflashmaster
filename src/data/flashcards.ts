@@ -1,4 +1,3 @@
-
 import { Flashcard, NiveauType, DiplomeType } from '@/types';
 import { frenchFlashcards } from './frenchFlashcards';
 import { philosophyFlashcards } from './philosophyFlashcards';
@@ -290,7 +289,7 @@ const flashcardsData: Flashcard[] = [
   }
 ];
 
-// Combine all history flashcards
+// Combine the history flashcards from both levels
 const historyFlashcards = [...historyPremiereFlashcards, ...historyTerminaleFlashcards];
 
 // Combine the base flashcards with the subject-specific flashcards

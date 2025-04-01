@@ -3,7 +3,8 @@ import { Flashcard } from '@/types';
 import { getFlashcards } from './flashcards';
 import { frenchFlashcards } from './frenchFlashcards';
 import { philosophyFlashcards } from './philosophyFlashcards';
-import { historyFlashcards } from './historyFlashcards';
+import { historyPremiereFlashcards } from './historyPremiereFlashcards';
+import { historyTerminaleFlashcards } from './historyTerminaleFlashcards';
 import { geographyFlashcards } from './geographyFlashcards';
 
 // Export all flashcards for use in other files
@@ -16,7 +17,8 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...baseFlashcards,
     ...frenchFlashcards,
     ...philosophyFlashcards,
-    ...historyFlashcards,
+    ...historyPremiereFlashcards,
+    ...historyTerminaleFlashcards,
     ...geographyFlashcards
   ];
 };
