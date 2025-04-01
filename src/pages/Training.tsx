@@ -32,7 +32,8 @@ const Training = () => {
     showResult,
     currentResult,
     continueAfterResult,
-    calculateImprovementRate
+    calculateImprovementRate,
+    finishTraining
   } = useFlashcards();
 
   // Parse URL parameters
@@ -48,6 +49,9 @@ const Training = () => {
   const improvementRate = currentResult 
     ? calculateImprovementRate(currentResult.pourcentage, currentResult.matiere)
     : null;
+
+  // Déterminer si c'est la dernière question
+  const isLastQuestion = currentIndex === currentQuestions.length - 1;
 
   if (showResult && currentResult) {
     return (
@@ -108,6 +112,8 @@ const Training = () => {
                     onIncorrect={markIncorrect}
                     onNext={nextQuestion}
                     showAnswerButtons={isFlipped}
+                    isLastQuestion={isLastQuestion}
+                    finishTraining={finishTraining}
                   />
                 )}
               </motion.div>

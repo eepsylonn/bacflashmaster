@@ -26,7 +26,8 @@ const Exam = () => {
     showResult,
     currentResult,
     continueAfterResult,
-    calculateImprovementRate
+    calculateImprovementRate,
+    finishTraining
   } = useFlashcards();
   
   const { diplome } = useDiplome();
@@ -57,6 +58,9 @@ const Exam = () => {
   const improvementRate = currentResult 
     ? calculateImprovementRate(currentResult.pourcentage, currentResult.matiere)
     : null;
+
+  // Déterminer si c'est la dernière question
+  const isLastQuestion = currentIndex === currentQuestions.length - 1;
 
   if (showResult && currentResult) {
     return (
@@ -131,6 +135,8 @@ const Exam = () => {
                   onIncorrect={markIncorrect}
                   onNext={nextQuestion}
                   showAnswerButtons={isFlipped}
+                  isLastQuestion={isLastQuestion}
+                  finishTraining={finishTraining}
                 />
               )}
             </motion.div>

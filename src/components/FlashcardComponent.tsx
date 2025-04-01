@@ -1,8 +1,9 @@
+
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ThumbsUp, ThumbsDown, ArrowRight, CheckCircle, XCircle, Sparkles, Eye } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, ArrowRight, CheckCircle, XCircle, Sparkles, Eye, Flag } from 'lucide-react';
 import { Flashcard } from '@/types';
 import Mascot from '@/components/Mascot';
 import WriteAnswer from '@/components/WriteAnswer';
@@ -15,6 +16,8 @@ interface FlashcardProps {
   onIncorrect: () => void;
   onNext?: () => void;
   showAnswerButtons: boolean;
+  isLastQuestion?: boolean;
+  finishTraining?: () => void;
 }
 
 const FlashcardComponent = ({
@@ -25,6 +28,8 @@ const FlashcardComponent = ({
   onIncorrect,
   onNext,
   showAnswerButtons,
+  isLastQuestion = false,
+  finishTraining,
 }: FlashcardProps) => {
   const [dimension, setDimension] = useState({ width: 0, height: 0 });
   const [hasWriteAnswerEnabled, setHasWriteAnswerEnabled] = useState<boolean>(false);
@@ -82,9 +87,22 @@ const FlashcardComponent = ({
     }
   };
 
+  // Gestionnaire pour terminer l'entraînement/examen
+  const handleFinishTraining = () => {
+    if (answerCorrectness === true) {
+      onCorrect();
+    } else if (answerCorrectness === false) {
+      onIncorrect();
+    } else if (finishTraining) {
+      finishTraining();
+    }
+  };
+
   // Afficher la réponse sans retourner la carte
   const handleShowAnswer = () => {
     setShowAnswer(true);
+    // Ajouter une animation cool pour gamifier
+    setShowConfetti(true);
   };
 
   // Animation variants
@@ -129,6 +147,28 @@ const FlashcardComponent = ({
         duration: 0.4
       }
     })
+  };
+
+  // Animation cool pour la réponse
+  const answerVariants = {
+    hidden: { 
+      opacity: 0,
+      y: 50,
+      scale: 0.9,
+      rotateX: -30
+    },
+    visible: { 
+      opacity: 1,
+      y: 0,
+      scale: 1,
+      rotateX: 0,
+      transition: {
+        type: "spring",
+        stiffness: 300,
+        damping: 20,
+        duration: 0.7
+      }
+    }
   };
 
   return (
@@ -276,13 +316,23 @@ const FlashcardComponent = ({
                               whileHover="hover"
                               whileTap="tap"
                             >
-                              <Button
-                                onClick={handleNextQuestion}
-                                className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white py-3 text-base"
-                              >
-                                <ArrowRight className="h-5 w-5 mr-2" />
-                                Question suivante
-                              </Button>
+                              {isLastQuestion ? (
+                                <Button
+                                  onClick={handleFinishTraining}
+                                  className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 text-base"
+                                >
+                                  <Flag className="h-5 w-5 mr-2" />
+                                  Terminer
+                                </Button>
+                              ) : (
+                                <Button
+                                  onClick={handleNextQuestion}
+                                  className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white py-3 text-base"
+                                >
+                                  <ArrowRight className="h-5 w-5 mr-2" />
+                                  Question suivante
+                                </Button>
+                              )}
                             </motion.div>
                           </div>
                         ) : (
@@ -399,59 +449,89 @@ const FlashcardComponent = ({
                     <AnimatePresence>
                       {showAnswer && !isFlipped && (
                         <motion.div
-                          className="space-y-4 mt-6"
-                          initial={{ opacity: 0, y: 20 }}
-                          animate={{ opacity: 1, y: 0 }}
-                          exit={{ opacity: 0, y: -20 }}
-                          transition={{ duration: 0.3 }}
+                          className="mt-4"
+                          variants={answerVariants}
+                          initial="hidden"
+                          animate="visible"
                         >
-                          <div className="relative">
+                          <div className="relative overflow-hidden">
                             <motion.div 
-                              className="absolute -right-2 -top-2 z-10"
-                              animate={{ rotate: [0, 15, -15, 0] }}
-                              transition={{ duration: 1.5, repeat: Infinity, repeatType: "reverse" }}
+                              animate={{ 
+                                x: [0, 5, -5, 0],
+                                rotate: [0, 2, -2, 0]
+                              }}
+                              transition={{ 
+                                duration: 0.5,
+                                delay: 0.2
+                              }}
+                              className="bg-gradient-to-r from-amber-100 to-yellow-100 dark:from-amber-900/50 dark:to-yellow-900/50 p-5 rounded-lg shadow-lg border-2 border-yellow-300 dark:border-yellow-600"
                             >
-                              <Sparkles className="h-6 w-6 text-yellow-500" />
-                            </motion.div>
-                            <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2 bg-yellow-100 dark:bg-yellow-800/70 p-3 rounded-lg shadow-md relative">
-                              Réponse:
-                            </h3>
-                          </div>
-                          
-                          <div className="text-app-blue-dark dark:text-blue-200 text-lg p-5 bg-white dark:bg-gray-700/90 rounded-lg shadow-md border border-gray-100 dark:border-gray-600">
-                            <p className="font-medium">{flashcard.answer || "Pas de réponse disponible"}</p>
-                          </div>
-                          
-                          <div className="flex space-x-2 mt-4">
-                            <motion.div 
-                              className="flex-1"
-                              variants={buttonVariants}
-                              initial="initial"
-                              whileHover="hover"
-                              whileTap="tap"
-                            >
-                              <Button
-                                onClick={onCorrect}
-                                className="w-full bg-green-500 hover:bg-green-600 text-white py-3 text-base"
+                              <div className="relative mb-2">
+                                <motion.div 
+                                  className="absolute -right-1 -top-1 z-10"
+                                  animate={{ 
+                                    rotate: [0, 15, -15, 0],
+                                    scale: [1, 1.2, 1]
+                                  }}
+                                  transition={{ 
+                                    duration: 1.5, 
+                                    repeat: Infinity, 
+                                    repeatType: "reverse" 
+                                  }}
+                                >
+                                  <Sparkles className="h-6 w-6 text-yellow-500" />
+                                </motion.div>
+                                <h3 className="text-xl font-bold text-yellow-800 dark:text-yellow-300">
+                                  Réponse:
+                                </h3>
+                              </div>
+                              
+                              <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.3, duration: 0.4 }}
+                                className="text-app-blue-dark dark:text-blue-200 text-lg bg-white/80 dark:bg-gray-800/80 p-4 rounded-md shadow-inner"
                               >
-                                <ThumbsUp className="h-5 w-5 mr-2" />
-                                Correct
-                              </Button>
-                            </motion.div>
-                            <motion.div 
-                              className="flex-1"
-                              variants={buttonVariants}
-                              initial="initial"
-                              whileHover="hover"
-                              whileTap="tap"
-                            >
-                              <Button
-                                onClick={onIncorrect}
-                                className="w-full bg-red-500 hover:bg-red-600 text-white py-3 text-base"
+                                <p className="font-medium">{flashcard.answer || "Pas de réponse disponible"}</p>
+                              </motion.div>
+                              
+                              <motion.div
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ delay: 0.5, duration: 0.4 }}
+                                className="flex space-x-2 mt-4"
                               >
-                                <ThumbsDown className="h-5 w-5 mr-2" />
-                                Incorrect
-                              </Button>
+                                <motion.div 
+                                  className="flex-1"
+                                  variants={buttonVariants}
+                                  initial="initial"
+                                  whileHover="hover"
+                                  whileTap="tap"
+                                >
+                                  <Button
+                                    onClick={onCorrect}
+                                    className="w-full bg-green-500 hover:bg-green-600 text-white py-3 text-base"
+                                  >
+                                    <ThumbsUp className="h-5 w-5 mr-2" />
+                                    Correct
+                                  </Button>
+                                </motion.div>
+                                <motion.div 
+                                  className="flex-1"
+                                  variants={buttonVariants}
+                                  initial="initial"
+                                  whileHover="hover"
+                                  whileTap="tap"
+                                >
+                                  <Button
+                                    onClick={onIncorrect}
+                                    className="w-full bg-red-500 hover:bg-red-600 text-white py-3 text-base"
+                                  >
+                                    <ThumbsDown className="h-5 w-5 mr-2" />
+                                    Incorrect
+                                  </Button>
+                                </motion.div>
+                              </motion.div>
                             </motion.div>
                           </div>
                         </motion.div>
