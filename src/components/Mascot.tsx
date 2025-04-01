@@ -2,16 +2,17 @@
 import { motion } from 'framer-motion';
 
 interface MascotProps {
-  size?: 'sm' | 'md' | 'lg';
+  size?: 'xs' | 'sm' | 'md' | 'lg';
   animation?: 'bounce' | 'pulse' | 'wave' | 'spin' | 'none';
   className?: string;
 }
 
 const Mascot = ({ size = 'md', animation = 'none', className = '' }: MascotProps) => {
   const sizeClass = {
+    xs: 'w-6 h-6',
     sm: 'w-8 h-8',
-    md: 'w-12 h-12',
-    lg: 'w-20 h-20'
+    md: 'w-10 h-10',
+    lg: 'w-16 h-16'
   };
 
   const getAnimationProps = () => {

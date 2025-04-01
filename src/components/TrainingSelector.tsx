@@ -7,6 +7,7 @@ import { NombreQuestions } from '@/types';
 import { MascotSlider } from '@/components/MascotSlider';
 import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
+import { useDiplome } from '@/contexts/DiplomeContext';
 
 interface TrainingSelectorProps {
   matiere: string | undefined;
@@ -18,16 +19,29 @@ interface TrainingSelectorProps {
   onStartTraining: () => void;
 }
 
-const matieres = [
-  'Mathématiques',
-  'Physique-Chimie',
-  'SVT',
-  'Histoire-Géographie',
-  'Français',
-  'Philosophie',
-  'Anglais',
-  'SES'
-];
+// Matières selon le diplôme
+const getMatieresByDiplome = (diplome: string | undefined) => {
+  switch(diplome) {
+    case 'toeic':
+      return ['Compréhension orale', 'Compréhension écrite', 'Grammaire', 'Vocabulaire'];
+    case 'tage-mage':
+      return ['Calcul', 'Logique', 'Verbal', 'Problèmes'];
+    case 'baccalaureat':
+    default:
+      return [
+        'Mathématiques',
+        'Physique',
+        'Chimie',
+        'SVT',
+        'Histoire',
+        'Géographie',
+        'Français',
+        'Philosophie',
+        'Anglais',
+        'SES'
+      ];
+  }
+};
 
 const questionOptions: NombreQuestions[] = [5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 
@@ -41,6 +55,10 @@ const TrainingSelector = ({
   onStartTraining
 }: TrainingSelectorProps) => {
   const [sliderValue, setSliderValue] = useState<number[]>([questionOptions.indexOf(nombreQuestions)]);
+  const { diplome } = useDiplome();
+  
+  // Obtenir les matières selon le diplôme sélectionné
+  const matieres = getMatieresByDiplome(diplome);
   
   // Mettre à jour le nombre de questions lorsque le slider change
   useEffect(() => {
@@ -53,7 +71,7 @@ const TrainingSelector = ({
   return (
     <Card className="p-6 shadow-lg bg-white rounded-xl border-2 border-app-blue-light">
       <div className="flex items-center justify-center mb-6">
-        <Mascot size="lg" animation="wave" />
+        <Mascot size="md" animation="wave" />
         <h2 className="text-2xl font-semibold ml-4 text-app-blue-dark">Paramètres d'entraînement</h2>
       </div>
       
@@ -62,14 +80,14 @@ const TrainingSelector = ({
           <label className="block text-sm font-medium text-gray-700">
             Matière
           </label>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 gap-2">
             {matieres.map((m) => (
               <motion.button
                 key={m}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => setMatiere(m)}
-                className={`p-3 rounded-lg text-center text-sm transition-all ${
+                className={`p-3 h-14 rounded-lg text-center text-sm transition-all flex items-center justify-center ${
                   matiere === m
                     ? 'bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white font-medium shadow-md'
                     : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
@@ -81,34 +99,36 @@ const TrainingSelector = ({
           </div>
         </div>
         
-        <div className="space-y-2">
-          <label className="block text-sm font-medium text-gray-700">
-            Niveau
-          </label>
-          <Tabs 
-            defaultValue={niveau || "both"} 
-            onValueChange={(value) => {
-              if (value === "both") {
-                setNiveau(undefined);
-              } else {
-                setNiveau(value as 'premiere' | 'terminale');
-              }
-            }}
-            className="w-full"
-          >
-            <TabsList className="grid grid-cols-3 w-full">
-              <TabsTrigger value="premiere" className="data-[state=active]:bg-app-blue-medium data-[state=active]:text-white">
-                Première
-              </TabsTrigger>
-              <TabsTrigger value="terminale" className="data-[state=active]:bg-app-blue-medium data-[state=active]:text-white">
-                Terminale
-              </TabsTrigger>
-              <TabsTrigger value="both" className="data-[state=active]:bg-app-blue-medium data-[state=active]:text-white">
-                Les deux
-              </TabsTrigger>
-            </TabsList>
-          </Tabs>
-        </div>
+        {diplome === 'baccalaureat' && (
+          <div className="space-y-2">
+            <label className="block text-sm font-medium text-gray-700">
+              Niveau
+            </label>
+            <Tabs 
+              defaultValue={niveau || "both"} 
+              onValueChange={(value) => {
+                if (value === "both") {
+                  setNiveau(undefined);
+                } else {
+                  setNiveau(value as 'premiere' | 'terminale');
+                }
+              }}
+              className="w-full"
+            >
+              <TabsList className="grid grid-cols-3 w-full">
+                <TabsTrigger value="premiere" className="data-[state=active]:bg-app-blue-medium data-[state=active]:text-white">
+                  Première
+                </TabsTrigger>
+                <TabsTrigger value="terminale" className="data-[state=active]:bg-app-blue-medium data-[state=active]:text-white">
+                  Terminale
+                </TabsTrigger>
+                <TabsTrigger value="both" className="data-[state=active]:bg-app-blue-medium data-[state=active]:text-white">
+                  Les deux
+                </TabsTrigger>
+              </TabsList>
+            </Tabs>
+          </div>
+        )}
         
         <div className="space-y-4">
           <label className="block text-sm font-medium text-gray-700">

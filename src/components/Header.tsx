@@ -1,17 +1,15 @@
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { BookOpen, Menu, X } from 'lucide-react';
 import { motion } from 'framer-motion';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import Mascot from '@/components/Mascot';
 
 const Header = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [currentTab, setCurrentTab] = useState('');
+  const [activeTab, setActiveTab] = useState('/');
+  const tabsContainerRef = useRef<HTMLDivElement>(null);
   
   const tabs = [
     { value: '/', label: 'Accueil' },
@@ -21,116 +19,171 @@ const Header = () => {
     { value: '/statistiques', label: 'Statistiques' }
   ];
   
+  // Effet pour définir l'onglet actif en fonction de la route
   useEffect(() => {
-    // Trouver le tab qui correspond à la route actuelle
-    const tab = tabs.find(tab => tab.value === location.pathname);
-    if (tab) {
-      setCurrentTab(tab.value);
-    } else {
-      setCurrentTab('/');
+    const path = location.pathname;
+    setActiveTab(path);
+    
+    // Faites défiler vers l'onglet actif
+    const activeTabElement = document.querySelector(`[data-path="${path}"]`);
+    if (activeTabElement && tabsContainerRef.current) {
+      const containerWidth = tabsContainerRef.current.offsetWidth;
+      const tabPosition = (activeTabElement as HTMLElement).offsetLeft;
+      const tabWidth = (activeTabElement as HTMLElement).offsetWidth;
+      
+      // Calculer la position de défilement pour centrer l'onglet
+      const scrollPosition = tabPosition - (containerWidth / 2) + (tabWidth / 2);
+      tabsContainerRef.current.scrollTo({ left: scrollPosition, behavior: 'smooth' });
     }
   }, [location.pathname]);
   
-  const handleTabChange = (value: string) => {
-    setCurrentTab(value);
-    navigate(value);
-    // Fermer le menu mobile si ouvert
-    if (isMobileMenuOpen) {
-      setIsMobileMenuOpen(false);
-    }
-  };
-  
   return (
-    <header className="bg-gradient-to-r from-app-blue-dark to-indigo-800 text-white py-5 shadow-md relative">
-      <div className="container px-4 mx-auto">
-        <div className="flex flex-col mb-5">
-          <Link to="/" className="text-3xl font-bold flex items-center gap-2 group mx-auto">
-            <motion.div
-              initial={{ rotate: 0 }}
-              animate={{ rotate: [0, 10, 0, -10, 0] }}
-              transition={{ duration: 1, repeat: Infinity, repeatDelay: 3 }}
-            >
-              <Mascot animation="none" />
-            </motion.div>
-            <span className="text-gradient-title font-extrabold">
-              <span className="animate-pulse inline-block">F</span>
-              <span className="animate-pulse inline-block delay-75">l</span>
-              <span className="animate-pulse inline-block delay-100">a</span>
-              <span className="animate-pulse inline-block delay-125">s</span>
-              <span className="animate-pulse inline-block delay-150">h</span>
-              <span className="animate-pulse inline-block delay-175">B</span>
-              <span className="animate-pulse inline-block delay-200">a</span>
-              <span className="animate-pulse inline-block delay-225">c</span>
-              <span className="animate-pulse inline-block delay-250">'</span>
-            </span>
-          </Link>
-        </div>
-      
-        {/* Navigation pour desktop */}
-        <div className="hidden md:block">
-          <Tabs
-            value={currentTab}
-            onValueChange={handleTabChange}
-            className="w-full"
-          >
-            <TabsList className="w-full bg-white/10 p-1">
-              {tabs.map((tab) => (
-                <TabsTrigger
-                  key={tab.value}
-                  value={tab.value}
-                  className="flex-1 data-[state=active]:bg-white/20 data-[state=active]:text-white data-[state=active]:shadow-sm"
-                >
-                  {tab.label}
-                </TabsTrigger>
-              ))}
-            </TabsList>
-          </Tabs>
-        </div>
-        
-        {/* Navigation Mobile - Bouton burger */}
-        <div className="md:hidden flex justify-center">
-          <motion.button
-            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="bg-white/20 p-2 rounded-full"
-            whileTap={{ scale: 0.9 }}
-          >
-            {isMobileMenuOpen ? (
-              <X className="h-6 w-6" />
-            ) : (
-              <Menu className="h-6 w-6" />
-            )}
-          </motion.button>
-        </div>
-        
-        {/* Menu mobile déroulant */}
-        {isMobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="md:hidden mt-4 flex flex-col gap-2 bg-white/10 rounded-lg p-3"
-          >
-            {tabs.map((tab) => (
+    <header className="relative">
+      {/* Fond avec gradient */}
+      <div className="bg-gradient-to-r from-app-blue-dark to-indigo-800 text-white py-5 shadow-lg">
+        <div className="container px-4 mx-auto">
+          {/* Logo et titre */}
+          <div className="flex justify-center items-center mb-5">
+            <Link to="/" className="text-3xl font-bold flex items-center gap-2 group">
               <motion.div
-                key={tab.value}
-                whileTap={{ scale: 0.95 }}
+                initial={{ rotate: 0 }}
+                animate={{ rotate: [0, 10, 0, -10, 0] }}
+                transition={{ duration: 1, repeat: Infinity, repeatDelay: 3 }}
               >
-                <Link 
-                  to={tab.value} 
-                  className={`block p-3 rounded-lg transition-all ${
-                    location.pathname === tab.value 
-                      ? 'bg-white/20 text-white font-medium' 
-                      : 'text-gray-200 hover:bg-white/10 hover:text-white'
-                  }`}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  {tab.label}
-                </Link>
+                <Mascot animation="none" size="md" />
               </motion.div>
-            ))}
-          </motion.div>
-        )}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-300 to-amber-500 font-extrabold text-3xl md:text-4xl">
+                <motion.span 
+                  className="inline-block origin-bottom"
+                  animate={{ 
+                    y: [0, -3, 0],
+                    transition: { delay: 0, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
+                  }}
+                >
+                  F
+                </motion.span>
+                <motion.span 
+                  className="inline-block origin-bottom"
+                  animate={{ 
+                    y: [0, -3, 0],
+                    transition: { delay: 0.1, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
+                  }}
+                >
+                  l
+                </motion.span>
+                <motion.span 
+                  className="inline-block origin-bottom"
+                  animate={{ 
+                    y: [0, -3, 0],
+                    transition: { delay: 0.2, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
+                  }}
+                >
+                  a
+                </motion.span>
+                <motion.span 
+                  className="inline-block origin-bottom"
+                  animate={{ 
+                    y: [0, -3, 0],
+                    transition: { delay: 0.3, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
+                  }}
+                >
+                  s
+                </motion.span>
+                <motion.span 
+                  className="inline-block origin-bottom"
+                  animate={{ 
+                    y: [0, -3, 0],
+                    transition: { delay: 0.4, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
+                  }}
+                >
+                  h
+                </motion.span>
+                <motion.span 
+                  className="inline-block origin-bottom"
+                  animate={{ 
+                    y: [0, -3, 0],
+                    transition: { delay: 0.5, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
+                  }}
+                >
+                  B
+                </motion.span>
+                <motion.span 
+                  className="inline-block origin-bottom"
+                  animate={{ 
+                    y: [0, -3, 0],
+                    transition: { delay: 0.6, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
+                  }}
+                >
+                  a
+                </motion.span>
+                <motion.span 
+                  className="inline-block origin-bottom"
+                  animate={{ 
+                    y: [0, -3, 0],
+                    transition: { delay: 0.7, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
+                  }}
+                >
+                  c
+                </motion.span>
+                <motion.span 
+                  className="inline-block origin-bottom"
+                  animate={{ 
+                    y: [0, -3, 0],
+                    transition: { delay: 0.8, duration: 0.5, repeat: Infinity, repeatDelay: 3 }
+                  }}
+                >
+                  '
+                </motion.span>
+              </span>
+            </Link>
+          </div>
+          
+          {/* Onglets avec défilement horizontal */}
+          <div 
+            ref={tabsContainerRef}
+            className="overflow-x-auto scrollbar-hide max-w-full"
+            style={{ 
+              scrollbarWidth: 'none', 
+              msOverflowStyle: 'none',
+              WebkitOverflowScrolling: 'touch' 
+            }}
+          >
+            <div className="flex space-x-1 p-1 bg-white/10 rounded-lg min-w-max mx-auto" style={{ width: 'fit-content' }}>
+              {tabs.map((tab) => (
+                <button
+                  key={tab.value}
+                  data-path={tab.value}
+                  onClick={() => navigate(tab.value)}
+                  className={`relative px-4 py-2 rounded-md text-sm transition-all min-w-[100px] whitespace-nowrap
+                    ${activeTab === tab.value 
+                      ? 'text-white font-medium' 
+                      : 'text-white/70 hover:text-white hover:bg-white/10'}`}
+                >
+                  {activeTab === tab.value && (
+                    <motion.div
+                      layoutId="activeTab"
+                      className="absolute inset-0 bg-white/20 rounded-md"
+                      initial={false}
+                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    />
+                  )}
+                  <span className="relative z-10">{tab.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
+      
+      {/* Ajouter des styles pour cacher la scrollbar */}
+      <style>
+        {`
+          /* For Webkit browsers like Chrome/Safari */
+          .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+          }
+        `}
+      </style>
     </header>
   );
 };

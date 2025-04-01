@@ -8,6 +8,7 @@ import { Card } from '@/components/ui/card';
 import { useFlashcards } from '@/hooks/useFlashcards';
 import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
+import { useDiplome } from '@/contexts/DiplomeContext';
 
 const Exam = () => {
   const {
@@ -26,6 +27,30 @@ const Exam = () => {
     continueAfterResult,
     calculateImprovementRate
   } = useFlashcards();
+  
+  const { diplome } = useDiplome();
+  
+  // Textes spécifiques selon le diplôme
+  const getExamTitle = () => {
+    switch(diplome) {
+      case 'toeic': return 'Simulation TOEIC';
+      case 'tage-mage': return 'Simulation TAGE MAGE';
+      case 'baccalaureat':
+      default: return 'Examen Baccalauréat';
+    }
+  };
+  
+  const getExamDescription = () => {
+    switch(diplome) {
+      case 'toeic': 
+        return 'Teste tes compétences en anglais avec cette simulation TOEIC de 200 questions couvrant la compréhension orale et écrite.';
+      case 'tage-mage': 
+        return 'Entraîne-toi pour le TAGE MAGE avec 200 questions mêlant calcul, logique et compréhension verbale.';
+      case 'baccalaureat':
+      default: 
+        return 'Prépare-toi à passer un examen comprenant 200 questions aléatoires portant sur toutes les matières du programme de première et terminale.';
+    }
+  };
   
   // Calculer le taux d'amélioration pour afficher dans la page de résultat
   const improvementRate = currentResult 
@@ -58,12 +83,11 @@ const Exam = () => {
                 <Card className="p-8 shadow-lg bg-white rounded-xl border-2 border-app-blue-light">
                   <div className="flex items-center justify-center mb-6">
                     <Mascot size="lg" animation="bounce" />
-                    <h2 className="text-2xl font-semibold ml-4 text-app-blue-dark text-center">Examen Baccalauréat</h2>
+                    <h2 className="text-2xl font-semibold ml-4 text-app-blue-dark text-center">{getExamTitle()}</h2>
                   </div>
                   
                   <p className="text-gray-600 mb-6 text-center">
-                    Prépare-toi à passer un examen comprenant 200 questions aléatoires 
-                    portant sur toutes les matières du programme de première et terminale.
+                    {getExamDescription()}
                   </p>
                   
                   <motion.div
