@@ -1,5 +1,4 @@
-
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -13,7 +12,6 @@ import { ChevronDown, ChevronUp, Settings, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 
-// Matières selon le diplôme
 const getMatieresByDiplome = (diplome: string | undefined, selectedSpecialities: string[] = []) => {
   switch(diplome) {
     case 'toeic':
@@ -44,7 +42,6 @@ const getMatieresByDiplome = (diplome: string | undefined, selectedSpecialities:
         'Technologie'
       ];
     case 'baccalaureat':
-      // Matières du tronc commun
       const troncCommun = [
         'Philosophie',
         'Français',
@@ -55,12 +52,10 @@ const getMatieresByDiplome = (diplome: string | undefined, selectedSpecialities:
         'Espagnol'
       ];
       
-      // Si des spécialités sont sélectionnées, les ajouter au tronc commun
       if (selectedSpecialities && selectedSpecialities.length > 0) {
         return [...troncCommun, ...selectedSpecialities];
       }
       
-      // Sinon, retourner seulement le tronc commun
       return troncCommun;
     default:
       return [
@@ -143,26 +138,21 @@ const TrainingSelector = ({
   const [showAllSubjects, setShowAllSubjects] = useState(false);
   const isMobile = useIsMobile();
   
-  // Obtenir les matières selon le diplôme sélectionné
   const matieres = getMatieresByDiplome(diplome, selectedSpecialities);
   const visibleMatieres = showAllSubjects ? matieres : matieres.slice(0, isMobile ? 4 : 6);
   const hasMoreSubjects = matieres.length > (isMobile ? 4 : 6);
   
-  // Obtenir les niveaux selon le diplôme
   const niveaux = getNiveauByDiplome(diplome);
   const defaultNiveau = niveaux[0]?.value || "both";
   
-  // Déterminer si le niveau doit être verrouillé sur "première"
   const isFrenchBac = diplome === 'baccalaureat' && matiere === 'Français';
   
-  // Forcer le niveau à "première" si c'est le français du bac
   useEffect(() => {
     if (isFrenchBac && niveau !== 'premiere') {
       setNiveau('premiere');
     }
   }, [isFrenchBac, niveau, setNiveau]);
   
-  // Mettre à jour le nombre de questions lorsque le slider change
   useEffect(() => {
     const index = sliderValue[0];
     if (index >= 0 && index < questionOptions.length) {
@@ -170,7 +160,6 @@ const TrainingSelector = ({
     }
   }, [sliderValue, setNombreQuestions]);
   
-  // Réinitialiser la matière si elle n'existe pas dans la nouvelle liste
   useEffect(() => {
     if (matiere && !matieres.includes(matiere)) {
       setMatiere(matieres[0]);
@@ -205,9 +194,6 @@ const TrainingSelector = ({
                 }`}
               >
                 {m}
-                {m === 'Français' && diplome === 'baccalaureat' && (
-                  <Lock className="ml-1 h-3 w-3 opacity-70" />
-                )}
               </motion.button>
             ))}
           </div>
@@ -266,7 +252,6 @@ const TrainingSelector = ({
               defaultValue={isFrenchBac ? 'premiere' : (niveau || defaultNiveau)} 
               onValueChange={(value) => {
                 if (isFrenchBac) {
-                  // Ne rien faire si c'est le français du bac
                   return;
                 }
                 
