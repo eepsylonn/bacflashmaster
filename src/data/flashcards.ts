@@ -1,4 +1,3 @@
-
 import { Flashcard, NiveauType, DiplomeType } from '@/types';
 import { philosophyFlashcards } from './philosophyFlashcards';
 import { historyPremiereFlashcards } from './historyPremiereFlashcards';
@@ -326,7 +325,7 @@ const anglaisFlashcards = [
     ...anglaisTerminaleFlashcards
 ];
 
-// Combine the base flashcards with the subject-specific flashcards
+// Combine all flashcards into one array for general access
 const allFlashcards = [
     ...flashcardsData,
     ...philosophyFlashcards,
@@ -374,20 +373,3 @@ export const getFlashcards = (
 
   return filteredFlashcards;
 };
-
-// Combine all flashcards into one array for general access
-// This section doesn't affect the filtering above since we're building the filtered array from scratch
-const allFlashcards = [
-  ...flashcardsData,
-  ...philosophyFlashcards,
-  ...historyPremiereFlashcards,
-  ...historyTerminaleFlashcards,
-  ...physiqueChimiePremiereFlashcards,
-  ...physiqueChimieTerminaleFlashcards,
-  ...geographiePremiereFlashcards,
-  ...geographieTerminaleFlashcards,
-  ...emcPremiereFlashcards,
-  ...emcTerminaleFlashcards,
-  ...anglaisPremiereFlashcards,
-  ...anglaisTerminaleFlashcards
-];
