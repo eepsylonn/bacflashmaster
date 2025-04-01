@@ -1,5 +1,4 @@
-
-import { Flashcard } from '@/types';
+import { Flashcard, DiplomeType } from '@/types';
 
 // Fonction pour générer un ID unique
 const generateId = () => {
@@ -731,59 +730,4 @@ const sesTerminale: Flashcard[] = [
   },
   {
     id: generateId(),
-    question: "Quels sont les instruments de la politique monétaire?",
-    answer: "Taux d'intérêt directeurs, opérations d'open market, réserves obligatoires, programmes d'achats d'actifs (quantitative easing), forward guidance",
-    matiere: "SES",
-    niveau: "terminale"
-  },
-];
-
-// Combine all flashcards into a single export
-const allFlashcards: Flashcard[] = [
-  ...mathPremiere,
-  ...mathTerminale,
-  ...physiqueChimiePremiere,
-  ...physiqueChimieTerminale,
-  ...svtPremiere,
-  ...svtTerminale,
-  ...histGeoPremiereHistoire,
-  ...histGeoPremiereGeo,
-  ...histGeoTerminaleHistoire,
-  ...histGeoTerminaleGeo,
-  ...francaisPremiere,
-  ...philoTerminale,
-  ...anglaisPremiere,
-  ...anglaisTerminale,
-  ...sesPremiere,
-  ...sesTerminale,
-];
-
-export const getFlashcards = (
-  matiere?: string,
-  niveau?: 'premiere' | 'terminale',
-  count?: number
-): Flashcard[] => {
-  let filteredCards = [...allFlashcards];
-  
-  if (matiere) {
-    filteredCards = filteredCards.filter(card => card.matiere === matiere);
-  }
-  
-  if (niveau) {
-    filteredCards = filteredCards.filter(card => card.niveau === niveau);
-  }
-  
-  // Shuffle the cards
-  const shuffledCards = [...filteredCards].sort(() => Math.random() - 0.5);
-  
-  // Return requested number or all
-  return count ? shuffledCards.slice(0, count) : shuffledCards;
-};
-
-export const getMatieres = (): string[] => {
-  const matieres = new Set<string>();
-  allFlashcards.forEach(card => matieres.add(card.matiere));
-  return Array.from(matieres);
-};
-
-export default allFlashcards;
+    question: "

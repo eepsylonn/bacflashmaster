@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion } from '@/types';
+import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, DiplomeType } from '@/types';
 import { getFlashcards } from '@/data/flashcards';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
