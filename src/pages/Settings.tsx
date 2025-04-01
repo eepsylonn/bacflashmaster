@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import { useDiplome } from '@/contexts/DiplomeContext';
@@ -50,7 +49,6 @@ const Settings = () => {
   const [showMoreDiplomas, setShowMoreDiplomas] = useState<boolean>(false);
   const { toast } = useToast();
 
-  // Liste des spécialités pour le baccalauréat avec descriptions et icônes
   const bacSpecialitiesData: {
     id: BacSpecialite;
     description: string;
@@ -137,14 +135,13 @@ const Settings = () => {
     },
     {
       id: 'Latin/Grec',
-      description: 'Langues et cultures de l'Antiquité',
+      description: "Langues et cultures de l'Antiquité",
       category: 'Langues',
       icon: '🏛️',
       color: 'bg-amber-100 border-amber-300'
     }
   ];
 
-  // Grouper les spécialités par catégorie
   const groupedSpecialities = bacSpecialitiesData.reduce((acc, item) => {
     if (!acc[item.category]) {
       acc[item.category] = [];
@@ -379,7 +376,6 @@ const Settings = () => {
                         </Button>
                       </div>
                       
-                      {/* Sélection des spécialités du baccalauréat avec un design plus fun et éducatif */}
                       {selectedDiplome === 'baccalaureat' && (
                         <motion.div 
                           className="mt-6 border-t pt-4"
@@ -471,7 +467,6 @@ const Settings = () => {
                             </Button>
                           </div>
                           
-                          {/* Affichage du nombre de spécialités sélectionnées */}
                           <div className="mt-4 text-center text-sm">
                             {selectedSpecialities.length === 0 ? (
                               <p className="text-amber-600">Aucune spécialité sélectionnée (tronc commun uniquement)</p>
