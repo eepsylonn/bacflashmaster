@@ -40,10 +40,10 @@ const FlashcardComponent = ({
   
   // Récupérer les dimensions de la carte pour l'animation
   useEffect(() => {
-    const card = document.querySelector('.flashcard-front');
+    const card = document.querySelector('.flashcard-container');
     if (card) {
       const { width, height } = card.getBoundingClientRect();
-      setDimension({ width, height });
+      setDimension({ width: width > 0 ? width : 350, height: height > 0 ? height : 250 });
     }
   }, [flashcard]);
 
@@ -52,12 +52,6 @@ const FlashcardComponent = ({
     setHasSubmittedAnswer(false);
     setAnswerCorrectness(null);
   }, [flashcard]);
-
-  const cardStyle = {
-    width: dimension.width > 0 ? dimension.width : '100%',
-    height: dimension.height > 0 ? dimension.height : 'auto',
-    minHeight: '250px',
-  };
   
   // Gestionnaire pour la soumission de réponse écrite
   const handleAnswerSubmit = (answer: string, isCorrect: boolean) => {
@@ -84,82 +78,84 @@ const FlashcardComponent = ({
   return (
     <div className="p-4">
       <div className="relative mx-auto max-w-2xl perspective-1000">
-        <AnimatePresence initial={false} mode="wait">
-          <motion.div
-            key={isFlipped ? 'back' : 'front'}
-            initial={{ rotateY: isFlipped ? -90 : 90, opacity: 0 }}
-            animate={{ rotateY: 0, opacity: 1 }}
-            exit={{ rotateY: isFlipped ? 90 : -90, opacity: 0 }}
-            transition={{ duration: 0.4, ease: 'easeInOut' }}
-            style={cardStyle}
-            className="w-full"
-          >
-            <Card
-              className={`flashcard-${isFlipped ? 'back' : 'front'} p-6 w-full shadow-lg border-2 ${
-                isFlipped ? 'border-indigo-300 bg-gradient-to-br from-indigo-50 to-blue-50' : 'border-app-blue-light'
-              }`}
+        <div className="flashcard-container w-full" style={{ minHeight: '250px' }}>
+          <AnimatePresence initial={false} mode="wait">
+            <motion.div
+              key={isFlipped ? 'back' : 'front'}
+              initial={{ rotateY: isFlipped ? -90 : 90, opacity: 0 }}
+              animate={{ rotateY: 0, opacity: 1 }}
+              exit={{ rotateY: isFlipped ? 90 : -90, opacity: 0 }}
+              transition={{ duration: 0.4, ease: 'easeInOut' }}
+              style={{ width: '100%', minHeight: '250px' }}
+              className="w-full"
             >
-              <div className="flex flex-col h-full">
-                <div className="flex justify-between items-center mb-4">
-                  <div>
-                    <span className="text-xs text-gray-500">
-                      Matière: <span className="font-medium text-app-blue-dark">{flashcard.matiere}</span>
-                    </span>
-                    {flashcard.niveau && (
-                      <span className="text-xs text-gray-500 ml-2">
-                        Niveau: <span className="font-medium text-app-blue-dark">{flashcard.niveau}</span>
+              <Card
+                className={`flashcard-${isFlipped ? 'back' : 'front'} p-6 w-full shadow-lg border-2 ${
+                  isFlipped ? 'border-indigo-300 bg-gradient-to-br from-indigo-50 to-blue-50' : 'border-app-blue-light'
+                }`}
+              >
+                <div className="flex flex-col h-full">
+                  <div className="flex justify-between items-center mb-4">
+                    <div>
+                      <span className="text-xs text-gray-500">
+                        Matière: <span className="font-medium text-app-blue-dark">{flashcard.matiere}</span>
                       </span>
-                    )}
-                  </div>
-                  <Mascot size="sm" animation={isFlipped ? 'bounce' : 'none'} />
-                </div>
-
-                <div className="flex-grow flex flex-col justify-center">
-                  {isFlipped ? (
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold text-gray-700 mb-1">Réponse:</h3>
-                      <p className="text-app-blue-dark">{flashcard.answer}</p>
-                    </div>
-                  ) : (
-                    <div className="space-y-4">
-                      <h3 className="text-lg font-semibold text-gray-700 mb-1">Question:</h3>
-                      <p className="text-app-blue-dark">{flashcard.question}</p>
-                      
-                      {hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped && (
-                        <div className="mt-4">
-                          <WriteAnswer 
-                            onSubmit={handleAnswerSubmit} 
-                            correctAnswer={flashcard.answer}
-                          />
-                        </div>
+                      {flashcard.niveau && (
+                        <span className="text-xs text-gray-500 ml-2">
+                          Niveau: <span className="font-medium text-app-blue-dark">{flashcard.niveau}</span>
+                        </span>
                       )}
                     </div>
-                  )}
-                </div>
+                    <Mascot size="sm" animation={isFlipped ? 'bounce' : 'none'} />
+                  </div>
 
-                <div className="mt-6">
-                  {isFlipped ? (
-                    <Button
-                      className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700"
-                      onClick={handleNextQuestion}
-                    >
-                      Passer à la question suivante
-                      <ArrowRight className="h-4 w-4 ml-2" />
-                    </Button>
-                  ) : (
-                    <Button
-                      onClick={onFlip}
-                      className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white"
-                      disabled={hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped}
-                    >
-                      {isFlipped ? 'Retour à la question' : 'Voir la réponse'}
-                    </Button>
-                  )}
+                  <div className="flex-grow flex flex-col justify-center">
+                    {isFlipped ? (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-1">Réponse:</h3>
+                        <p className="text-app-blue-dark">{flashcard.answer}</p>
+                      </div>
+                    ) : (
+                      <div className="space-y-4">
+                        <h3 className="text-lg font-semibold text-gray-700 mb-1">Question:</h3>
+                        <p className="text-app-blue-dark">{flashcard.question}</p>
+                        
+                        {hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped && (
+                          <div className="mt-4">
+                            <WriteAnswer 
+                              onSubmit={handleAnswerSubmit} 
+                              correctAnswer={flashcard.answer}
+                            />
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-6">
+                    {isFlipped ? (
+                      <Button
+                        className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700"
+                        onClick={handleNextQuestion}
+                      >
+                        Passer à la question suivante
+                        <ArrowRight className="h-4 w-4 ml-2" />
+                      </Button>
+                    ) : (
+                      <Button
+                        onClick={onFlip}
+                        className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white"
+                        disabled={hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped}
+                      >
+                        {isFlipped ? 'Retour à la question' : 'Voir la réponse'}
+                      </Button>
+                    )}
+                  </div>
                 </div>
-              </div>
-            </Card>
-          </motion.div>
-        </AnimatePresence>
+              </Card>
+            </motion.div>
+          </AnimatePresence>
+        </div>
       </div>
     </div>
   );
