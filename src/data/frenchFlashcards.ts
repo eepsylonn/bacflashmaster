@@ -709,4 +709,4 @@ export const frenchFlashcards: Flashcard[] = [
   },
   {
     id: 'fr-86',
-    question: 'Citez deux fables
+    question: 'Citez
