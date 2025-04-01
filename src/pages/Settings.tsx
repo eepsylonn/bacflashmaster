@@ -261,6 +261,67 @@ const Settings = () => {
 
   const allDiplomas = [...mainDiplomas, ...(showMoreDiplomas ? extraDiplomas : [])];
 
+  // Grouper les spécialités par catégorie
+  const groupedSpecialities = bacSpecialitiesData.reduce((acc, item) => {
+    if (!acc[item.category]) {
+      acc[item.category] = [];
+    }
+    acc[item.category].push(item);
+    return acc;
+  }, {} as Record<string, typeof bacSpecialitiesData>);
+  
+  const categories = Object.keys(groupedSpecialities);
+
+  useEffect(() => {
+    setSelectedDiplome(diplome || '');
+  }, [diplome]);
+
+  const handleSaveSettings = () => {
+    setDiplome(selectedDiplome as any);
+    
+    localStorage.setItem('darkMode', darkMode.toString());
+    localStorage.setItem('notifications', notificationsEnabled.toString());
+    localStorage.setItem('fontSize', fontSize.toString());
+    localStorage.setItem('cardsPerDay', cardsPerDay.toString());
+    localStorage.setItem('hideAnsweredCards', hideAnsweredCards.toString());
+    localStorage.setItem('writeAnswers', writeAnswers.toString());
+    
+    document.documentElement.style.fontSize = `${fontSize}%`;
+    if (darkMode) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
+    
+    toast({
+      title: "Paramètres enregistrés",
+      description: "Vos préférences ont été mises à jour.",
+      duration: 3000,
+    });
+  };
+
+  const handleReset = () => {
+    localStorage.removeItem('diplomeSelected');
+    localStorage.removeItem('diplomeType');
+    localStorage.removeItem('darkMode');
+    localStorage.removeItem('notifications');
+    localStorage.removeItem('fontSize');
+    localStorage.removeItem('cardsPerDay');
+    localStorage.removeItem('hideAnsweredCards');
+    localStorage.removeItem('writeAnswers');
+    localStorage.removeItem('selectedSpecialities');
+    setSelectedSpecialities([]);
+    window.location.reload();
+  };
+
+  const toggleSpeciality = (speciality: BacSpecialite) => {
+    if (selectedSpecialities.includes(speciality)) {
+      setSelectedSpecialities(selectedSpecialities.filter(item => item !== speciality));
+    } else {
+      setSelectedSpecialities([...selectedSpecialities, speciality]);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-indigo-50 dark:from-gray-900 dark:to-gray-800 dark:text-white">
       <Header />
