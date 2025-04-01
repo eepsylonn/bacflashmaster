@@ -1,8 +1,11 @@
 
 import { Flashcard, NiveauType, DiplomeType } from '@/types';
 import { frenchFlashcards } from './frenchFlashcards';
+import { philosophyFlashcards } from './philosophyFlashcards';
+import { historyFlashcards } from './historyFlashcards';
+import { geographyFlashcards } from './geographyFlashcards';
 
-// Mock flashcard data
+// Mock flashcard data for the base subjects
 const flashcardsData: Flashcard[] = [
   // Baccalauréat flashcards
   {
@@ -286,8 +289,8 @@ const flashcardsData: Flashcard[] = [
   }
 ];
 
-// Combine the base flashcards with the French flashcards
-const allFlashcards = [...flashcardsData, ...frenchFlashcards];
+// Combine the base flashcards with the subject-specific flashcards
+const allFlashcards = [...flashcardsData, ...frenchFlashcards, ...philosophyFlashcards, ...historyFlashcards, ...geographyFlashcards];
 
 // Function to get flashcards based on criteria
 export const getFlashcards = (
