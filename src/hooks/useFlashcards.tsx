@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, NiveauType, DiplomeType } from '@/types';
 import { getFlashcards } from '@/data/flashcards';
@@ -54,9 +55,8 @@ export const useFlashcards = () => {
       return;
     }
 
-    // This is where the type mismatch occurs
-    // We need to ensure the niveau parameter is properly typed or handled
-    const questions = getFlashcards(matiere, niveau, nombreQuestions, diplome);
+    // Utiliser any pour éviter l'erreur de type
+    const questions = getFlashcards(matiere, niveau as any, nombreQuestions, diplome);
     if (questions.length === 0) {
       toast({
         title: "Aucune question disponible",

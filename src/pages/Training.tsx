@@ -8,7 +8,6 @@ import TrainingProgress from '@/components/TrainingProgress';
 import TrainingResultPage from '@/pages/TrainingResult';
 import { useFlashcards } from '@/hooks/useFlashcards';
 import { motion } from 'framer-motion';
-import { NiveauType } from '@/types';
 
 const Training = () => {
   const location = useLocation();
@@ -29,6 +28,7 @@ const Training = () => {
     flipCard,
     markCorrect,
     markIncorrect,
+    nextQuestion,
     showResult,
     currentResult,
     continueAfterResult,
@@ -96,6 +96,7 @@ const Training = () => {
                   onFlip={flipCard}
                   onCorrect={markCorrect}
                   onIncorrect={markIncorrect}
+                  onNext={nextQuestion}
                   showAnswerButtons={isFlipped}
                 />
               )}

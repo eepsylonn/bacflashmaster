@@ -1,4 +1,3 @@
-
 import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -222,8 +221,10 @@ const HomeContent = () => {
                 </div>
               </div>
               
-              <Button variant="link" className="mt-2 text-amber-700 p-0 h-auto font-medium">
-                Voir toutes les ressources <ArrowRight className="h-4 w-4 ml-1" />
+              <Button variant="link" className="mt-2 text-amber-700 p-0 h-auto font-medium" asChild>
+                <Link to="/methodologie">
+                  Voir toutes les ressources <ArrowRight className="h-4 w-4 ml-1" />
+                </Link>
               </Button>
             </CardContent>
           </Card>

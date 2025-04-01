@@ -6,7 +6,7 @@ import { CheckCircle2, XCircle } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 interface WriteAnswerProps {
-  onSubmit: (answer: string) => void;
+  onSubmit: (answer: string, isCorrect: boolean) => void;
   correctAnswer: string;
 }
 
@@ -33,10 +33,8 @@ const WriteAnswer = ({ onSubmit, correctAnswer }: WriteAnswerProps) => {
     setIsCorrect(result);
     setSubmitted(true);
     
-    // Informer le parent après un court délai pour permettre l'animation
-    setTimeout(() => {
-      onSubmit(answer);
-    }, 1500);
+    // Informer le parent directement avec la correction
+    onSubmit(answer, result);
   };
   
   return (

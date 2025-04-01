@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ThumbsUp, ThumbsDown } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, ArrowRight } from 'lucide-react';
 import { Flashcard } from '@/types';
 import Mascot from '@/components/Mascot';
 import WriteAnswer from '@/components/WriteAnswer';
@@ -14,6 +14,7 @@ interface FlashcardProps {
   onFlip: () => void;
   onCorrect: () => void;
   onIncorrect: () => void;
+  onNext?: () => void;
   showAnswerButtons: boolean;
 }
 
@@ -23,11 +24,13 @@ const FlashcardComponent = ({
   onFlip,
   onCorrect,
   onIncorrect,
+  onNext,
   showAnswerButtons,
 }: FlashcardProps) => {
   const [dimension, setDimension] = useState({ width: 0, height: 0 });
   const [hasWriteAnswerEnabled, setHasWriteAnswerEnabled] = useState<boolean>(false);
   const [hasSubmittedAnswer, setHasSubmittedAnswer] = useState<boolean>(false);
+  const [answerCorrectness, setAnswerCorrectness] = useState<boolean | null>(null);
   
   // Vérifier si l'option d'écrire les réponses est activée
   useEffect(() => {
@@ -44,6 +47,12 @@ const FlashcardComponent = ({
     }
   }, [flashcard]);
 
+  // Réinitialiser l'état quand la flashcard change
+  useEffect(() => {
+    setHasSubmittedAnswer(false);
+    setAnswerCorrectness(null);
+  }, [flashcard]);
+
   const cardStyle = {
     width: dimension.width > 0 ? dimension.width : '100%',
     height: dimension.height > 0 ? dimension.height : 'auto',
@@ -51,9 +60,25 @@ const FlashcardComponent = ({
   };
   
   // Gestionnaire pour la soumission de réponse écrite
-  const handleAnswerSubmit = (answer: string) => {
+  const handleAnswerSubmit = (answer: string, isCorrect: boolean) => {
     setHasSubmittedAnswer(true);
+    setAnswerCorrectness(isCorrect);
+    
     // On ne retourne pas encore la carte, on laisse l'utilisateur le faire
+    if (!isFlipped) {
+      onFlip(); // Retourner automatiquement la carte pour voir la réponse
+    }
+  };
+
+  // Gestionnaire pour passer à la question suivante
+  const handleNextQuestion = () => {
+    if (answerCorrectness === true) {
+      onCorrect();
+    } else if (answerCorrectness === false) {
+      onIncorrect();
+    } else if (onNext) {
+      onNext();
+    }
   };
 
   return (
@@ -113,24 +138,36 @@ const FlashcardComponent = ({
                 </div>
 
                 <div className="mt-6">
-                  {isFlipped && showAnswerButtons ? (
-                    <div className="flex justify-between gap-4">
+                  {isFlipped ? (
+                    hasSubmittedAnswer ? (
                       <Button
-                        variant="outline"
-                        className="flex-1 border-red-300 hover:bg-red-50 text-red-700"
-                        onClick={onIncorrect}
+                        className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700"
+                        onClick={handleNextQuestion}
                       >
-                        <ThumbsDown className="h-4 w-4 mr-2" />
-                        Je ne savais pas
+                        Passer à la question suivante
+                        <ArrowRight className="h-4 w-4 ml-2" />
                       </Button>
-                      <Button
-                        className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                        onClick={onCorrect}
-                      >
-                        <ThumbsUp className="h-4 w-4 mr-2" />
-                        Je savais
-                      </Button>
-                    </div>
+                    ) : (
+                      showAnswerButtons && (
+                        <div className="flex justify-between gap-4">
+                          <Button
+                            variant="outline"
+                            className="flex-1 border-red-300 hover:bg-red-50 text-red-700"
+                            onClick={onIncorrect}
+                          >
+                            <ThumbsDown className="h-4 w-4 mr-2" />
+                            Je ne savais pas
+                          </Button>
+                          <Button
+                            className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                            onClick={onCorrect}
+                          >
+                            <ThumbsUp className="h-4 w-4 mr-2" />
+                            Je savais
+                          </Button>
+                        </div>
+                      )
+                    )
                   ) : (
                     <Button
                       onClick={onFlip}

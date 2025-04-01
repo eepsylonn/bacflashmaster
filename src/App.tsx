@@ -13,6 +13,7 @@ import HistoryDetail from "./pages/HistoryDetail";
 import Statistics from "./pages/Statistics";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
+import Methodology from "./pages/Methodology";
 
 const queryClient = new QueryClient();
 
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/historique/:id" element={<HistoryDetail />} />
             <Route path="/statistiques" element={<Statistics />} />
             <Route path="/reglages" element={<Settings />} />
+            <Route path="/methodologie" element={<Methodology />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
