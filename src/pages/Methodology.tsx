@@ -412,7 +412,7 @@ const fichesMatieres: Record<string, Record<string, FicheType[]>> = {
           "   • Identifiez les éléments qui apparaissent/disparaissent systématiquement",
           "   • Observez l'évolution des couleurs ou des formes",
           "4. Séries alphabétiques:",
-          "   • Repérez les sauts dans l'alphabet (ex: B, E, H, K → +3 lettres)",
+          "   �� Repérez les sauts dans l'alphabet (ex: B, E, H, K → +3 lettres)",
           "   • Attention aux séries basées sur la valeur numérique des lettres (A=1, B=2...)",
           "   • Cherchez des patterns dans l'alternance voyelles/consonnes",
           "   • Vérifiez si certaines lettres correspondent aux initiales de mots d'une suite logique",
@@ -530,3 +530,179 @@ const fichesMatieres: Record<string, Record<string, FicheType[]>> = {
     ]
   }
 };
+
+const Methodology = () => {
+  const { diplome } = useDiplome();
+  const [matiere, setMatiere] = useState<string>(
+    diplome === 'baccalaureat' ? 'maths' : 
+    diplome === 'toeic' ? 'listening' : 'calcul'
+  );
+  const [content, setContent] = useState<ContentType>('methodologie');
+  const [chapter, setChapter] = useState<ChapitreType | null>(null);
+  const [niveau, setNiveau] = useState<NiveauBac>('terminale');
+
+  const matieres = methodologiesMatieres[diplome as keyof typeof methodologiesMatieres] || [];
+  const fiches = fichesMatieres[diplome]?.[matiere] || [];
+
+  const handleOpenChapter = (chapitre: ChapitreType) => {
+    setChapter(chapitre);
+  };
+
+  const handleCloseChapter = () => {
+    setChapter(null);
+  };
+
+  if (chapter) {
+    return (
+      <div className="min-h-screen bg-gray-50">
+        <Header />
+        <div className="container mx-auto px-4 py-8">
+          <button 
+            onClick={handleCloseChapter}
+            className="flex items-center text-app-blue-dark hover:text-app-blue-medium mb-4"
+          >
+            <ChevronRight className="h-4 w-4 mr-1 transform rotate-180" />
+            Retour aux fiches
+          </button>
+          
+          <Card className="shadow-lg">
+            <CardHeader>
+              <CardTitle className="text-xl md:text-2xl text-app-blue-dark">{chapter.title}</CardTitle>
+              <CardDescription>
+                {diplome === 'baccalaureat' && `Niveau: ${niveau === 'premiere' ? 'Première' : 'Terminale'}`}
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              {chapter.content.map((paragraph, idx) => (
+                <p key={idx} className="text-gray-700 leading-relaxed">
+                  {paragraph}
+                </p>
+              ))}
+            </CardContent>
+          </Card>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      <div className="container mx-auto px-4 py-8">
+        <h1 className="text-2xl md:text-3xl font-bold text-app-blue-dark mb-6">
+          Fiches de {diplome === 'baccalaureat' ? 'Baccalauréat' : diplome === 'toeic' ? 'TOEIC' : 'TAGE MAGE'}
+        </h1>
+        
+        {diplome === 'baccalaureat' && (
+          <div className="mb-6">
+            <Select value={niveau} onValueChange={(value) => setNiveau(value as NiveauBac)}>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Niveau" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="premiere">Première</SelectItem>
+                <SelectItem value="terminale">Terminale</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        )}
+        
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-6">
+          <div className="md:col-span-3">
+            <Card className="shadow-md">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-lg text-app-blue-dark">Matières</CardTitle>
+              </CardHeader>
+              <CardContent className="space-y-2 pt-0">
+                <div className="space-y-1">
+                  {matieres.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => setMatiere(item.id)}
+                      className={`flex items-center w-full px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                        matiere === item.id 
+                          ? 'bg-app-blue-light text-app-blue-dark' 
+                          : 'text-gray-600 hover:bg-gray-100'
+                      }`}
+                    >
+                      {item.icon}
+                      <span className="ml-2">{item.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+          
+          <div className="md:col-span-9">
+            <Tabs defaultValue="methodologie" value={content} onValueChange={(value) => setContent(value as ContentType)}>
+              <TabsList className="mb-4">
+                <TabsTrigger value="methodologie" className="flex items-center">
+                  <BookOpenText className="h-4 w-4 mr-2" />
+                  Méthodologie
+                </TabsTrigger>
+                <TabsTrigger value="cours" className="flex items-center">
+                  <FileText className="h-4 w-4 mr-2" />
+                  Cours
+                </TabsTrigger>
+              </TabsList>
+              
+              <TabsContent value="methodologie" className="space-y-4">
+                <h2 className="text-xl font-semibold text-app-blue-dark mb-4">
+                  Fiches de méthodologie - {matieres.find(m => m.id === matiere)?.name || ''}
+                </h2>
+                
+                {Array.isArray(fiches) && fiches.length > 0 ? (
+                  fiches.map((fiche, index) => (
+                    <Card key={index} className="shadow-sm transition-shadow hover:shadow-md cursor-pointer" 
+                      onClick={() => handleOpenChapter({ id: `${matiere}-${index}`, title: fiche.title, content: fiche.content })}>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-lg text-app-blue-dark flex items-center">
+                          <BookOpen className="h-5 w-5 mr-2 text-app-blue-medium" />
+                          {fiche.title}
+                        </CardTitle>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <p className="text-gray-500 text-sm">{fiche.content[0].split(':')[0]}...</p>
+                      </CardContent>
+                    </Card>
+                  ))
+                ) : (
+                  <Card className="shadow-sm">
+                    <CardHeader className="pb-2">
+                      <CardTitle className="text-lg text-gray-600">Aucune fiche disponible</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pt-0">
+                      <p className="text-gray-500">
+                        Les fiches de méthodologie pour cette matière seront bientôt disponibles.
+                      </p>
+                    </CardContent>
+                  </Card>
+                )}
+              </TabsContent>
+              
+              <TabsContent value="cours" className="space-y-4">
+                <h2 className="text-xl font-semibold text-app-blue-dark mb-4">
+                  Fiches de cours - {matieres.find(m => m.id === matiere)?.name || ''}
+                </h2>
+                
+                <Card className="shadow-sm">
+                  <CardHeader className="pb-2">
+                    <CardTitle className="text-lg text-gray-600">Contenu en cours de préparation</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pt-0">
+                    <p className="text-gray-500">
+                      Les fiches de cours seront bientôt disponibles. Consultez les fiches de méthodologie en attendant.
+                    </p>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+            </Tabs>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Methodology;
