@@ -149,12 +149,14 @@ const TrainingSelector = ({
   const isPhiloBac = diplome === 'baccalaureat' && matiere === 'Philosophie';
   
   useEffect(() => {
-    if (isFrenchBac && niveau !== 'premiere') {
-      setNiveau('premiere');
-    } else if (isPhiloBac && niveau !== 'terminale') {
-      setNiveau('terminale');
+    if (diplome === 'baccalaureat') {
+      if (matiere === 'Français') {
+        setNiveau('premiere');
+      } else if (matiere === 'Philosophie') {
+        setNiveau('terminale');
+      }
     }
-  }, [isFrenchBac, isPhiloBac, niveau, setNiveau]);
+  }, [matiere, diplome, setNiveau]);
   
   useEffect(() => {
     const index = sliderValue[0];
