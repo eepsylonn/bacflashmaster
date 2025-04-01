@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import { useDiplome } from '@/contexts/DiplomeContext';
@@ -23,13 +22,12 @@ import {
   Sun, 
   Moon, 
   GraduationCap, 
-  BookOpenText, 
+  BookmarkCheck, 
+  Globe, 
   ChevronDown, 
   ChevronUp, 
-  Globe, 
-  BookmarkCheck,
-  Check,
-  Sparkles
+  Sparkles,
+  Check
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
@@ -144,18 +142,7 @@ const Settings = () => {
     }
   ];
 
-  // Only show first 4 specialties (SVT et NSI incluses) unless showing more
   const visibleSpecialities = showMoreSpecialities ? bacSpecialitiesData : bacSpecialitiesData.slice(0, 4);
-
-  const groupedSpecialities = bacSpecialitiesData.reduce((acc, item) => {
-    if (!acc[item.category]) {
-      acc[item.category] = [];
-    }
-    acc[item.category].push(item);
-    return acc;
-  }, {} as Record<string, typeof bacSpecialitiesData>);
-  
-  const categories = Object.keys(groupedSpecialities);
 
   useEffect(() => {
     setSelectedDiplome(diplome || '');
@@ -456,59 +443,52 @@ const Settings = () => {
                             </Button>
                             
                             {showMoreSpecialities && (
-                              <div className="space-y-4">
-                                {categories.map((category) => (
-                                  <div key={category} className="mb-4">
-                                    <h4 className="text-md font-medium mb-2 bg-gray-100 py-1 px-2 rounded-md">
-                                      {category}
-                                    </h4>
-                                    <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-2`}>
-                                      {groupedSpecialities[category].map((speciality) => (
-                                        <motion.div 
-                                          key={speciality.id}
-                                          className={`p-3 rounded-lg border-2 ${
-                                            selectedSpecialities.includes(speciality.id)
-                                              ? `${speciality.color} border-opacity-100 shadow-sm`
-                                              : 'border-gray-200 hover:border-gray-300'
-                                          } transition-all`}
-                                          whileHover={{ y: -2 }}
-                                          whileTap={{ scale: 0.98 }}
+                              <div className="space-y-4 mt-2">
+                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                  {bacSpecialitiesData.slice(4).map((speciality) => (
+                                    <motion.div 
+                                      key={speciality.id}
+                                      className={`p-3 rounded-lg border-2 ${
+                                        selectedSpecialities.includes(speciality.id)
+                                          ? `${speciality.color} border-opacity-100 shadow-sm`
+                                          : 'border-gray-200 hover:border-gray-300'
+                                      } transition-all`}
+                                      whileHover={{ y: -2 }}
+                                      whileTap={{ scale: 0.98 }}
+                                    >
+                                      <div className="flex items-start">
+                                        <div 
+                                          className="flex items-center justify-center mr-3"
+                                          onClick={() => toggleSpeciality(speciality.id)}
                                         >
-                                          <div className="flex items-start">
-                                            <div 
-                                              className="flex items-center justify-center mr-3"
-                                              onClick={() => toggleSpeciality(speciality.id)}
+                                          <Checkbox 
+                                            id={`speciality-extra-${speciality.id}`}
+                                            checked={selectedSpecialities.includes(speciality.id)}
+                                            onCheckedChange={() => toggleSpeciality(speciality.id)}
+                                            className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
+                                          />
+                                        </div>
+                                        <div
+                                          className="flex-1 cursor-pointer"
+                                          onClick={() => toggleSpeciality(speciality.id)}
+                                        >
+                                          <div className="flex items-center">
+                                            <span className="text-2xl mr-2">{speciality.icon}</span>
+                                            <Label 
+                                              htmlFor={`speciality-extra-${speciality.id}`}
+                                              className="font-medium"
                                             >
-                                              <Checkbox 
-                                                id={`speciality-cat-${speciality.id}`}
-                                                checked={selectedSpecialities.includes(speciality.id)}
-                                                onCheckedChange={() => toggleSpeciality(speciality.id)}
-                                                className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
-                                              />
-                                            </div>
-                                            <div
-                                              className="flex-1 cursor-pointer"
-                                              onClick={() => toggleSpeciality(speciality.id)}
-                                            >
-                                              <div className="flex items-center">
-                                                <span className="text-2xl mr-2">{speciality.icon}</span>
-                                                <Label 
-                                                  htmlFor={`speciality-cat-${speciality.id}`}
-                                                  className="font-medium"
-                                                >
-                                                  {speciality.id}
-                                                </Label>
-                                              </div>
-                                              <p className="text-xs text-gray-500 mt-1">
-                                                {speciality.description}
-                                              </p>
-                                            </div>
+                                              {speciality.id}
+                                            </Label>
                                           </div>
-                                        </motion.div>
-                                      ))}
-                                    </div>
-                                  </div>
-                                ))}
+                                          <p className="text-xs text-gray-500 mt-1">
+                                            {speciality.description}
+                                          </p>
+                                        </div>
+                                      </div>
+                                    </motion.div>
+                                  ))}
+                                </div>
                               </div>
                             )}
                           </div>
