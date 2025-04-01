@@ -196,7 +196,7 @@ const WriteAnswer = ({ onSubmit, correctAnswer }: WriteAnswerProps) => {
                   transition={{ delay: 0.5 }}
                 >
                   <span className="font-medium">Réponse correcte:</span> 
-                  <p className="mt-1 p-2 bg-green-50/50 dark:bg-green-900/20 rounded border border-green-100 dark:border-green-800">
+                  <p className="mt-1 p-2 bg-green-50/50 dark:bg-green-900/20 rounded border border-green-100 dark:border-green-800 text-gray-800 dark:text-gray-200">
                     {correctAnswer}
                   </p>
                 </motion.div>
