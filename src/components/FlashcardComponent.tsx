@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -39,13 +38,11 @@ const FlashcardComponent = ({
   const [showAnswer, setShowAnswer] = useState<boolean>(false);
   const [answeredLastQuestion, setAnsweredLastQuestion] = useState<boolean>(false);
   
-  // Vérifier si l'option d'écrire les réponses est activée
   useEffect(() => {
     const writeAnswersEnabled = localStorage.getItem('writeAnswers') === 'true';
     setHasWriteAnswerEnabled(writeAnswersEnabled);
   }, []);
   
-  // Récupérer les dimensions de la carte pour l'animation
   useEffect(() => {
     const card = document.querySelector('.flashcard-container');
     if (card) {
@@ -54,7 +51,6 @@ const FlashcardComponent = ({
     }
   }, [flashcard]);
 
-  // Réinitialiser l'état quand la flashcard change
   useEffect(() => {
     setHasSubmittedAnswer(false);
     setAnswerCorrectness(null);
@@ -63,7 +59,6 @@ const FlashcardComponent = ({
     setAnsweredLastQuestion(false);
   }, [flashcard]);
   
-  // Gestionnaire pour la soumission de réponse écrite
   const handleAnswerSubmit = (answer: string, isCorrect: boolean) => {
     setHasSubmittedAnswer(true);
     setAnswerCorrectness(isCorrect);
@@ -72,13 +67,11 @@ const FlashcardComponent = ({
       setShowConfetti(true);
     }
     
-    // On retourne automatiquement la carte pour voir la réponse
     if (!isFlipped) {
       onFlip();
     }
   };
 
-  // Gestionnaire pour passer à la question suivante
   const handleNextQuestion = () => {
     if (answerCorrectness === true) {
       onCorrect();
@@ -89,7 +82,6 @@ const FlashcardComponent = ({
     }
   };
 
-  // Gestionnaire pour terminer l'entraînement/examen
   const handleFinishTraining = () => {
     if (answerCorrectness === true) {
       onCorrect();
@@ -102,7 +94,6 @@ const FlashcardComponent = ({
     }
   };
 
-  // Gestionnaire pour marquer une réponse comme correcte et enregistrer qu'on a répondu à la dernière question
   const handleCorrect = () => {
     onCorrect();
     if (isLastQuestion) {
@@ -110,7 +101,6 @@ const FlashcardComponent = ({
     }
   };
 
-  // Gestionnaire pour marquer une réponse comme incorrecte et enregistrer qu'on a répondu à la dernière question
   const handleIncorrect = () => {
     onIncorrect();
     if (isLastQuestion) {
@@ -118,14 +108,11 @@ const FlashcardComponent = ({
     }
   };
 
-  // Afficher la réponse sans retourner la carte
   const handleShowAnswer = () => {
     setShowAnswer(true);
-    // Ajouter une animation cool pour gamifier
     setShowConfetti(true);
   };
 
-  // Animation variants
   const cardVariants = {
     hidden: (isBack: boolean) => ({
       rotateY: isBack ? -90 : 90,
@@ -149,14 +136,12 @@ const FlashcardComponent = ({
     })
   };
 
-  // Button animation variants
   const buttonVariants = {
     initial: { scale: 1 },
     hover: { scale: 1.05, boxShadow: "0 5px 15px rgba(0,0,0,0.1)" },
     tap: { scale: 0.95 }
   };
 
-  // Content animation variants
   const contentVariants = {
     hidden: { opacity: 0, y: 20 },
     visible: (custom: number) => ({
@@ -169,7 +154,6 @@ const FlashcardComponent = ({
     })
   };
 
-  // Animation cool pour la réponse
   const answerVariants = {
     hidden: { 
       opacity: 0,
@@ -488,7 +472,6 @@ const FlashcardComponent = ({
                       </motion.div>
                     ) : null}
                     
-                    {/* Affichage de la réponse lorsqu'on clique sur "Voir la réponse" */}
                     <AnimatePresence>
                       {showAnswer && !isFlipped && (
                         <motion.div
@@ -552,7 +535,7 @@ const FlashcardComponent = ({
                                   whileTap="tap"
                                 >
                                   <Button
-                                    onClick={onCorrect}
+                                    onClick={handleCorrect}
                                     className="w-full bg-green-500 hover:bg-green-600 text-white py-3 text-base"
                                   >
                                     <ThumbsUp className="h-5 w-5 mr-2" />
@@ -567,7 +550,7 @@ const FlashcardComponent = ({
                                   whileTap="tap"
                                 >
                                   <Button
-                                    onClick={onIncorrect}
+                                    onClick={handleIncorrect}
                                     className="w-full bg-red-500 hover:bg-red-600 text-white py-3 text-base"
                                   >
                                     <ThumbsDown className="h-5 w-5 mr-2" />
@@ -575,6 +558,32 @@ const FlashcardComponent = ({
                                   </Button>
                                 </motion.div>
                               </motion.div>
+                              
+                              {isLastQuestion && (
+                                <motion.div 
+                                  className="w-full mt-4"
+                                  variants={buttonVariants}
+                                  initial="initial"
+                                  whileHover="hover"
+                                  whileTap="tap"
+                                  animate={{ 
+                                    scale: [1, 1.05, 1],
+                                    y: [10, 0]
+                                  }}
+                                  transition={{ 
+                                    scale: { repeat: 3, duration: 0.5 },
+                                    y: { duration: 0.3 }
+                                  }}
+                                >
+                                  <Button
+                                    onClick={finishTraining}
+                                    className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-4 text-lg shadow-lg"
+                                  >
+                                    <CheckSquare2 className="h-5 w-5 mr-2" />
+                                    Finir le test
+                                  </Button>
+                                </motion.div>
+                              )}
                             </motion.div>
                           </div>
                         </motion.div>
@@ -612,7 +621,6 @@ const FlashcardComponent = ({
                   </motion.div>
                 )}
                 
-                {/* Bouton "Finir le test" pour la dernière question après avoir répondu */}
                 {(isFlipped && isLastQuestion && answeredLastQuestion && !hasSubmittedAnswer) && (
                   <motion.div 
                     className="w-full"
