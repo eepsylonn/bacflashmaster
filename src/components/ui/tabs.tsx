@@ -39,7 +39,7 @@ const TabsTrigger = React.forwardRef<
     </span>
     {props["data-state"] === "active" && (
       <motion.div
-        className="absolute inset-0 rounded-sm"
+        className="absolute inset-0 rounded-sm bg-gray-200 dark:bg-gray-700"
         layoutId={`tab-indicator-${props.value}`}
         transition={{ 
           type: "spring", 
@@ -55,115 +55,7 @@ const TabsTrigger = React.forwardRef<
           position: "absolute",
           zIndex: 0
         }}
-      >
-        {/* Background gradient animation */}
-        <motion.div 
-          className="absolute inset-0 rounded-sm overflow-hidden"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-        >
-          {/* Animated gradient background */}
-          <motion.div
-            className="absolute inset-0"
-            animate={{
-              background: [
-                "linear-gradient(45deg, rgba(96, 165, 250, 0.8), rgba(99, 102, 241, 0.8))",
-                "linear-gradient(45deg, rgba(139, 92, 246, 0.8), rgba(236, 72, 153, 0.8))",
-                "linear-gradient(45deg, rgba(16, 185, 129, 0.8), rgba(59, 130, 246, 0.8))",
-                "linear-gradient(45deg, rgba(96, 165, 250, 0.8), rgba(99, 102, 241, 0.8))"
-              ]
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-          
-          {/* Glowing particles */}
-          <motion.div
-            className="absolute w-1 h-1 rounded-full bg-white opacity-80"
-            animate={{
-              x: ["0%", "100%", "0%"],
-              y: ["0%", "100%", "0%"],
-              scale: [1, 1.5, 1],
-              opacity: [0.5, 0.8, 0.5]
-            }}
-            transition={{
-              duration: 3,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            style={{ top: "20%", left: "30%" }}
-          />
-          
-          <motion.div
-            className="absolute w-1 h-1 rounded-full bg-white opacity-80"
-            animate={{
-              x: ["100%", "0%", "100%"],
-              y: ["100%", "0%", "100%"],
-              scale: [1, 1.5, 1],
-              opacity: [0.5, 0.8, 0.5]
-            }}
-            transition={{
-              duration: 3,
-              delay: 0.5,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            style={{ top: "50%", left: "60%" }}
-          />
-          
-          <motion.div
-            className="absolute w-1 h-1 rounded-full bg-white opacity-80"
-            animate={{
-              x: ["50%", "0%", "50%"],
-              y: ["0%", "50%", "0%"],
-              scale: [1, 1.5, 1],
-              opacity: [0.5, 0.8, 0.5]
-            }}
-            transition={{
-              duration: 3,
-              delay: 1,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-            style={{ top: "70%", left: "20%" }}
-          />
-          
-          {/* Shimmer effect overlay */}
-          <motion.div
-            className="absolute inset-0 bg-gradient-to-r from-transparent via-white to-transparent opacity-20"
-            animate={{
-              x: ["-100%", "100%"]
-            }}
-            transition={{
-              duration: 1.5,
-              repeat: Infinity,
-              ease: "easeInOut",
-              repeatDelay: 1
-            }}
-          />
-          
-          {/* Bottom border glow */}
-          <motion.div
-            className="absolute bottom-0 left-0 right-0 h-[2px] bg-white"
-            animate={{
-              opacity: [0.3, 0.8, 0.3],
-              boxShadow: [
-                "0 0 2px rgba(255, 255, 255, 0.5)", 
-                "0 0 8px rgba(255, 255, 255, 0.8)", 
-                "0 0 2px rgba(255, 255, 255, 0.5)"
-              ]
-            }}
-            transition={{
-              duration: 2,
-              repeat: Infinity,
-              ease: "easeInOut"
-            }}
-          />
-        </motion.div>
-      </motion.div>
+      />
     )}
   </TabsPrimitive.Trigger>
 ))
