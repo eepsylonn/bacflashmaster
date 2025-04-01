@@ -7,11 +7,13 @@ import { MascotSlider } from '@/components/MascotSlider';
 import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
 import { useDiplome } from '@/contexts/DiplomeContext';
+import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { NiveauType, NombreQuestions } from '@/types';
-import { ChevronDown, ChevronUp } from 'lucide-react';
+import { ChevronDown, ChevronUp, Settings } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 // Matières selon le diplôme
-const getMatieresByDiplome = (diplome: string | undefined) => {
+const getMatieresByDiplome = (diplome: string | undefined, selectedSpecialities: string[] = []) => {
   switch(diplome) {
     case 'toeic':
       return ['Compréhension orale', 'Compréhension écrite', 'Grammaire', 'Vocabulaire'];
@@ -41,6 +43,42 @@ const getMatieresByDiplome = (diplome: string | undefined) => {
         'Technologie'
       ];
     case 'baccalaureat':
+      // Matières du tronc commun
+      const troncCommun = [
+        'Philosophie',
+        'Français',
+        'Histoire-Géographie',
+        'EMC',
+        'Anglais',
+        'Espagnol'
+      ];
+      
+      // Si des spécialités sont sélectionnées, les ajouter
+      if (selectedSpecialities && selectedSpecialities.length > 0) {
+        return [...troncCommun, ...selectedSpecialities];
+      }
+      
+      // Sinon, retourner toutes les matières
+      return [
+        'Philosophie',
+        'Français',
+        'Histoire-Géographie',
+        'EMC',
+        'Anglais',
+        'Espagnol',
+        'Mathématiques',
+        'Physique-Chimie',
+        'SVT',
+        'SES',
+        'HGGSP',
+        'Humanités-Littérature-Philosophie',
+        'NSI',
+        'Arts',
+        'Mathématiques expertes',
+        'Mathématiques complémentaires',
+        'LVC',
+        'Latin/Grec'
+      ];
     default:
       return [
         'Philosophie',
@@ -75,7 +113,8 @@ const getNiveauByDiplome = (diplome: string | undefined) => {
     case 'tage-mage':
       return [
         { value: "intermediaire", label: "Intermédiaire" },
-        { value: "avance", label: "Avancé" }
+        { value: "avance", label: "Avancé" },
+        { value: "both", label: "Les deux" }
       ];
     case 'brevet':
       return [
@@ -116,10 +155,11 @@ const TrainingSelector = ({
 }: TrainingSelectorProps) => {
   const [sliderValue, setSliderValue] = useState<number[]>([questionOptions.indexOf(nombreQuestions)]);
   const { diplome } = useDiplome();
+  const { selectedSpecialities } = useUserPreferences();
   const [showAllSubjects, setShowAllSubjects] = useState(false);
   
   // Obtenir les matières selon le diplôme sélectionné
-  const matieres = getMatieresByDiplome(diplome);
+  const matieres = getMatieresByDiplome(diplome, selectedSpecialities);
   const visibleMatieres = showAllSubjects ? matieres : matieres.slice(0, 6);
   const hasMoreSubjects = matieres.length > 6;
   
@@ -141,6 +181,8 @@ const TrainingSelector = ({
       setMatiere(matieres[0]);
     }
   }, [diplome, matiere, matieres, setMatiere]);
+
+  const showSpecialitiesMessage = diplome === 'baccalaureat' && selectedSpecialities.length === 0;
   
   return (
     <Card className="p-6 shadow-lg bg-white rounded-xl border-2 border-app-blue-light">
@@ -174,9 +216,9 @@ const TrainingSelector = ({
           
           {hasMoreSubjects && (
             <Button 
-              variant="outline" 
+              variant="ghost" 
               onClick={() => setShowAllSubjects(!showAllSubjects)} 
-              className="w-full mt-2 text-app-blue-dark border-app-blue-light hover:bg-app-blue-light/10"
+              className="w-full mt-2 text-app-blue-dark hover:bg-app-blue-light/10 p-1 h-8"
             >
               {showAllSubjects ? (
                 <>
@@ -190,6 +232,25 @@ const TrainingSelector = ({
                 </>
               )}
             </Button>
+          )}
+
+          {/* Message pour ajouter des spécialités */}
+          {showSpecialitiesMessage && (
+            <motion.div 
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="mt-2 bg-amber-50 border border-amber-200 rounded-md p-3 text-sm text-amber-800 flex items-center gap-2"
+            >
+              <Mascot size="xs" />
+              <div>
+                <p>
+                  Vous n'avez pas encore sélectionné vos spécialités. 
+                  <Link to="/reglages" className="ml-1 text-app-blue-medium font-medium hover:underline">
+                    Aller dans les réglages pour personnaliser votre contenu
+                  </Link>
+                </p>
+              </div>
+            </motion.div>
           )}
         </div>
         

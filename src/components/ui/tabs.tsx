@@ -29,7 +29,7 @@ const TabsTrigger = React.forwardRef<
   <TabsPrimitive.Trigger
     ref={ref}
     className={cn(
-      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-foreground relative",
+      "inline-flex items-center justify-center whitespace-nowrap rounded-sm px-3 py-1.5 text-sm font-medium ring-offset-background transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 data-[state=active]:text-foreground relative z-10",
       className
     )}
     {...props}
@@ -39,7 +39,7 @@ const TabsTrigger = React.forwardRef<
     </span>
     {props["data-state"] === "active" && (
       <motion.div
-        className="absolute inset-0 rounded-sm bg-background shadow-md"
+        className="absolute inset-0 rounded-sm"
         layoutId="tab-indicator"
         transition={{ 
           type: "spring", 
@@ -57,21 +57,37 @@ const TabsTrigger = React.forwardRef<
         }}
       >
         <motion.div 
-          className="absolute inset-0 bg-gradient-to-r from-app-blue-light/40 via-indigo-400/40 to-purple-400/40 rounded-sm"
-          animate={{
-            opacity: [0.5, 0.8, 0.5],
-            background: [
-              "linear-gradient(to right, rgba(59, 130, 246, 0.4), rgba(99, 102, 241, 0.4))",
-              "linear-gradient(to right, rgba(99, 102, 241, 0.4), rgba(139, 92, 246, 0.4))",
-              "linear-gradient(to right, rgba(139, 92, 246, 0.4), rgba(59, 130, 246, 0.4))"
-            ]
-          }}
-          transition={{
-            duration: 3,
-            repeat: Infinity,
-            ease: "easeInOut"
-          }}
-        />
+          className="absolute inset-0 rounded-sm overflow-hidden"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+        >
+          <motion.div
+            className="absolute inset-0 bg-gradient-to-r from-blue-400/80 to-indigo-500/80"
+            animate={{
+              background: [
+                "linear-gradient(to right, rgba(96, 165, 250, 0.8), rgba(99, 102, 241, 0.8))",
+                "linear-gradient(to right, rgba(99, 102, 241, 0.8), rgba(139, 92, 246, 0.8))",
+                "linear-gradient(to right, rgba(139, 92, 246, 0.8), rgba(96, 165, 250, 0.8))"
+              ]
+            }}
+            transition={{
+              duration: 5,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+          <motion.div
+            className="absolute top-0 left-0 right-0 h-[2px] bg-white/50"
+            animate={{
+              opacity: [0.3, 0.8, 0.3],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut"
+            }}
+          />
+        </motion.div>
       </motion.div>
     )}
   </TabsPrimitive.Trigger>

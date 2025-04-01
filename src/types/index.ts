@@ -2,6 +2,20 @@
 export type DiplomeType = 'baccalaureat' | 'toeic' | 'tage-mage' | 'toefl' | 'ielts' | 'cambridge' | 'gmat' | 'brevet';
 export type NiveauType = 'premiere' | 'terminale' | 'intermediaire' | 'avance' | 'sixieme' | 'cinquieme' | 'quatrieme' | 'troisieme' | 'both';
 
+export type BacSpecialite = 
+  | 'Mathématiques'
+  | 'Physique-Chimie'
+  | 'SVT'
+  | 'SES'
+  | 'HGGSP'
+  | 'Humanités-Littérature-Philosophie'
+  | 'NSI'
+  | 'Arts'
+  | 'Mathématiques expertes'
+  | 'Mathématiques complémentaires'
+  | 'LVC'
+  | 'Latin/Grec';
+
 export interface Flashcard {
   id: string;
   question: string;

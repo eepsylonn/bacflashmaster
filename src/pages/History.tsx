@@ -47,14 +47,41 @@ const History = () => {
           <div className="bg-white rounded-lg shadow-sm border p-6">
             <Tabs defaultValue="all" value={filter} onValueChange={(v) => setFilter(v as any)}>
               <TabsList className="w-full mb-6 p-1 rounded-lg overflow-hidden grid grid-cols-3">
-                <TabsTrigger value="all">
-                  Tout
+                <TabsTrigger value="all" className="relative">
+                  <div className="relative z-10">Tout</div>
+                  {filter === 'all' && (
+                    <motion.div 
+                      layoutId="activeHistoryTab"
+                      className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 opacity-90 rounded-md"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  )}
                 </TabsTrigger>
-                <TabsTrigger value="entrainement">
-                  Entraînements
+                <TabsTrigger value="entrainement" className="relative">
+                  <div className="relative z-10">Entraînements</div>
+                  {filter === 'entrainement' && (
+                    <motion.div 
+                      layoutId="activeHistoryTab"
+                      className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 opacity-90 rounded-md"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  )}
                 </TabsTrigger>
-                <TabsTrigger value="examen">
-                  Examens
+                <TabsTrigger value="examen" className="relative">
+                  <div className="relative z-10">Examens</div>
+                  {filter === 'examen' && (
+                    <motion.div 
+                      layoutId="activeHistoryTab"
+                      className="absolute inset-0 bg-gradient-to-r from-blue-400 to-indigo-500 opacity-90 rounded-md"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  )}
                 </TabsTrigger>
               </TabsList>
               

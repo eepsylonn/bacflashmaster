@@ -1,6 +1,8 @@
+
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import { useDiplome } from '@/contexts/DiplomeContext';
+import { useUserPreferences } from '@/contexts/UserPreferencesContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
@@ -8,12 +10,33 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
-import { Settings as SettingsIcon, Save, RotateCcw, BookOpen, PenTool, BellRing, Palette, EyeOff, Sun, Moon, GraduationCap, BookOpenText, ChevronDown, ChevronUp, Globe, BookmarkCheck } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { 
+  Settings as SettingsIcon, 
+  Save, 
+  RotateCcw, 
+  BookOpen, 
+  PenTool, 
+  BellRing, 
+  Palette, 
+  EyeOff, 
+  Sun, 
+  Moon, 
+  GraduationCap, 
+  BookOpenText, 
+  ChevronDown, 
+  ChevronUp, 
+  Globe, 
+  BookmarkCheck,
+  Check
+} from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
+import { BacSpecialite } from '@/types';
 
 const Settings = () => {
   const { diplome, setDiplome, showDiplomeSelector } = useDiplome();
+  const { selectedSpecialities, setSelectedSpecialities } = useUserPreferences();
   const [selectedDiplome, setSelectedDiplome] = useState<string>(diplome || '');
   const [darkMode, setDarkMode] = useState<boolean>(localStorage.getItem('darkMode') === 'true');
   const [notificationsEnabled, setNotificationsEnabled] = useState<boolean>(localStorage.getItem('notifications') !== 'false');
@@ -23,6 +46,22 @@ const Settings = () => {
   const [writeAnswers, setWriteAnswers] = useState<boolean>(localStorage.getItem('writeAnswers') === 'true');
   const [showMoreDiplomas, setShowMoreDiplomas] = useState<boolean>(false);
   const { toast } = useToast();
+
+  // Liste des spécialités pour le baccalauréat
+  const bacSpecialities: BacSpecialite[] = [
+    'Mathématiques',
+    'Physique-Chimie',
+    'SVT',
+    'SES',
+    'HGGSP',
+    'Humanités-Littérature-Philosophie',
+    'NSI',
+    'Arts',
+    'Mathématiques expertes',
+    'Mathématiques complémentaires',
+    'LVC',
+    'Latin/Grec'
+  ];
 
   useEffect(() => {
     setSelectedDiplome(diplome || '');
@@ -61,7 +100,17 @@ const Settings = () => {
     localStorage.removeItem('cardsPerDay');
     localStorage.removeItem('hideAnsweredCards');
     localStorage.removeItem('writeAnswers');
+    localStorage.removeItem('selectedSpecialities');
+    setSelectedSpecialities([]);
     window.location.reload();
+  };
+
+  const toggleSpeciality = (speciality: BacSpecialite) => {
+    if (selectedSpecialities.includes(speciality)) {
+      setSelectedSpecialities(selectedSpecialities.filter(item => item !== speciality));
+    } else {
+      setSelectedSpecialities([...selectedSpecialities, speciality]);
+    }
   };
 
   const mainDiplomas = [
@@ -234,6 +283,43 @@ const Settings = () => {
                           Ouvrir le sélecteur de diplôme
                         </Button>
                       </div>
+                      
+                      {/* Sélection des spécialités du baccalauréat */}
+                      {selectedDiplome === 'baccalaureat' && (
+                        <motion.div 
+                          className="mt-6 border-t pt-4"
+                          initial={{ opacity: 0, height: 0 }}
+                          animate={{ opacity: 1, height: 'auto' }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <h3 className="text-lg font-medium mb-3">Mes spécialités</h3>
+                          <p className="text-sm text-gray-500 mb-4">
+                            Sélectionnez vos spécialités pour personnaliser votre contenu d'entraînement.
+                          </p>
+                          
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {bacSpecialities.map((speciality) => (
+                              <div 
+                                key={speciality}
+                                className="flex items-center space-x-2"
+                              >
+                                <Checkbox 
+                                  id={`speciality-${speciality}`}
+                                  checked={selectedSpecialities.includes(speciality)}
+                                  onCheckedChange={() => toggleSpeciality(speciality)}
+                                  className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
+                                />
+                                <Label 
+                                  htmlFor={`speciality-${speciality}`}
+                                  className="cursor-pointer"
+                                >
+                                  {speciality}
+                                </Label>
+                              </div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
                     </div>
                   </TabsContent>
                   
