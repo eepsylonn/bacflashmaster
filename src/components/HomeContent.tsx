@@ -3,7 +3,7 @@ import { motion } from 'framer-motion';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { useDiplome } from '@/contexts/DiplomeContext';
-import { Brain, BookOpen, Award, TrendingUp, History, ArrowRight } from 'lucide-react';
+import { Brain, BookOpen, Award, TrendingUp, History, ArrowRight, Calendar, Medal, Zap, LightbulbIcon, BookOpenText, FileText } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 const HomeContent = () => {
@@ -146,6 +146,87 @@ const HomeContent = () => {
               </CardContent>
             </Card>
           </Link>
+        </motion.div>
+      </div>
+      
+      {/* Nouvelle section : Astuces et conseils */}
+      <div className="px-4 mt-6">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.6, duration: 0.5 }}
+        >
+          <h2 className="text-xl font-semibold text-app-blue-dark mb-4">Astuces et conseils</h2>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card className="bg-gradient-to-br from-purple-50 to-indigo-50 border-indigo-100">
+              <CardContent className="p-4 flex flex-col items-center text-center">
+                <div className="bg-indigo-100 p-3 rounded-full mb-3">
+                  <Calendar className="h-5 w-5 text-indigo-600" />
+                </div>
+                <h3 className="font-medium text-indigo-800">Planifiez vos révisions</h3>
+                <p className="text-sm text-gray-600 mt-2">Révisez régulièrement 15-20 minutes par jour plutôt que plusieurs heures d'affilée.</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-blue-50 to-cyan-50 border-blue-100">
+              <CardContent className="p-4 flex flex-col items-center text-center">
+                <div className="bg-blue-100 p-3 rounded-full mb-3">
+                  <Medal className="h-5 w-5 text-blue-600" />
+                </div>
+                <h3 className="font-medium text-blue-800">Récompensez-vous</h3>
+                <p className="text-sm text-gray-600 mt-2">Fixez-vous des objectifs et célébrez vos réussites pour rester motivé.</p>
+              </CardContent>
+            </Card>
+            
+            <Card className="bg-gradient-to-br from-green-50 to-teal-50 border-green-100">
+              <CardContent className="p-4 flex flex-col items-center text-center">
+                <div className="bg-green-100 p-3 rounded-full mb-3">
+                  <Zap className="h-5 w-5 text-green-600" />
+                </div>
+                <h3 className="font-medium text-green-800">Variez les matières</h3>
+                <p className="text-sm text-gray-600 mt-2">Alterner entre différents sujets améliore la mémorisation et évite la monotonie.</p>
+              </CardContent>
+            </Card>
+          </div>
+        </motion.div>
+      </div>
+      
+      {/* Nouvelle section : Ressources */}
+      <div className="px-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+        >
+          <Card className="bg-gradient-to-r from-amber-50 to-yellow-50 border-amber-100">
+            <CardContent className="p-5">
+              <h3 className="font-semibold text-amber-800 flex items-center">
+                <LightbulbIcon className="h-5 w-5 mr-2" />
+                Ressources complémentaires
+              </h3>
+              
+              <div className="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex items-start p-3 bg-white rounded-lg shadow-sm">
+                  <BookOpenText className="h-5 w-5 text-amber-600 mt-0.5 mr-3" />
+                  <div>
+                    <h4 className="font-medium text-sm">{diplomeName} : Les sujets probables</h4>
+                    <p className="text-xs text-gray-600 mt-1">Consultez les thèmes prioritaires à réviser cette année.</p>
+                  </div>
+                </div>
+                <div className="flex items-start p-3 bg-white rounded-lg shadow-sm">
+                  <FileText className="h-5 w-5 text-amber-600 mt-0.5 mr-3" />
+                  <div>
+                    <h4 className="font-medium text-sm">Fiches de méthodologie</h4>
+                    <p className="text-xs text-gray-600 mt-1">Des conseils pratiques pour optimiser vos révisions.</p>
+                  </div>
+                </div>
+              </div>
+              
+              <Button variant="link" className="mt-2 text-amber-700 p-0 h-auto font-medium">
+                Voir toutes les ressources <ArrowRight className="h-4 w-4 ml-1" />
+              </Button>
+            </CardContent>
+          </Card>
         </motion.div>
       </div>
     </div>

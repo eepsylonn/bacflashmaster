@@ -1,17 +1,20 @@
 
 import { useState, useEffect } from 'react';
-import { Flashcard } from '@/types';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { RotateCw } from 'lucide-react';
+import { ThumbsUp, ThumbsDown } from 'lucide-react';
+import { Flashcard } from '@/types';
+import Mascot from '@/components/Mascot';
+import WriteAnswer from '@/components/WriteAnswer';
 
-interface FlashcardComponentProps {
+interface FlashcardProps {
   flashcard: Flashcard;
   isFlipped: boolean;
   onFlip: () => void;
-  onCorrect?: () => void;
-  onIncorrect?: () => void;
-  showAnswerButtons?: boolean;
+  onCorrect: () => void;
+  onIncorrect: () => void;
+  showAnswerButtons: boolean;
 }
 
 const FlashcardComponent = ({
@@ -20,78 +23,128 @@ const FlashcardComponent = ({
   onFlip,
   onCorrect,
   onIncorrect,
-  showAnswerButtons = false
-}: FlashcardComponentProps) => {
-  const [isAnimating, setIsAnimating] = useState(false);
-
+  showAnswerButtons,
+}: FlashcardProps) => {
+  const [dimension, setDimension] = useState({ width: 0, height: 0 });
+  const [hasWriteAnswerEnabled, setHasWriteAnswerEnabled] = useState<boolean>(false);
+  const [hasSubmittedAnswer, setHasSubmittedAnswer] = useState<boolean>(false);
+  
+  // Vérifier si l'option d'écrire les réponses est activée
   useEffect(() => {
-    setIsAnimating(true);
-    const timer = setTimeout(() => setIsAnimating(false), 300);
-    return () => clearTimeout(timer);
-  }, [flashcard.id]);
+    const writeAnswersEnabled = localStorage.getItem('writeAnswers') === 'true';
+    setHasWriteAnswerEnabled(writeAnswersEnabled);
+  }, []);
+  
+  // Récupérer les dimensions de la carte pour l'animation
+  useEffect(() => {
+    const card = document.querySelector('.flashcard-front');
+    if (card) {
+      const { width, height } = card.getBoundingClientRect();
+      setDimension({ width, height });
+    }
+  }, [flashcard]);
+
+  const cardStyle = {
+    width: dimension.width > 0 ? dimension.width : '100%',
+    height: dimension.height > 0 ? dimension.height : 'auto',
+    minHeight: '250px',
+  };
+  
+  // Gestionnaire pour la soumission de réponse écrite
+  const handleAnswerSubmit = (answer: string) => {
+    setHasSubmittedAnswer(true);
+    // On ne retourne pas encore la carte, on laisse l'utilisateur le faire
+  };
 
   return (
-    <div 
-      className={`flashcard w-full max-w-3xl mx-auto ${isFlipped ? 'flipped' : ''} ${isAnimating ? 'animate-fade-in' : ''}`}
-    >
-      <div className="flashcard-inner relative w-full">
-        <Card 
-          className="flashcard-front p-6 min-h-[300px] flex flex-col justify-center cursor-pointer"
-          onClick={onFlip}
-        >
-          <div className="mb-2 flex justify-between text-sm text-gray-500">
-            <span>{flashcard.matiere}</span>
-            <span className="capitalize">{flashcard.niveau}</span>
-          </div>
-          <h3 className="text-xl md:text-2xl text-center font-medium my-4">{flashcard.question}</h3>
-          <p className="text-center text-gray-500 mt-4">Cliquez pour voir la réponse</p>
-        </Card>
-        
-        <Card className="flashcard-back p-6 min-h-[300px] flex flex-col justify-center absolute inset-0">
-          <div className="mb-2 flex justify-between text-sm text-gray-500">
-            <span>{flashcard.matiere}</span>
-            <span className="capitalize">{flashcard.niveau}</span>
-          </div>
-          <div className="text-lg md:text-xl text-center my-4 overflow-auto">
-            {flashcard.answer}
-          </div>
-          
-          <div className="flex flex-col gap-3 mt-4">
-            <Button 
-              variant="outline"
-              className="hover:bg-gray-100 text-gray-700 flex items-center justify-center gap-2 mx-auto"
-              onClick={onFlip}
+    <div className="p-4">
+      <div className="relative mx-auto max-w-2xl perspective-1000">
+        <AnimatePresence initial={false} mode="wait">
+          <motion.div
+            key={isFlipped ? 'back' : 'front'}
+            initial={{ rotateY: isFlipped ? -90 : 90, opacity: 0 }}
+            animate={{ rotateY: 0, opacity: 1 }}
+            exit={{ rotateY: isFlipped ? 90 : -90, opacity: 0 }}
+            transition={{ duration: 0.4, ease: 'easeInOut' }}
+            style={cardStyle}
+            className="w-full"
+          >
+            <Card
+              className={`flashcard-${isFlipped ? 'back' : 'front'} p-6 w-full shadow-lg border-2 ${
+                isFlipped ? 'border-indigo-300 bg-gradient-to-br from-indigo-50 to-blue-50' : 'border-app-blue-light'
+              }`}
             >
-              <RotateCw className="h-4 w-4" />
-              Revoir la question
-            </Button>
-            
-            {showAnswerButtons && (
-              <div className="flex justify-center space-x-4">
-                <Button 
-                  onClick={(e) => { 
-                    e.stopPropagation(); 
-                    onIncorrect && onIncorrect(); 
-                  }}
-                  variant="outline" 
-                  className="border-red-500 hover:bg-red-50 text-red-500"
-                >
-                  Incorrect
-                </Button>
-                <Button 
-                  onClick={(e) => { 
-                    e.stopPropagation(); 
-                    onCorrect && onCorrect(); 
-                  }}
-                  variant="outline" 
-                  className="border-green-500 hover:bg-green-50 text-green-500"
-                >
-                  Correct
-                </Button>
+              <div className="flex flex-col h-full">
+                <div className="flex justify-between items-center mb-4">
+                  <div>
+                    <span className="text-xs text-gray-500">
+                      Matière: <span className="font-medium text-app-blue-dark">{flashcard.matiere}</span>
+                    </span>
+                    {flashcard.niveau && (
+                      <span className="text-xs text-gray-500 ml-2">
+                        Niveau: <span className="font-medium text-app-blue-dark">{flashcard.niveau}</span>
+                      </span>
+                    )}
+                  </div>
+                  <Mascot size="sm" animation={isFlipped ? 'bounce' : 'none'} />
+                </div>
+
+                <div className="flex-grow flex flex-col justify-center">
+                  {isFlipped ? (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold text-gray-700 mb-1">Réponse:</h3>
+                      <p className="text-app-blue-dark">{flashcard.answer}</p>
+                    </div>
+                  ) : (
+                    <div className="space-y-4">
+                      <h3 className="text-lg font-semibold text-gray-700 mb-1">Question:</h3>
+                      <p className="text-app-blue-dark">{flashcard.question}</p>
+                      
+                      {hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped && (
+                        <div className="mt-4">
+                          <WriteAnswer 
+                            onSubmit={handleAnswerSubmit} 
+                            correctAnswer={flashcard.answer}
+                          />
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                <div className="mt-6">
+                  {isFlipped && showAnswerButtons ? (
+                    <div className="flex justify-between gap-4">
+                      <Button
+                        variant="outline"
+                        className="flex-1 border-red-300 hover:bg-red-50 text-red-700"
+                        onClick={onIncorrect}
+                      >
+                        <ThumbsDown className="h-4 w-4 mr-2" />
+                        Je ne savais pas
+                      </Button>
+                      <Button
+                        className="flex-1 bg-green-600 hover:bg-green-700 text-white"
+                        onClick={onCorrect}
+                      >
+                        <ThumbsUp className="h-4 w-4 mr-2" />
+                        Je savais
+                      </Button>
+                    </div>
+                  ) : (
+                    <Button
+                      onClick={onFlip}
+                      className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white"
+                      disabled={hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped}
+                    >
+                      {isFlipped ? 'Retour à la question' : 'Voir la réponse'}
+                    </Button>
+                  )}
+                </div>
               </div>
-            )}
-          </div>
-        </Card>
+            </Card>
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );

@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Slider } from '@/components/ui/slider';
-import { Settings as SettingsIcon, Save, RotateCcw, BookOpen, PenTool, BellRing, Palette, EyeOff, Sun, Moon, GraduationCap } from 'lucide-react';
+import { Settings as SettingsIcon, Save, RotateCcw, BookOpen, PenTool, BellRing, Palette, EyeOff, Sun, Moon, GraduationCap, BookOpenText } from 'lucide-react';
 import { motion } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 
@@ -21,6 +21,7 @@ const Settings = () => {
   const [fontSize, setFontSize] = useState<number>(Number(localStorage.getItem('fontSize') || 100));
   const [cardsPerDay, setCardsPerDay] = useState<number>(Number(localStorage.getItem('cardsPerDay') || 20));
   const [hideAnsweredCards, setHideAnsweredCards] = useState<boolean>(localStorage.getItem('hideAnsweredCards') === 'true');
+  const [writeAnswers, setWriteAnswers] = useState<boolean>(localStorage.getItem('writeAnswers') === 'true');
   const { toast } = useToast();
 
   useEffect(() => {
@@ -37,6 +38,7 @@ const Settings = () => {
     localStorage.setItem('fontSize', fontSize.toString());
     localStorage.setItem('cardsPerDay', cardsPerDay.toString());
     localStorage.setItem('hideAnsweredCards', hideAnsweredCards.toString());
+    localStorage.setItem('writeAnswers', writeAnswers.toString());
     
     // Appliquer les réglages
     document.documentElement.style.fontSize = `${fontSize}%`;
@@ -62,6 +64,7 @@ const Settings = () => {
     localStorage.removeItem('fontSize');
     localStorage.removeItem('cardsPerDay');
     localStorage.removeItem('hideAnsweredCards');
+    localStorage.removeItem('writeAnswers');
     window.location.reload();
   };
 
@@ -240,6 +243,21 @@ const Settings = () => {
                               id="hide-answered"
                               checked={hideAnsweredCards}
                               onCheckedChange={setHideAnsweredCards}
+                            />
+                          </div>
+                        </div>
+                        
+                        <div className="flex items-center justify-between">
+                          <div className="space-y-0.5">
+                            <Label htmlFor="write-answers" className="font-medium">Écrire les réponses</Label>
+                            <p className="text-sm text-muted-foreground">Possibilité d'écrire vos réponses avant de vérifier</p>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <BookOpenText className="h-4 w-4 text-gray-500" />
+                            <Switch 
+                              id="write-answers"
+                              checked={writeAnswers}
+                              onCheckedChange={setWriteAnswers}
                             />
                           </div>
                         </div>

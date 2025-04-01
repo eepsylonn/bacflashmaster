@@ -3,17 +3,20 @@ import { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { NombreQuestions } from '@/types';
 import { MascotSlider } from '@/components/MascotSlider';
 import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
 import { useDiplome } from '@/contexts/DiplomeContext';
 
+// Importation manuelle des types requis
+type NiveauType = 'premiere' | 'terminale' | 'intermediaire' | 'avance';
+type NombreQuestions = 5 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100;
+
 interface TrainingSelectorProps {
   matiere: string | undefined;
   setMatiere: (matiere: string) => void;
-  niveau: 'premiere' | 'terminale' | undefined;
-  setNiveau: (niveau: 'premiere' | 'terminale' | undefined) => void;
+  niveau: NiveauType | undefined;
+  setNiveau: (niveau: NiveauType | undefined) => void;
   nombreQuestions: NombreQuestions;
   setNombreQuestions: (nombreQuestions: NombreQuestions) => void;
   onStartTraining: () => void;
@@ -71,7 +74,7 @@ const TrainingSelector = ({
   return (
     <Card className="p-6 shadow-lg bg-white rounded-xl border-2 border-app-blue-light">
       <div className="flex items-center justify-center mb-6">
-        <Mascot size="md" animation="wave" />
+        <Mascot size="lg" animation="wave" />
         <h2 className="text-2xl font-semibold ml-4 text-app-blue-dark">Paramètres d'entraînement</h2>
       </div>
       
@@ -110,7 +113,7 @@ const TrainingSelector = ({
                 if (value === "both") {
                   setNiveau(undefined);
                 } else {
-                  setNiveau(value as 'premiere' | 'terminale');
+                  setNiveau(value as NiveauType);
                 }
               }}
               className="w-full"
@@ -132,17 +135,17 @@ const TrainingSelector = ({
         
         <div className="space-y-4">
           <label className="block text-sm font-medium text-gray-700">
-            Nombre de questions: <span className="text-app-blue-dark font-bold">{nombreQuestions}</span>
+            Nombre de questions
           </label>
           
-          <div className="px-2 pt-6 pb-2">
+          <div className="px-2 pt-2 pb-2">
             <MascotSlider
               value={sliderValue}
               onValueChange={setSliderValue}
               max={questionOptions.length - 1}
               step={1}
               steps={questionOptions}
-              showLabels={true}
+              currentValue={nombreQuestions}
             />
           </div>
         </div>

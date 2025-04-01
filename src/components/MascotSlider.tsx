@@ -7,14 +7,18 @@ import Mascot from "@/components/Mascot";
 interface MascotSliderProps extends React.ComponentPropsWithoutRef<typeof SliderPrimitive.Root> {
   onValueChange: (value: number[]) => void;
   steps?: number[];
-  showLabels?: boolean;
+  currentValue: number;
 }
 
 const MascotSlider = React.forwardRef<
   React.ElementRef<typeof SliderPrimitive.Root>,
   MascotSliderProps
->(({ className, steps = [], showLabels = false, ...props }, ref) => (
-  <div className="space-y-5">
+>(({ className, steps = [], currentValue, ...props }, ref) => (
+  <div className="space-y-5 relative">
+    <div className="text-center bg-app-blue-light/20 rounded-full py-1 px-4 font-semibold text-app-blue-dark text-lg mb-4 shadow-sm">
+      {currentValue} questions
+    </div>
+    
     <SliderPrimitive.Root
       ref={ref}
       className={cn(
@@ -37,22 +41,6 @@ const MascotSlider = React.forwardRef<
         </SliderPrimitive.Thumb>
       ))}
     </SliderPrimitive.Root>
-    
-    {showLabels && steps.length > 0 && (
-      <div className="relative w-full px-2">
-        <div className="flex justify-between w-full absolute -top-4">
-          {steps.map((step, index) => (
-            <span 
-              key={index} 
-              className="text-xs text-gray-500 absolute transform -translate-x-1/2"
-              style={{ left: `${(index / (steps.length - 1)) * 100}%` }}
-            >
-              {step}
-            </span>
-          ))}
-        </div>
-      </div>
-    )}
   </div>
 ));
 

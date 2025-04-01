@@ -6,6 +6,7 @@ import { motion } from 'framer-motion';
 import { GraduationCap, BookOpenCheck, BrainCircuit } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 import { cn } from '@/lib/utils';
+import Mascot from '@/components/Mascot';
 
 interface DiplomeSelectorProps {
   onSelectDiplome: (diplome: string) => void;
@@ -50,6 +51,7 @@ const DiplomeSelector = ({ onSelectDiplome, isOpen, setIsOpen }: DiplomeSelector
         <Card className="border-2 border-app-blue-light overflow-hidden shadow-xl">
           <div className="bg-gradient-to-r from-app-blue-dark to-indigo-800 text-white p-4 sm:p-6">
             <div className="flex items-center justify-center mb-4">
+              <Mascot size="lg" animation="bounce" className="mr-3" />
               <h2 className="text-xl sm:text-2xl font-bold">Bienvenue sur FlashBac'</h2>
             </div>
             <p className="text-center text-white/90 text-sm sm:text-base">

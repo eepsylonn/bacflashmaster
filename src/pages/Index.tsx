@@ -8,6 +8,19 @@ const Index = () => {
   const { isFirstOpen } = useDiplome();
   
   useEffect(() => {
+    // Initialiser les réglages utilisateur s'ils n'existent pas
+    if (localStorage.getItem('fontSize') === null) {
+      localStorage.setItem('fontSize', '100');
+    }
+    
+    if (localStorage.getItem('darkMode') === null) {
+      localStorage.setItem('darkMode', 'false');
+    }
+    
+    if (localStorage.getItem('writeAnswers') === null) {
+      localStorage.setItem('writeAnswers', 'false');
+    }
+    
     // Appliquer les réglages utilisateur
     const fontSize = localStorage.getItem('fontSize') || '100';
     const darkMode = localStorage.getItem('darkMode') === 'true';
