@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, NiveauType, DiplomeType } from '@/types';
 import { getFlashcards } from '@/data/flashcards';
@@ -55,6 +54,8 @@ export const useFlashcards = () => {
       return;
     }
 
+    // This is where the type mismatch occurs
+    // We need to ensure the niveau parameter is properly typed or handled
     const questions = getFlashcards(matiere, niveau, nombreQuestions, diplome);
     if (questions.length === 0) {
       toast({
@@ -176,7 +177,8 @@ export const useFlashcards = () => {
       score,
       pourcentage,
       note,
-      questions: answeredQuestions
+      questions: answeredQuestions,
+      diplome: diplome as DiplomeType
     };
 
     // Add to history and keep only the last 10 entries
