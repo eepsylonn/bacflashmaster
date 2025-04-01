@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -148,6 +149,7 @@ const TrainingSelector = ({
   const isFrenchBac = diplome === 'baccalaureat' && matiere === 'Français';
   const isPhiloBac = diplome === 'baccalaureat' && matiere === 'Philosophie';
   
+  // Update niveau when matiere changes
   useEffect(() => {
     if (diplome === 'baccalaureat') {
       if (matiere === 'Français') {
@@ -173,6 +175,19 @@ const TrainingSelector = ({
 
   const showSpecialitiesMessage = diplome === 'baccalaureat' && selectedSpecialities.length === 0;
   
+  const handleMatiereSelection = (selectedMatiere: string) => {
+    setMatiere(selectedMatiere);
+    
+    // Auto-select tabs based on subject for baccalauréat
+    if (diplome === 'baccalaureat') {
+      if (selectedMatiere === 'Français') {
+        setNiveau('premiere');
+      } else if (selectedMatiere === 'Philosophie') {
+        setNiveau('terminale');
+      }
+    }
+  };
+  
   return (
     <Card className="p-6 shadow-lg bg-white rounded-xl border-2 border-app-blue-light">
       <div className="flex items-center justify-center mb-6">
@@ -191,7 +206,7 @@ const TrainingSelector = ({
                 key={m}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => setMatiere(m)}
+                onClick={() => handleMatiereSelection(m)}
                 className={`p-3 h-14 rounded-lg text-center text-xs sm:text-sm transition-all flex items-center justify-center ${
                   matiere === m
                     ? 'bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white font-medium shadow-md'
@@ -264,7 +279,12 @@ const TrainingSelector = ({
                 isFrenchBac ? 'premiere' : 
                 isPhiloBac ? 'terminale' : 
                 (niveau || defaultNiveau)
-              } 
+              }
+              value={
+                isFrenchBac ? 'premiere' : 
+                isPhiloBac ? 'terminale' : 
+                (niveau || defaultNiveau)
+              }
               onValueChange={(value) => {
                 if (isFrenchBac || isPhiloBac) {
                   return;
