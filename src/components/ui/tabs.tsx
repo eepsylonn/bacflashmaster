@@ -57,12 +57,17 @@ const TabsTrigger = React.forwardRef<
         }}
       >
         <motion.div 
-          className="absolute inset-0 bg-gradient-to-r from-app-blue-light/40 to-indigo-400/40 rounded-sm"
+          className="absolute inset-0 bg-gradient-to-r from-app-blue-light/40 via-indigo-400/40 to-purple-400/40 rounded-sm"
           animate={{
             opacity: [0.5, 0.8, 0.5],
+            background: [
+              "linear-gradient(to right, rgba(59, 130, 246, 0.4), rgba(99, 102, 241, 0.4))",
+              "linear-gradient(to right, rgba(99, 102, 241, 0.4), rgba(139, 92, 246, 0.4))",
+              "linear-gradient(to right, rgba(139, 92, 246, 0.4), rgba(59, 130, 246, 0.4))"
+            ]
           }}
           transition={{
-            duration: 2,
+            duration: 3,
             repeat: Infinity,
             ease: "easeInOut"
           }}

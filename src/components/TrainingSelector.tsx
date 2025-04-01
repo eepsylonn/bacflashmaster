@@ -17,19 +17,78 @@ const getMatieresByDiplome = (diplome: string | undefined) => {
       return ['Compréhension orale', 'Compréhension écrite', 'Grammaire', 'Vocabulaire'];
     case 'tage-mage':
       return ['Calcul', 'Logique', 'Verbal', 'Problèmes'];
+    case 'toefl':
+      return ['Reading', 'Listening', 'Speaking', 'Writing', 'Grammar', 'Vocabulary'];
+    case 'ielts':
+      return ['Reading', 'Listening', 'Speaking', 'Writing', 'Vocabulary', 'Academic', 'General Training'];
+    case 'cambridge':
+      return ['Reading & Use of English', 'Writing', 'Listening', 'Speaking', 'Grammar', 'Vocabulary'];
+    case 'gmat':
+      return ['Quantitative', 'Verbal', 'Integrated Reasoning', 'Analytical Writing'];
+    case 'brevet':
+      return [
+        'Français (Grammaire)',
+        'Français (Compréhension)',
+        'Français (Rédaction)',
+        'Mathématiques (Calculs)',
+        'Mathématiques (Géométrie)',
+        'Mathématiques (Programmation)',
+        'Histoire',
+        'Géographie',
+        'EMC',
+        'Physique-Chimie',
+        'SVT',
+        'Technologie'
+      ];
     case 'baccalaureat':
     default:
       return [
-        'Mathématiques',
-        'Physique',
-        'Chimie',
-        'SVT',
-        'Histoire',
-        'Géographie',
-        'Français',
         'Philosophie',
+        'Français',
+        'Histoire-Géographie',
+        'EMC',
         'Anglais',
-        'SES'
+        'Espagnol',
+        'Mathématiques',
+        'Physique-Chimie',
+        'SVT',
+        'SES',
+        'HGGSP',
+        'Humanités-Littérature-Philosophie',
+        'NSI',
+        'Arts',
+        'Mathématiques expertes',
+        'Mathématiques complémentaires',
+        'LVC',
+        'Latin/Grec'
+      ];
+  }
+};
+
+const getNiveauByDiplome = (diplome: string | undefined) => {
+  switch(diplome) {
+    case 'toeic':
+    case 'toefl':
+    case 'ielts':
+    case 'cambridge':
+    case 'gmat':
+    case 'tage-mage':
+      return [
+        { value: "intermediaire", label: "Intermédiaire" },
+        { value: "avance", label: "Avancé" }
+      ];
+    case 'brevet':
+      return [
+        { value: "troisieme", label: "Troisième" },
+        { value: "quatrieme", label: "Quatrième" },
+        { value: "both", label: "Les deux" }
+      ];
+    case 'baccalaureat':
+    default:
+      return [
+        { value: "premiere", label: "Première" },
+        { value: "terminale", label: "Terminale" },
+        { value: "both", label: "Les deux" }
       ];
   }
 };
@@ -64,6 +123,10 @@ const TrainingSelector = ({
   const visibleMatieres = showAllSubjects ? matieres : matieres.slice(0, 6);
   const hasMoreSubjects = matieres.length > 6;
   
+  // Obtenir les niveaux selon le diplôme
+  const niveaux = getNiveauByDiplome(diplome);
+  const defaultNiveau = niveaux[0]?.value || "both";
+  
   // Mettre à jour le nombre de questions lorsque le slider change
   useEffect(() => {
     const index = sliderValue[0];
@@ -71,6 +134,13 @@ const TrainingSelector = ({
       setNombreQuestions(questionOptions[index]);
     }
   }, [sliderValue, setNombreQuestions]);
+  
+  // Réinitialiser la matière si elle n'existe pas dans la nouvelle liste
+  useEffect(() => {
+    if (matiere && !matieres.includes(matiere)) {
+      setMatiere(matieres[0]);
+    }
+  }, [diplome, matiere, matieres, setMatiere]);
   
   return (
     <Card className="p-6 shadow-lg bg-white rounded-xl border-2 border-app-blue-light">
@@ -123,13 +193,13 @@ const TrainingSelector = ({
           )}
         </div>
         
-        {diplome === 'baccalaureat' && (
+        {niveaux.length > 0 && (
           <div className="space-y-2">
             <label className="block text-sm font-medium text-gray-700">
               Niveau
             </label>
             <Tabs 
-              defaultValue={niveau || "both"} 
+              defaultValue={niveau || defaultNiveau} 
               onValueChange={(value) => {
                 if (value === "both") {
                   setNiveau(undefined);
@@ -140,15 +210,11 @@ const TrainingSelector = ({
               className="w-full"
             >
               <TabsList className="grid grid-cols-3 w-full">
-                <TabsTrigger value="premiere">
-                  Première
-                </TabsTrigger>
-                <TabsTrigger value="terminale">
-                  Terminale
-                </TabsTrigger>
-                <TabsTrigger value="both">
-                  Les deux
-                </TabsTrigger>
+                {niveaux.map((niv) => (
+                  <TabsTrigger key={niv.value} value={niv.value}>
+                    {niv.label}
+                  </TabsTrigger>
+                ))}
               </TabsList>
             </Tabs>
           </div>

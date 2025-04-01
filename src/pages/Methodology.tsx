@@ -9,11 +9,16 @@ import { motion } from 'framer-motion';
 
 const methodologiesMatieres = {
   'baccalaureat': [
-    { id: 'maths', name: 'Mathématiques', icon: <Book className="h-5 w-5 text-blue-600" /> },
+    { id: 'philosophie', name: 'Philosophie', icon: <Book className="h-5 w-5 text-blue-600" /> },
     { id: 'francais', name: 'Français', icon: <Book className="h-5 w-5 text-red-600" /> },
     { id: 'histoire', name: 'Histoire-Géographie', icon: <Book className="h-5 w-5 text-amber-600" /> },
-    { id: 'philo', name: 'Philosophie', icon: <Book className="h-5 w-5 text-purple-600" /> },
-    { id: 'sciences', name: 'Sciences', icon: <Book className="h-5 w-5 text-green-600" /> },
+    { id: 'maths', name: 'Mathématiques', icon: <Book className="h-5 w-5 text-green-600" /> },
+    { id: 'physique', name: 'Physique-Chimie', icon: <Book className="h-5 w-5 text-purple-600" /> },
+    { id: 'svt', name: 'SVT', icon: <Book className="h-5 w-5 text-emerald-600" /> },
+    { id: 'ses', name: 'SES', icon: <Book className="h-5 w-5 text-orange-600" /> },
+    { id: 'nsi', name: 'NSI', icon: <Book className="h-5 w-5 text-indigo-600" /> },
+    { id: 'arts', name: 'Arts', icon: <Book className="h-5 w-5 text-pink-600" /> },
+    { id: 'langues', name: 'Langues vivantes', icon: <Book className="h-5 w-5 text-teal-600" /> },
   ],
   'toeic': [
     { id: 'listening', name: 'Listening', icon: <Book className="h-5 w-5 text-blue-600" /> },
@@ -25,6 +30,39 @@ const methodologiesMatieres = {
     { id: 'calcul', name: 'Calcul', icon: <Book className="h-5 w-5 text-green-600" /> },
     { id: 'logique', name: 'Logique', icon: <Book className="h-5 w-5 text-orange-600" /> },
     { id: 'verbal', name: 'Verbal', icon: <Book className="h-5 w-5 text-purple-600" /> },
+  ],
+  'toefl': [
+    { id: 'reading', name: 'Reading', icon: <Book className="h-5 w-5 text-blue-600" /> },
+    { id: 'listening', name: 'Listening', icon: <Book className="h-5 w-5 text-indigo-600" /> },
+    { id: 'speaking', name: 'Speaking', icon: <Book className="h-5 w-5 text-violet-600" /> },
+    { id: 'writing', name: 'Writing', icon: <Book className="h-5 w-5 text-pink-600" /> },
+    { id: 'grammar', name: 'Grammar', icon: <Book className="h-5 w-5 text-teal-600" /> },
+  ],
+  'ielts': [
+    { id: 'reading', name: 'Reading', icon: <Book className="h-5 w-5 text-blue-600" /> },
+    { id: 'listening', name: 'Listening', icon: <Book className="h-5 w-5 text-indigo-600" /> },
+    { id: 'speaking', name: 'Speaking', icon: <Book className="h-5 w-5 text-violet-600" /> },
+    { id: 'writing', name: 'Writing', icon: <Book className="h-5 w-5 text-pink-600" /> },
+    { id: 'academic', name: 'Academic', icon: <Book className="h-5 w-5 text-amber-600" /> },
+    { id: 'general', name: 'General Training', icon: <Book className="h-5 w-5 text-green-600" /> },
+  ],
+  'cambridge': [
+    { id: 'reading', name: 'Reading & Use of English', icon: <Book className="h-5 w-5 text-blue-600" /> },
+    { id: 'writing', name: 'Writing', icon: <Book className="h-5 w-5 text-indigo-600" /> },
+    { id: 'listening', name: 'Listening', icon: <Book className="h-5 w-5 text-violet-600" /> },
+    { id: 'speaking', name: 'Speaking', icon: <Book className="h-5 w-5 text-pink-600" /> },
+  ],
+  'gmat': [
+    { id: 'quantitative', name: 'Quantitative', icon: <Book className="h-5 w-5 text-green-600" /> },
+    { id: 'verbal', name: 'Verbal', icon: <Book className="h-5 w-5 text-blue-600" /> },
+    { id: 'integrated', name: 'Integrated Reasoning', icon: <Book className="h-5 w-5 text-orange-600" /> },
+    { id: 'writing', name: 'Analytical Writing', icon: <Book className="h-5 w-5 text-purple-600" /> },
+  ],
+  'brevet': [
+    { id: 'francais', name: 'Français', icon: <Book className="h-5 w-5 text-red-600" /> },
+    { id: 'maths', name: 'Mathématiques', icon: <Book className="h-5 w-5 text-blue-600" /> },
+    { id: 'histoire', name: 'Histoire-Géographie-EMC', icon: <Book className="h-5 w-5 text-amber-600" /> },
+    { id: 'sciences', name: 'Sciences et Technologie', icon: <Book className="h-5 w-5 text-green-600" /> },
   ]
 };
 
@@ -69,6 +107,18 @@ const fichesMatieres: Record<string, Record<string, FicheInfo[]>> = {
         ]
       }
     ],
+    'philosophie': [
+      {
+        title: "Comment rédiger une dissertation philosophique",
+        content: [
+          "1. Analyser soigneusement le sujet et identifier les concepts clés.",
+          "2. Problématiser en posant une question centrale et des sous-questions.",
+          "3. Construire un plan dialectique (thèse, antithèse, synthèse).",
+          "4. Illustrer vos arguments avec des références précises aux philosophes.",
+          "5. Conclure en montrant l'évolution de votre réflexion et en ouvrant vers d'autres questions."
+        ]
+      }
+    ],
     // ... autres matières
   },
   'toeic': {
@@ -100,7 +150,117 @@ const fichesMatieres: Record<string, Record<string, FicheInfo[]>> = {
       }
     ],
     // ... autres matières
-  }
+  },
+  'brevet': {
+    'francais': [
+      {
+        title: "Préparation à l'épreuve de français",
+        content: [
+          "1. Pratique régulière de la dictée pour l'orthographe et la grammaire.",
+          "2. Entraînement à la compréhension de texte avec différents genres littéraires.",
+          "3. Exercices de rédaction avec attention à la structure et aux consignes.",
+          "4. Mémorisation des règles de grammaire essentielles.",
+          "5. Enrichissement du vocabulaire par la lecture."
+        ]
+      }
+    ],
+    'maths': [
+      {
+        title: "Révisions efficaces en mathématiques",
+        content: [
+          "1. Maîtriser les formules géométriques (aires, volumes, Pythagore, Thalès).",
+          "2. S'entraîner à la résolution de problèmes concrets (proportionnalité, pourcentages).",
+          "3. Pratiquer les fonctions et leurs représentations graphiques.",
+          "4. Comprendre les bases de la programmation et des algorithmes.",
+          "5. Réviser les statistiques et la probabilité."
+        ]
+      }
+    ],
+    'histoire': [
+      {
+        title: "Mémoriser les dates et événements clés",
+        content: [
+          "1. Créer des frises chronologiques pour visualiser les périodes importantes.",
+          "2. Associer chaque événement à une image mentale forte.",
+          "3. Établir des connexions entre les événements pour comprendre leur enchaînement.",
+          "4. Réviser régulièrement avec des quiz et des résumés.",
+          "5. Préparer des fiches synthétiques par thème."
+        ]
+      }
+    ],
+    'sciences': [
+      {
+        title: "Organisation des révisions scientifiques",
+        content: [
+          "1. Alterner entre physique-chimie, SVT et technologie.",
+          "2. Maîtriser le vocabulaire scientifique spécifique à chaque discipline.",
+          "3. S'entraîner à décrire et interpréter des expériences.",
+          "4. Comprendre les grands enjeux environnementaux et de santé.",
+          "5. Réviser les schémas et cycles importants."
+        ]
+      }
+    ],
+  },
+  'toefl': {
+    'reading': [
+      {
+        title: "Stratégies pour la section Reading",
+        content: [
+          "1. Pratiquer la lecture rapide (skimming) pour identifier les idées principales.",
+          "2. S'entraîner à repérer les détails importants (scanning).",
+          "3. Élargir son vocabulaire académique.",
+          "4. Pratiquer la synthèse de textes complexes.",
+          "5. Gérer efficacement le temps: 20 minutes par passage."
+        ]
+      }
+    ],
+    // Autres sections ajoutées selon besoin
+  },
+  'ielts': {
+    'writing': [
+      {
+        title: "Réussir la partie Writing",
+        content: [
+          "1. Task 1: S'entraîner à décrire des graphiques et tableaux de données en 20 minutes.",
+          "2. Task 2: Structurer un essai argumentatif en 40 minutes.",
+          "3. Employer un vocabulaire varié et des structures grammaticales complexes.",
+          "4. Respecter le nombre minimum de mots (150 pour Task 1, 250 pour Task 2).",
+          "5. Réviser les connecteurs logiques pour une argumentation fluide."
+        ]
+      }
+    ],
+    // Autres sections ajoutées selon besoin
+  },
+  'cambridge': {
+    'reading': [
+      {
+        title: "Optimiser la section Reading",
+        content: [
+          "1. Familiarisez-vous avec les différents formats de questions (QCM, texte à trous, etc.).",
+          "2. Pratiquez la lecture active en soulignant les idées clés.",
+          "3. Analysez attentivement les instructions de chaque tâche.",
+          "4. Développez des stratégies pour chaque type d'exercice.",
+          "5. Gérez votre temps: 1h15 pour 8 parties."
+        ]
+      }
+    ],
+    // Autres sections ajoutées selon besoin
+  },
+  'gmat': {
+    'quantitative': [
+      {
+        title: "Exceller dans la section Quantitative",
+        content: [
+          "1. Maîtrisez les formules d'arithmétique, d'algèbre et de géométrie essentielles.",
+          "2. Pratiquez l'analyse de données et la résolution de problèmes.",
+          "3. Développez des techniques d'estimation pour gagner du temps.",
+          "4. Exercez-vous à traduire des problèmes textuels en équations.",
+          "5. Mémorisez les propriétés des nombres (divisibilité, factorisation, etc.)."
+        ]
+      }
+    ],
+    // Autres sections ajoutées selon besoin
+  },
 };
 
 const Methodology = () => {
@@ -110,7 +270,12 @@ const Methodology = () => {
   const diplomeName = {
     'baccalaureat': 'Baccalauréat',
     'toeic': 'TOEIC',
-    'tage-mage': 'TAGE MAGE'
+    'tage-mage': 'TAGE MAGE',
+    'toefl': 'TOEFL',
+    'ielts': 'IELTS',
+    'cambridge': 'Cambridge',
+    'gmat': 'GMAT',
+    'brevet': 'Brevet des collèges'
   }[diplome || 'baccalaureat'] || 'votre diplôme';
   
   const matieres = methodologiesMatieres[diplome as keyof typeof methodologiesMatieres] || methodologiesMatieres.baccalaureat;

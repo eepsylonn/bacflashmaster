@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import { useDiplome } from '@/contexts/DiplomeContext';
@@ -26,14 +25,12 @@ const Settings = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    // Mettre à jour la sélection lorsque le diplôme change dans le contexte
     setSelectedDiplome(diplome || '');
   }, [diplome]);
 
   const handleSaveSettings = () => {
     setDiplome(selectedDiplome as any);
     
-    // Sauvegarder les autres réglages
     localStorage.setItem('darkMode', darkMode.toString());
     localStorage.setItem('notifications', notificationsEnabled.toString());
     localStorage.setItem('fontSize', fontSize.toString());
@@ -41,7 +38,6 @@ const Settings = () => {
     localStorage.setItem('hideAnsweredCards', hideAnsweredCards.toString());
     localStorage.setItem('writeAnswers', writeAnswers.toString());
     
-    // Appliquer les réglages
     document.documentElement.style.fontSize = `${fontSize}%`;
     if (darkMode) {
       document.documentElement.classList.add('dark');
@@ -57,7 +53,6 @@ const Settings = () => {
   };
 
   const handleReset = () => {
-    // Réinitialiser l'application
     localStorage.removeItem('diplomeSelected');
     localStorage.removeItem('diplomeType');
     localStorage.removeItem('darkMode');
@@ -69,7 +64,6 @@ const Settings = () => {
     window.location.reload();
   };
 
-  // Liste complète des diplômes disponibles
   const mainDiplomas = [
     {
       id: 'baccalaureat',
@@ -214,24 +208,23 @@ const Settings = () => {
                         ))}
                       </div>
                       
-                      <div className="mt-4 space-y-2">
-                        <Button 
+                      <div className="mt-4 flex flex-col space-y-2">
+                        <button 
                           onClick={() => setShowMoreDiplomas(!showMoreDiplomas)}
-                          variant="outline" 
-                          className="w-full flex items-center justify-center"
+                          className="text-app-blue-medium hover:text-app-blue-dark flex items-center justify-center text-sm self-center py-1"
                         >
                           {showMoreDiplomas ? (
                             <>
-                              <ChevronUp className="h-4 w-4 mr-2" />
+                              <ChevronUp className="h-4 w-4 mr-1" />
                               Afficher moins
                             </>
                           ) : (
                             <>
-                              <ChevronDown className="h-4 w-4 mr-2" />
+                              <ChevronDown className="h-4 w-4 mr-1" />
                               Afficher plus de diplômes
                             </>
                           )}
-                        </Button>
+                        </button>
                         
                         <Button 
                           onClick={showDiplomeSelector}

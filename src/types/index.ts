@@ -1,6 +1,6 @@
 
-export type DiplomeType = 'baccalaureat' | 'toeic' | 'tage-mage';
-export type NiveauType = 'premiere' | 'terminale' | 'intermediaire' | 'avance';
+export type DiplomeType = 'baccalaureat' | 'toeic' | 'tage-mage' | 'toefl' | 'ielts' | 'cambridge' | 'gmat' | 'brevet';
+export type NiveauType = 'premiere' | 'terminale' | 'intermediaire' | 'avance' | 'sixieme' | 'cinquieme' | 'quatrieme' | 'troisieme';
 
 export interface Flashcard {
   id: string;
