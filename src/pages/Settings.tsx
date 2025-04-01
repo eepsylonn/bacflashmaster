@@ -34,6 +34,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/hooks/use-toast';
 import { BacSpecialite } from '@/types';
 import { useIsMobile } from '@/hooks/use-mobile';
+import SpecialitySelector from '@/components/SpecialitySelector';
 
 const Settings = () => {
   const isMobile = useIsMobile();
@@ -47,7 +48,7 @@ const Settings = () => {
   const [hideAnsweredCards, setHideAnsweredCards] = useState<boolean>(localStorage.getItem('hideAnsweredCards') === 'true');
   const [writeAnswers, setWriteAnswers] = useState<boolean>(localStorage.getItem('writeAnswers') === 'true');
   const [showMoreDiplomas, setShowMoreDiplomas] = useState<boolean>(false);
-  const [showMoreSpecialities, setShowMoreSpecialities] = useState<boolean>(false);
+  const [showSpecialityPopup, setShowSpecialityPopup] = useState<boolean>(false);
   const { toast } = useToast();
 
   const bacSpecialitiesData: {
@@ -143,9 +144,7 @@ const Settings = () => {
     }
   ];
 
-  const visibleSpecialities = showMoreSpecialities 
-    ? bacSpecialitiesData 
-    : bacSpecialitiesData.slice(0, 4);
+  const visibleSpecialities = bacSpecialitiesData.slice(0, 4);
 
   useEffect(() => {
     setSelectedDiplome(diplome || '');
@@ -195,6 +194,14 @@ const Settings = () => {
     } else {
       setSelectedSpecialities([...selectedSpecialities, speciality]);
     }
+  };
+
+  const openSpecialityPopup = () => {
+    setShowSpecialityPopup(true);
+  };
+
+  const closeSpecialityPopup = () => {
+    setShowSpecialityPopup(false);
   };
 
   const mainDiplomas = [
@@ -429,71 +436,15 @@ const Settings = () => {
                             
                             <Button 
                               variant="ghost" 
-                              onClick={() => setShowMoreSpecialities(!showMoreSpecialities)} 
+                              onClick={openSpecialityPopup} 
                               className="w-full mt-2 text-app-blue-dark hover:bg-app-blue-light/10 p-1 h-8"
                             >
-                              {showMoreSpecialities ? (
-                                <>
-                                  <span>Afficher moins</span>
-                                  <ChevronUp className="ml-1 h-4 w-4" />
-                                </>
-                              ) : (
-                                <>
-                                  <span>Afficher plus</span>
-                                  <ChevronDown className="ml-1 h-4 w-4" />
-                                </>
-                              )}
+                              <>
+                                <span>Afficher plus</span>
+                                <ChevronDown className="ml-1 h-4 w-4" />
+                              </>
                             </Button>
                             
-                            {showMoreSpecialities && (
-                              <div className="space-y-4 mt-2">
-                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                                  {bacSpecialitiesData.slice(4).map((speciality) => (
-                                    <motion.div 
-                                      key={`more-${speciality.id}`}
-                                      className={`p-3 rounded-lg border-2 ${
-                                        selectedSpecialities.includes(speciality.id)
-                                          ? `${speciality.color} border-opacity-100 shadow-sm`
-                                          : 'border-gray-200 hover:border-gray-300'
-                                      } transition-all`}
-                                      whileHover={{ y: -2 }}
-                                      whileTap={{ scale: 0.98 }}
-                                    >
-                                      <div className="flex items-start">
-                                        <div 
-                                          className="flex items-center justify-center mr-3"
-                                          onClick={() => toggleSpeciality(speciality.id)}
-                                        >
-                                          <Checkbox 
-                                            id={`speciality-extra-${speciality.id}`}
-                                            checked={selectedSpecialities.includes(speciality.id)}
-                                            onCheckedChange={() => toggleSpeciality(speciality.id)}
-                                            className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
-                                          />
-                                        </div>
-                                        <div
-                                          className="flex-1 cursor-pointer"
-                                          onClick={() => toggleSpeciality(speciality.id)}
-                                        >
-                                          <div className="flex items-center">
-                                            <span className="text-2xl mr-2">{speciality.icon}</span>
-                                            <Label 
-                                              htmlFor={`speciality-extra-${speciality.id}`}
-                                              className="font-medium"
-                                            >
-                                              {speciality.id}
-                                            </Label>
-                                          </div>
-                                          <p className="text-xs text-gray-500 mt-1">
-                                            {speciality.description}
-                                          </p>
-                                        </div>
-                                      </div>
-                                    </motion.div>
-                                  ))}
-                                </div>
-                              </div>
-                            )}
                           </div>
                           
                           <div className="flex justify-between mt-4">
@@ -675,6 +626,11 @@ const Settings = () => {
           </motion.div>
         </div>
       </main>
+
+      <SpecialitySelector
+        isOpen={showSpecialityPopup}
+        onClose={closeSpecialityPopup}
+      />
     </div>
   );
 };
