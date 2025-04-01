@@ -15,7 +15,7 @@ const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgr
   const successRate = currentIndex > 0 ? Math.round((score / currentIndex) * 100) : 0;
   
   return (
-    <div className="mb-8 relative bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
+    <div className="mb-8 relative bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md border border-gray-200 dark:border-gray-700">
       <div className="flex justify-between items-center mb-2">
         <motion.div 
           className="text-gray-700 dark:text-gray-200 font-medium"
@@ -41,7 +41,7 @@ const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgr
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
           style={{ originX: 0 }}
-          className="bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden"
+          className="bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden h-3 shadow-inner"
         >
           <Progress value={progress} className="h-3" />
         </motion.div>

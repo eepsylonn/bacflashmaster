@@ -58,9 +58,9 @@ const FlashcardComponent = ({
     setHasSubmittedAnswer(true);
     setAnswerCorrectness(isCorrect);
     
-    // On ne retourne pas encore la carte, on laisse l'utilisateur le faire
+    // On retourne automatiquement la carte pour voir la réponse
     if (!isFlipped) {
-      onFlip(); // Retourner automatiquement la carte pour voir la réponse
+      onFlip();
     }
   };
 
@@ -78,22 +78,22 @@ const FlashcardComponent = ({
   return (
     <div className="p-4">
       <div className="relative mx-auto max-w-2xl perspective-1000">
-        <div className="flashcard-container w-full" style={{ minHeight: '400px' }}>
+        <div className="flashcard-container w-full" style={{ minHeight: '450px' }}>
           <AnimatePresence initial={false} mode="wait">
             <motion.div
               key={isFlipped ? 'back' : 'front'}
               initial={{ rotateY: isFlipped ? -90 : 90, opacity: 0 }}
               animate={{ rotateY: 0, opacity: 1 }}
               exit={{ rotateY: isFlipped ? 90 : -90, opacity: 0 }}
-              transition={{ duration: 0.4, ease: 'easeInOut' }}
-              style={{ width: '100%', minHeight: '400px' }}
-              className="w-full"
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              style={{ width: '100%', minHeight: '450px' }}
+              className="w-full absolute inset-0"
             >
               <Card
                 className={`flashcard-${isFlipped ? 'back' : 'front'} p-6 w-full shadow-lg border-2 ${
                   isFlipped ? 'border-indigo-300 bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900 dark:to-blue-900 dark:border-indigo-600' : 'border-app-blue-light dark:border-app-blue-medium bg-white dark:bg-gray-800'
                 }`}
-                style={{ minHeight: '400px' }}
+                style={{ minHeight: '450px' }}
               >
                 <div className="flex flex-col h-full">
                   <div className="flex justify-between items-center mb-4">
@@ -113,8 +113,10 @@ const FlashcardComponent = ({
                   <div className="flex-grow flex flex-col justify-center">
                     {isFlipped ? (
                       <div className="space-y-4">
-                        <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2 bg-yellow-100 dark:bg-yellow-900 p-2 rounded">Réponse:</h3>
-                        <p className="text-app-blue-dark dark:text-blue-300 text-lg p-3 bg-white dark:bg-gray-700 rounded shadow-sm">{flashcard.answer || "Pas de réponse disponible"}</p>
+                        <h3 className="text-xl font-semibold text-gray-800 dark:text-white mb-2 bg-yellow-100 dark:bg-yellow-800 p-3 rounded-lg shadow">Réponse:</h3>
+                        <div className="text-app-blue-dark dark:text-blue-300 text-lg p-4 bg-white dark:bg-gray-700 rounded-lg shadow-md border border-gray-100 dark:border-gray-600">
+                          <p className="font-medium">{flashcard.answer || "Pas de réponse disponible"}</p>
+                        </div>
                         
                         {showAnswerButtons && (
                           <div className="mt-6 flex space-x-2">
