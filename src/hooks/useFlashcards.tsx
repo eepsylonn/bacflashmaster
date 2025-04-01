@@ -53,7 +53,11 @@ export const useFlashcards = () => {
       return;
     }
 
-    const questions = getFlashcards(matiere, niveau as any, nombreQuestions, diplome);
+    console.log(`Démarrage de l'entraînement avec niveau=${niveau}, matière=${matiere}`);
+    
+    // Nous nous assurons que le niveau est correctement passé à getFlashcards
+    const questions = getFlashcards(matiere, niveau, nombreQuestions, diplome);
+    
     if (questions.length === 0) {
       toast({
         title: "Aucune question disponible",
@@ -62,6 +66,13 @@ export const useFlashcards = () => {
       });
       return;
     }
+
+    console.log(`Questions récupérées: ${questions.length}`);
+    
+    // Log pour vérifier les niveaux des questions récupérées
+    const premiereCount = questions.filter(q => q.niveau === 'premiere').length;
+    const terminaleCount = questions.filter(q => q.niveau === 'terminale').length;
+    console.log(`Questions de première: ${premiereCount}, Questions de terminale: ${terminaleCount}`);
 
     setCurrentQuestions(questions);
     setAnsweredQuestions([]);

@@ -337,30 +337,46 @@ const allFlashcards = [
     ...anglaisFlashcards
 ];
 
-// Function to get flashcards based on criteria
+// Function to get flashcards based on criteria - refactored to ensure correct filtering
 export const getFlashcards = (
   matiere?: string, 
   niveau?: NiveauType, 
   limit?: number,
   diplome?: string
 ): Flashcard[] => {
+  console.log(`Filtrage avec : matière=${matiere}, niveau=${niveau}, diplôme=${diplome}`);
+  
   // Start with all flashcards
-  let filteredFlashcards = allFlashcards;
+  let filteredFlashcards = [...allFlashcards]; // Create a copy to avoid reference issues
   
   // First, filter by diploma if specified
   if (diplome) {
     filteredFlashcards = filteredFlashcards.filter(card => card.diplome === diplome);
+    console.log(`Après filtrage par diplôme: ${filteredFlashcards.length} cartes`);
   }
 
   // Then filter by matiere if specified
   if (matiere) {
     filteredFlashcards = filteredFlashcards.filter(card => card.matiere === matiere);
+    console.log(`Après filtrage par matière: ${filteredFlashcards.length} cartes`);
   }
 
   // Then filter by niveau if specified
-  // The 'both' option is handled by not filtering on niveau
+  // Important: We only skip niveau filtering if niveau is explicitly 'both'
   if (niveau && niveau !== 'both') {
-    filteredFlashcards = filteredFlashcards.filter(card => card.niveau === niveau);
+    filteredFlashcards = filteredFlashcards.filter(card => {
+      const match = card.niveau === niveau;
+      return match;
+    });
+    console.log(`Après filtrage par niveau (${niveau}): ${filteredFlashcards.length} cartes`);
+  }
+
+  // Debug log of the first few cards after filtering
+  if (filteredFlashcards.length > 0) {
+    console.log('Exemples de cartes filtrées:');
+    filteredFlashcards.slice(0, 3).forEach(card => {
+      console.log(`ID: ${card.id}, Matière: ${card.matiere}, Niveau: ${card.niveau}`);
+    });
   }
 
   // Randomize the array

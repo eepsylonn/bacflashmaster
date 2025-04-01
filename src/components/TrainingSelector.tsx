@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -149,7 +148,6 @@ const TrainingSelector = ({
   const isFrenchBac = diplome === 'baccalaureat' && matiere === 'Français';
   const isPhiloBac = diplome === 'baccalaureat' && matiere === 'Philosophie';
   
-  // Update niveau when matiere changes
   useEffect(() => {
     if (diplome === 'baccalaureat') {
       if (matiere === 'Français') {
@@ -178,13 +176,26 @@ const TrainingSelector = ({
   const handleMatiereSelection = (selectedMatiere: string) => {
     setMatiere(selectedMatiere);
     
-    // Auto-select tabs based on subject for baccalauréat
     if (diplome === 'baccalaureat') {
       if (selectedMatiere === 'Français') {
         setNiveau('premiere');
       } else if (selectedMatiere === 'Philosophie') {
         setNiveau('terminale');
       }
+    }
+  };
+  
+  const handleNiveauChange = (value: string) => {
+    if (isFrenchBac || isPhiloBac) {
+      return;
+    }
+    
+    console.log(`Changement de niveau: ${value}`);
+    
+    if (value === "both") {
+      setNiveau(undefined);
+    } else {
+      setNiveau(value as NiveauType);
     }
   };
   
@@ -285,17 +296,7 @@ const TrainingSelector = ({
                 isPhiloBac ? 'terminale' : 
                 (niveau || defaultNiveau)
               }
-              onValueChange={(value) => {
-                if (isFrenchBac || isPhiloBac) {
-                  return;
-                }
-                
-                if (value === "both") {
-                  setNiveau(undefined);
-                } else {
-                  setNiveau(value as NiveauType);
-                }
-              }}
+              onValueChange={handleNiveauChange}
               className="w-full"
             >
               <TabsList className="grid grid-cols-3 w-full">
