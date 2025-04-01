@@ -15,6 +15,7 @@ const Header = () => {
   
   const tabs = [
     { value: '/', label: 'Accueil' },
+    { value: '/methodologie', label: 'Fiches' },
     { value: '/entrainement', label: 'Entraînement' },
     { value: '/examen', label: 'Examen' },
     { value: '/historique', label: 'Historique' },
@@ -27,7 +28,7 @@ const Header = () => {
     const path = location.pathname;
     setActiveTab(path);
     
-    // Faire défiler vers l'onglet actif
+    // Faire défiler vers l'onglet actif sans animation
     const activeTabElement = document.querySelector(`[data-path="${path}"]`);
     if (activeTabElement && tabsContainerRef.current) {
       const containerWidth = tabsContainerRef.current.offsetWidth;
@@ -36,7 +37,9 @@ const Header = () => {
       
       // Calculer la position de défilement pour centrer l'onglet
       const scrollPosition = tabPosition - (containerWidth / 2) + (tabWidth / 2);
-      tabsContainerRef.current.scrollTo({ left: scrollPosition, behavior: 'smooth' });
+      
+      // Utiliser scrollLeft au lieu de scrollTo pour éviter l'animation
+      tabsContainerRef.current.scrollLeft = scrollPosition;
     }
   }, [location.pathname]);
   
@@ -167,7 +170,12 @@ const Header = () => {
                       layoutId="activeTab"
                       className="absolute inset-0 bg-white/20 rounded-md"
                       initial={false}
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      transition={{ 
+                        type: "spring", 
+                        stiffness: 500, 
+                        damping: 30,
+                        layout: { duration: 0.2 } 
+                      }}
                     />
                   )}
                   <span className="relative z-10">{tab.label}</span>

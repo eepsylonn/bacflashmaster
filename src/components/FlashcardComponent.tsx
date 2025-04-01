@@ -139,35 +139,13 @@ const FlashcardComponent = ({
 
                 <div className="mt-6">
                   {isFlipped ? (
-                    hasSubmittedAnswer ? (
-                      <Button
-                        className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700"
-                        onClick={handleNextQuestion}
-                      >
-                        Passer à la question suivante
-                        <ArrowRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    ) : (
-                      showAnswerButtons && (
-                        <div className="flex justify-between gap-4">
-                          <Button
-                            variant="outline"
-                            className="flex-1 border-red-300 hover:bg-red-50 text-red-700"
-                            onClick={onIncorrect}
-                          >
-                            <ThumbsDown className="h-4 w-4 mr-2" />
-                            Je ne savais pas
-                          </Button>
-                          <Button
-                            className="flex-1 bg-green-600 hover:bg-green-700 text-white"
-                            onClick={onCorrect}
-                          >
-                            <ThumbsUp className="h-4 w-4 mr-2" />
-                            Je savais
-                          </Button>
-                        </div>
-                      )
-                    )
+                    <Button
+                      className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700"
+                      onClick={handleNextQuestion}
+                    >
+                      Passer à la question suivante
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
                   ) : (
                     <Button
                       onClick={onFlip}

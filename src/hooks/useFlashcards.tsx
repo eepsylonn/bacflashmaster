@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, NiveauType, DiplomeType } from '@/types';
 import { getFlashcards } from '@/data/flashcards';
@@ -55,7 +54,7 @@ export const useFlashcards = () => {
       return;
     }
 
-    // Utiliser any pour éviter l'erreur de type
+    // Utiliser 'any' pour contourner l'erreur de type temporairement
     const questions = getFlashcards(matiere, niveau as any, nombreQuestions, diplome);
     if (questions.length === 0) {
       toast({
