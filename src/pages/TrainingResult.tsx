@@ -2,7 +2,7 @@
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Check, X, Trophy, TrendingUp, TrendingDown, Equals } from 'lucide-react';
+import { Check, X, Trophy, TrendingUp, TrendingDown, Equal } from 'lucide-react';
 import { TrainingResult as TrainingResultType } from '@/types';
 import confetti from 'canvas-confetti';
 import { useEffect } from 'react';
@@ -49,11 +49,11 @@ const TrainingResultPage = ({ result, improvementRate, onClose }: TrainingResult
 
   // Déterminer couleur et icône basées sur l'amélioration
   const getImprovementDisplay = () => {
-    if (improvementRate === null) return { color: 'bg-blue-100 text-blue-700', icon: <Equals className="w-5 h-5 mr-1" /> };
+    if (improvementRate === null) return { color: 'bg-blue-100 text-blue-700', icon: <Equal className="w-5 h-5 mr-1" /> };
     
     if (improvementRate > 5) return { color: 'bg-green-100 text-green-700', icon: <TrendingUp className="w-5 h-5 mr-1" /> };
     if (improvementRate < -5) return { color: 'bg-red-100 text-red-700', icon: <TrendingDown className="w-5 h-5 mr-1" /> };
-    return { color: 'bg-yellow-100 text-yellow-700', icon: <Equals className="w-5 h-5 mr-1" /> };
+    return { color: 'bg-yellow-100 text-yellow-700', icon: <Equal className="w-5 h-5 mr-1" /> };
   };
 
   const improvementDisplay = getImprovementDisplay();
