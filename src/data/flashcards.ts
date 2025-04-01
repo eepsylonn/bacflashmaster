@@ -6,6 +6,7 @@ import { historyTerminaleFlashcards } from './historyTerminaleFlashcards';
 import { geographyFlashcards } from './geographyFlashcards';
 import { detailedGeographyFlashcards } from './geographyDetailedFlashcards';
 import { emcFlashcards } from './emcFlashcards';
+import { englishFlashcards } from './englishFlashcards';
 
 // Mock flashcard data for the base subjects
 const flashcardsData: Flashcard[] = [
@@ -304,7 +305,8 @@ const allFlashcards = [
   ...philosophyFlashcards, 
   ...historyFlashcards, 
   ...allGeographyFlashcards,
-  ...emcFlashcards
+  ...emcFlashcards,
+  ...englishFlashcards
 ];
 
 // Function to get flashcards based on criteria
