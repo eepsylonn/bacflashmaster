@@ -5,7 +5,6 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DiplomeProvider } from "@/contexts/DiplomeContext";
-import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
 import Index from "./pages/Index";
 import Training from "./pages/Training";
 import Exam from "./pages/Exam";
@@ -22,24 +21,22 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <DiplomeProvider>
-        <UserPreferencesProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/methodologie" element={<Methodology />} />
-              <Route path="/entrainement" element={<Training />} />
-              <Route path="/examen" element={<Exam />} />
-              <Route path="/historique" element={<History />} />
-              <Route path="/historique/:id" element={<HistoryDetail />} />
-              <Route path="/statistiques" element={<Statistics />} />
-              <Route path="/reglages" element={<Settings />} />
-              <Route path="/methodologie" element={<Methodology />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
-        </UserPreferencesProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/methodologie" element={<Methodology />} />
+            <Route path="/entrainement" element={<Training />} />
+            <Route path="/examen" element={<Exam />} />
+            <Route path="/historique" element={<History />} />
+            <Route path="/historique/:id" element={<HistoryDetail />} />
+            <Route path="/statistiques" element={<Statistics />} />
+            <Route path="/reglages" element={<Settings />} />
+            <Route path="/methodologie" element={<Methodology />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
       </DiplomeProvider>
     </TooltipProvider>
   </QueryClientProvider>
