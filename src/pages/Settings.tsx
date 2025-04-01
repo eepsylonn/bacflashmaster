@@ -93,17 +93,21 @@ const Settings = () => {
               <CardContent className="p-0">
                 <Tabs defaultValue="diplome" className="w-full">
                   <TabsList className="w-full grid grid-cols-4 rounded-none">
-                    <TabsTrigger value="diplome" className="flex items-center gap-1">
-                      <BookOpen className="h-4 w-4" /> <span className="hidden sm:inline">Diplôme</span>
+                    <TabsTrigger value="diplome">
+                      <BookOpen className="h-4 w-4 mr-1 sm:mr-2" /> 
+                      <span className="hidden sm:inline">Diplôme</span>
                     </TabsTrigger>
-                    <TabsTrigger value="apparence" className="flex items-center gap-1">
-                      <Palette className="h-4 w-4" /> <span className="hidden sm:inline">Apparence</span>
+                    <TabsTrigger value="apparence">
+                      <Palette className="h-4 w-4 mr-1 sm:mr-2" /> 
+                      <span className="hidden sm:inline">Apparence</span>
                     </TabsTrigger>
-                    <TabsTrigger value="etude" className="flex items-center gap-1">
-                      <PenTool className="h-4 w-4" /> <span className="hidden sm:inline">Étude</span>
+                    <TabsTrigger value="etude">
+                      <PenTool className="h-4 w-4 mr-1 sm:mr-2" /> 
+                      <span className="hidden sm:inline">Étude</span>
                     </TabsTrigger>
-                    <TabsTrigger value="notification" className="flex items-center gap-1">
-                      <BellRing className="h-4 w-4" /> <span className="hidden sm:inline">Notifications</span>
+                    <TabsTrigger value="notification">
+                      <BellRing className="h-4 w-4 mr-1 sm:mr-2" /> 
+                      <span className="hidden sm:inline">Notifications</span>
                     </TabsTrigger>
                   </TabsList>
                   

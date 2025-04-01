@@ -165,28 +165,23 @@ const Header = () => {
                       ? 'text-white font-medium z-20' 
                       : 'text-white/70 hover:text-white hover:bg-white/10 z-10'}`}
                 >
-                  <span className="relative z-10">{tab.label}</span>
+                  <span>{tab.label}</span>
+                  
+                  {/* Indicateur d'onglet actif pour chaque onglet */}
+                  {activeTab === tab.value && (
+                    <motion.div
+                      layoutId="activeTabIndicator"
+                      className="absolute inset-0 bg-white/20 rounded-md z-0"
+                      transition={{ 
+                        type: "spring", 
+                        stiffness: 500, 
+                        damping: 30,
+                        duration: 0.3 
+                      }}
+                    />
+                  )}
                 </button>
               ))}
-              
-              {/* Indicateur animé d'onglet actif */}
-              <motion.div
-                layoutId="activeTabIndicator"
-                className="absolute top-0 left-0 bg-white/20 rounded-md z-0"
-                animate={{
-                  width: document.querySelector(`[data-path="${activeTab}"]`)?.getBoundingClientRect().width,
-                  height: document.querySelector(`[data-path="${activeTab}"]`)?.getBoundingClientRect().height,
-                  x: document.querySelector(`[data-path="${activeTab}"]`)?.getBoundingClientRect().left - 
-                     (tabsContainerRef.current?.getBoundingClientRect().left || 0) + 
-                     (tabsContainerRef.current?.scrollLeft || 0)
-                }}
-                transition={{ 
-                  type: "spring", 
-                  stiffness: 500, 
-                  damping: 30,
-                  duration: 0.3 
-                }}
-              />
             </div>
           </div>
         </div>
