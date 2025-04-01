@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ThumbsUp, ThumbsDown, ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, ArrowRight } from 'lucide-react';
 import { Flashcard } from '@/types';
 import Mascot from '@/components/Mascot';
 import WriteAnswer from '@/components/WriteAnswer';
@@ -64,9 +64,9 @@ const FlashcardComponent = ({
     setHasSubmittedAnswer(true);
     setAnswerCorrectness(isCorrect);
     
-    // On retourne automatiquement la carte pour voir la réponse
+    // On ne retourne pas encore la carte, on laisse l'utilisateur le faire
     if (!isFlipped) {
-      onFlip();
+      onFlip(); // Retourner automatiquement la carte pour voir la réponse
     }
   };
 
@@ -119,15 +119,6 @@ const FlashcardComponent = ({
                     <div className="space-y-4">
                       <h3 className="text-lg font-semibold text-gray-700 mb-1">Réponse:</h3>
                       <p className="text-app-blue-dark">{flashcard.answer}</p>
-                      
-                      {hasSubmittedAnswer && (
-                        <div className="mt-3 p-3 rounded-lg bg-gray-50 border border-gray-200 flex items-center">
-                          <CheckCircle2 className={`h-5 w-5 mr-2 ${answerCorrectness ? 'text-green-500' : 'text-red-500'}`} />
-                          <span className={`font-medium ${answerCorrectness ? 'text-green-700' : 'text-red-700'}`}>
-                            {answerCorrectness ? 'Bonne réponse !' : 'Réponse incorrecte'}
-                          </span>
-                        </div>
-                      )}
                     </div>
                   ) : (
                     <div className="space-y-4">
@@ -148,50 +139,23 @@ const FlashcardComponent = ({
 
                 <div className="mt-6">
                   {isFlipped ? (
-                    <motion.div
-                      initial={{ opacity: 0, y: 10 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ delay: 0.2 }}
+                    <Button
+                      className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700"
+                      onClick={handleNextQuestion}
                     >
-                      <Button
-                        className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white hover:from-emerald-600 hover:to-green-700"
-                        onClick={handleNextQuestion}
-                      >
-                        Passer à la question suivante
-                        <ArrowRight className="h-4 w-4 ml-2" />
-                      </Button>
-                    </motion.div>
+                      Passer à la question suivante
+                      <ArrowRight className="h-4 w-4 ml-2" />
+                    </Button>
                   ) : (
                     <Button
                       onClick={onFlip}
                       className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white"
-                      disabled={hasWriteAnswerEnabled && !hasSubmittedAnswer}
+                      disabled={hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped}
                     >
                       {isFlipped ? 'Retour à la question' : 'Voir la réponse'}
                     </Button>
                   )}
                 </div>
-                
-                {isFlipped && showAnswerButtons && !hasSubmittedAnswer && (
-                  <div className="mt-4 grid grid-cols-2 gap-3">
-                    <Button 
-                      variant="outline" 
-                      className="flex items-center justify-center border-green-500 text-green-600 hover:bg-green-50"
-                      onClick={onCorrect}
-                    >
-                      <ThumbsUp className="h-4 w-4 mr-2" />
-                      J'ai réussi
-                    </Button>
-                    <Button 
-                      variant="outline" 
-                      className="flex items-center justify-center border-red-500 text-red-600 hover:bg-red-50"
-                      onClick={onIncorrect}
-                    >
-                      <ThumbsDown className="h-4 w-4 mr-2" />
-                      J'ai raté
-                    </Button>
-                  </div>
-                )}
               </div>
             </Card>
           </motion.div>
