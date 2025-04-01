@@ -37,6 +37,7 @@ const FlashcardComponent = ({
   const [showConfetti, setShowConfetti] = useState<boolean>(false);
   const [showAnswer, setShowAnswer] = useState<boolean>(false);
   const [answeredLastQuestion, setAnsweredLastQuestion] = useState<boolean>(false);
+  const [showNextButtonAtLastQuestion, setShowNextButtonAtLastQuestion] = useState<boolean>(false);
   
   useEffect(() => {
     const writeAnswersEnabled = localStorage.getItem('writeAnswers') === 'true';
@@ -57,6 +58,7 @@ const FlashcardComponent = ({
     setShowConfetti(false);
     setShowAnswer(false);
     setAnsweredLastQuestion(false);
+    setShowNextButtonAtLastQuestion(false);
   }, [flashcard]);
   
   const handleAnswerSubmit = (answer: string, isCorrect: boolean) => {
@@ -70,22 +72,37 @@ const FlashcardComponent = ({
     if (!isFlipped) {
       onFlip();
     }
+    
+    if (isLastQuestion) {
+      setShowNextButtonAtLastQuestion(true);
+    }
   };
 
   const handleNextQuestion = () => {
-    if (answerCorrectness === true) {
-      onCorrect();
-    } else if (answerCorrectness === false) {
-      onIncorrect();
-    } else if (onNext) {
-      onNext();
+    if (isLastQuestion && hasWriteAnswerEnabled) {
+      setShowNextButtonAtLastQuestion(false);
+      setAnsweredLastQuestion(true);
+      
+      if (answerCorrectness === true) {
+        onCorrect();
+      } else if (answerCorrectness === false) {
+        onIncorrect();
+      }
+    } else {
+      if (answerCorrectness === true) {
+        onCorrect();
+      } else if (answerCorrectness === false) {
+        onIncorrect();
+      } else if (onNext) {
+        onNext();
+      }
     }
   };
 
   const handleFinishTraining = () => {
-    if (answerCorrectness === true) {
+    if (answerCorrectness === true && !answeredLastQuestion) {
       onCorrect();
-    } else if (answerCorrectness === false) {
+    } else if (answerCorrectness === false && !answeredLastQuestion) {
       onIncorrect();
     }
     
@@ -110,7 +127,9 @@ const FlashcardComponent = ({
 
   const handleShowAnswer = () => {
     setShowAnswer(true);
-    setShowConfetti(true);
+    if (isLastQuestion) {
+      setAnsweredLastQuestion(true);
+    }
   };
 
   const cardVariants = {
@@ -320,7 +339,15 @@ const FlashcardComponent = ({
                               whileHover="hover"
                               whileTap="tap"
                             >
-                              {isLastQuestion ? (
+                              {isLastQuestion && showNextButtonAtLastQuestion ? (
+                                <Button
+                                  onClick={handleNextQuestion}
+                                  className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white py-3 text-base"
+                                >
+                                  <ArrowRight className="h-5 w-5 mr-2" />
+                                  Question suivante
+                                </Button>
+                              ) : isLastQuestion ? (
                                 <Button
                                   onClick={handleFinishTraining}
                                   className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 text-white py-3 text-base"
