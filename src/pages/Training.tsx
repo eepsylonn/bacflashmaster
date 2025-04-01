@@ -5,8 +5,9 @@ import Header from '@/components/Header';
 import TrainingSelector from '@/components/TrainingSelector';
 import FlashcardComponent from '@/components/FlashcardComponent';
 import TrainingProgress from '@/components/TrainingProgress';
+import TrainingResultPage from '@/pages/TrainingResult';
 import { useFlashcards } from '@/hooks/useFlashcards';
-import { Card } from '@/components/ui/card';
+import { motion } from 'framer-motion';
 
 const Training = () => {
   const location = useLocation();
@@ -26,7 +27,11 @@ const Training = () => {
     startTraining,
     flipCard,
     markCorrect,
-    markIncorrect
+    markIncorrect,
+    showResult,
+    currentResult,
+    continueAfterResult,
+    calculateImprovementRate
   } = useFlashcards();
 
   // Parse URL parameters
@@ -38,27 +43,27 @@ const Training = () => {
     }
   }, [location.search, setMatiere]);
 
+  // Calculer le taux d'amélioration pour afficher dans la page de résultat
+  const improvementRate = currentResult 
+    ? calculateImprovementRate(currentResult.pourcentage, currentResult.matiere)
+    : null;
+
+  if (showResult && currentResult) {
+    return (
+      <TrainingResultPage 
+        result={currentResult}
+        improvementRate={improvementRate}
+        onClose={continueAfterResult}
+      />
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-indigo-50">
       <Header />
       
       <main className="flex-grow py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-8 text-center text-app-blue-dark">
-            <span className="animate-bounce inline-block">E</span>
-            <span className="animate-bounce inline-block delay-75">n</span>
-            <span className="animate-bounce inline-block delay-100">t</span>
-            <span className="animate-bounce inline-block delay-125">r</span>
-            <span className="animate-bounce inline-block delay-150">a</span>
-            <span className="animate-bounce inline-block delay-175">î</span>
-            <span className="animate-bounce inline-block delay-200">n</span>
-            <span className="animate-bounce inline-block delay-225">e</span>
-            <span className="animate-bounce inline-block delay-250">m</span>
-            <span className="animate-bounce inline-block delay-275">e</span>
-            <span className="animate-bounce inline-block delay-300">n</span>
-            <span className="animate-bounce inline-block delay-325">t</span>
-          </h1>
-          
           {!training ? (
             <div className="max-w-md mx-auto">
               <TrainingSelector
@@ -72,7 +77,11 @@ const Training = () => {
               />
             </div>
           ) : (
-            <div className="max-w-4xl mx-auto">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="max-w-4xl mx-auto"
+            >
               <TrainingProgress
                 currentIndex={currentIndex}
                 totalQuestions={currentQuestions.length}
@@ -89,7 +98,7 @@ const Training = () => {
                   showAnswerButtons={isFlipped}
                 />
               )}
-            </div>
+            </motion.div>
           )}
         </div>
       </main>

@@ -1,11 +1,13 @@
 
-import { useState } from 'react';
 import Header from '@/components/Header';
 import FlashcardComponent from '@/components/FlashcardComponent';
 import TrainingProgress from '@/components/TrainingProgress';
+import TrainingResultPage from '@/pages/TrainingResult';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useFlashcards } from '@/hooks/useFlashcards';
+import { motion } from 'framer-motion';
+import Mascot from '@/components/Mascot';
 
 const Exam = () => {
   const {
@@ -18,8 +20,27 @@ const Exam = () => {
     flipCard,
     markCorrect,
     markIncorrect,
-    examMode
+    examMode,
+    showResult,
+    currentResult,
+    continueAfterResult,
+    calculateImprovementRate
   } = useFlashcards();
+  
+  // Calculer le taux d'amélioration pour afficher dans la page de résultat
+  const improvementRate = currentResult 
+    ? calculateImprovementRate(currentResult.pourcentage, currentResult.matiere)
+    : null;
+
+  if (showResult && currentResult) {
+    return (
+      <TrainingResultPage 
+        result={currentResult}
+        improvementRate={improvementRate}
+        onClose={continueAfterResult}
+      />
+    );
+  }
   
   return (
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-indigo-50">
@@ -27,34 +48,49 @@ const Exam = () => {
       
       <main className="flex-grow py-12">
         <div className="container mx-auto px-4">
-          <h1 className="text-4xl font-bold mb-8 text-center text-app-blue-dark">
-            <span className="animate-bounce inline-block">E</span>
-            <span className="animate-bounce inline-block delay-75">x</span>
-            <span className="animate-bounce inline-block delay-100">a</span>
-            <span className="animate-bounce inline-block delay-125">m</span>
-            <span className="animate-bounce inline-block delay-150">e</span>
-            <span className="animate-bounce inline-block delay-175">n</span>
-          </h1>
-          
           {!examMode ? (
             <div className="max-w-md mx-auto">
-              <Card className="p-8 shadow-lg bg-white rounded-xl border-2 border-app-blue-light">
-                <h2 className="text-xl font-semibold mb-6 text-center">Examen Baccalauréat</h2>
-                <p className="text-gray-600 mb-6 text-center">
-                  Préparez-vous à passer un examen comprenant 200 questions aléatoires 
-                  portant sur toutes les matières du programme de première et terminale.
-                </p>
-                
-                <Button 
-                  onClick={startExam} 
-                  className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white hover:opacity-90 text-lg py-3 rounded-lg transform transition hover:scale-105"
-                >
-                  Commencer l'examen
-                </Button>
-              </Card>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <Card className="p-8 shadow-lg bg-white rounded-xl border-2 border-app-blue-light">
+                  <div className="flex items-center justify-center mb-6">
+                    <Mascot size="lg" animation="bounce" />
+                    <h2 className="text-2xl font-semibold ml-4 text-app-blue-dark text-center">Examen Baccalauréat</h2>
+                  </div>
+                  
+                  <p className="text-gray-600 mb-6 text-center">
+                    Prépare-toi à passer un examen comprenant 200 questions aléatoires 
+                    portant sur toutes les matières du programme de première et terminale.
+                  </p>
+                  
+                  <motion.div
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                  >
+                    <Button 
+                      onClick={startExam} 
+                      className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white hover:opacity-90 text-lg py-6 rounded-lg"
+                    >
+                      <motion.span 
+                        animate={{ scale: [1, 1.1, 1] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                      >
+                        Commencer l'examen
+                      </motion.span>
+                    </Button>
+                  </motion.div>
+                </Card>
+              </motion.div>
             </div>
           ) : (
-            <div className="max-w-4xl mx-auto">
+            <motion.div 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="max-w-4xl mx-auto"
+            >
               <TrainingProgress
                 currentIndex={currentIndex}
                 totalQuestions={currentQuestions.length}
@@ -71,7 +107,7 @@ const Exam = () => {
                   showAnswerButtons={isFlipped}
                 />
               )}
-            </div>
+            </motion.div>
           )}
         </div>
       </main>

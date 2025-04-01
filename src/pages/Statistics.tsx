@@ -4,8 +4,8 @@ import StatsChart from '@/components/StatsChart';
 import StatsSummary from '@/components/StatsSummary';
 import { useFlashcards } from '@/hooks/useFlashcards';
 import { useStats } from '@/hooks/useStats';
-import { Button } from '@/components/ui/button';
-import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
+import Mascot from '@/components/Mascot';
 
 const Statistics = () => {
   const { trainingHistory } = useFlashcards();
@@ -25,21 +25,31 @@ const Statistics = () => {
       
       <main className="flex-grow py-8">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-center mb-8">
+          <div className="flex items-center mb-8">
+            <motion.div
+              initial={{ rotate: 0 }}
+              animate={{ rotate: [0, 10, 0, -10, 0] }}
+              transition={{ duration: 1, repeat: Infinity, repeatDelay: 5 }}
+              className="mr-2"
+            >
+              <Mascot size="sm" />
+            </motion.div>
             <h1 className="text-3xl font-bold">Statistiques</h1>
-            
-            <Button asChild>
-              <Link to="/entrainement">Nouvel entraînement</Link>
-            </Button>
           </div>
           
           {trainingHistory.length === 0 ? (
             <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+              <Mascot size="lg" animation="pulse" className="mx-auto mb-4" />
               <h2 className="text-xl font-medium mb-2">Pas encore de données</h2>
-              <p className="text-gray-500 mb-6">Commencez à vous entraîner pour voir apparaître vos statistiques.</p>
-              <Button asChild>
-                <Link to="/entrainement">Commencer l'entraînement</Link>
-              </Button>
+              <p className="text-gray-500 mb-6">Commence à t'entraîner pour voir apparaître tes statistiques.</p>
+              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+                <button 
+                  onClick={() => window.location.href = '/entrainement'}
+                  className="bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white px-6 py-2 rounded-lg shadow hover:opacity-90"
+                >
+                  Commencer l'entraînement
+                </button>
+              </motion.div>
             </div>
           ) : (
             <div className="space-y-8">
@@ -56,8 +66,16 @@ const Statistics = () => {
                 onMatiereChange={setSelectedMatiere} 
               />
               
-              <div className="bg-white rounded-lg shadow-sm border p-6">
-                <h2 className="text-xl font-semibold mb-4">Conseils pour progresser</h2>
+              <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="bg-white rounded-lg shadow-sm border p-6"
+              >
+                <div className="flex items-center mb-4">
+                  <Mascot size="sm" animation="pulse" className="mr-2" />
+                  <h2 className="text-xl font-semibold">Conseils pour progresser</h2>
+                </div>
                 
                 <div className="space-y-4">
                   <div className="p-4 bg-blue-50 rounded-lg">
@@ -75,7 +93,7 @@ const Statistics = () => {
                     <p className="text-gray-700">Alterne les matières et les niveaux pour maintenir ton attention et créer des connexions entre les connaissances.</p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             </div>
           )}
         </div>

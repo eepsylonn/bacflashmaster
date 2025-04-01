@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import Training from "./pages/Training";
 import Exam from "./pages/Exam";
 import History from "./pages/History";
+import HistoryDetail from "./pages/HistoryDetail";
 import Statistics from "./pages/Statistics";
 import NotFound from "./pages/NotFound";
 
@@ -24,6 +25,7 @@ const App = () => (
           <Route path="/entrainement" element={<Training />} />
           <Route path="/examen" element={<Exam />} />
           <Route path="/historique" element={<History />} />
+          <Route path="/historique/:id" element={<HistoryDetail />} />
           <Route path="/statistiques" element={<Statistics />} />
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -7,6 +7,11 @@ export interface Flashcard {
   niveau: 'premiere' | 'terminale';
 }
 
+export interface AnsweredQuestion {
+  flashcard: Flashcard;
+  isCorrect: boolean;
+}
+
 export interface TrainingResult {
   id: string;
   date: string;
@@ -16,6 +21,7 @@ export interface TrainingResult {
   score: number;
   pourcentage: number;
   note: number;
+  questions?: AnsweredQuestion[];
 }
 
 export type NombreQuestions = 5 | 10 | 20 | 30 | 40 | 50 | 60 | 70 | 80 | 90 | 100 | 200;
