@@ -1,3 +1,4 @@
+
 import { Flashcard, NiveauType, DiplomeType } from '@/types';
 import { philosophyFlashcards } from './philosophyFlashcards';
 import { historyPremiereFlashcards } from './historyPremiereFlashcards';
@@ -343,22 +344,21 @@ export const getFlashcards = (
   limit?: number,
   diplome?: string
 ): Flashcard[] => {
-  // Start with an empty array to avoid combining cards prematurely
-  let filteredFlashcards: Flashcard[] = [];
+  // Start with all flashcards
+  let filteredFlashcards = allFlashcards;
   
-  // First, filter by diploma
-  const byDiplome = diplome 
-    ? allFlashcards.filter(card => card.diplome === diplome)
-    : allFlashcards;
+  // First, filter by diploma if specified
+  if (diplome) {
+    filteredFlashcards = filteredFlashcards.filter(card => card.diplome === diplome);
+  }
 
   // Then filter by matiere if specified
   if (matiere) {
-    filteredFlashcards = byDiplome.filter(card => card.matiere === matiere);
-  } else {
-    filteredFlashcards = byDiplome;
+    filteredFlashcards = filteredFlashcards.filter(card => card.matiere === matiere);
   }
 
-  // Filter by niveau - critical part that was causing the issue
+  // Then filter by niveau if specified
+  // The 'both' option is handled by not filtering on niveau
   if (niveau && niveau !== 'both') {
     filteredFlashcards = filteredFlashcards.filter(card => card.niveau === niveau);
   }
