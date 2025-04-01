@@ -48,7 +48,8 @@ const getMatieresByDiplome = (diplome: string | undefined, selectedSpecialities:
       const troncCommun = [
         'Philosophie',
         'Français',
-        'Histoire-Géographie',
+        'Histoire',
+        'Géographie',
         'EMC',
         'Anglais',
         'Espagnol'
@@ -65,7 +66,8 @@ const getMatieresByDiplome = (diplome: string | undefined, selectedSpecialities:
       return [
         'Philosophie',
         'Français',
-        'Histoire-Géographie',
+        'Histoire',
+        'Géographie',
         'EMC',
         'Anglais',
         'Espagnol',
@@ -217,7 +219,6 @@ const TrainingSelector = ({
             </Button>
           )}
 
-          {/* Message pour ajouter des spécialités */}
           {showSpecialitiesMessage && (
             <motion.div 
               initial={{ opacity: 0, y: -10 }}

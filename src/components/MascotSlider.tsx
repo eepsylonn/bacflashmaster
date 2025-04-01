@@ -33,7 +33,7 @@ const MascotSlider = React.forwardRef<
       {props.value?.map((_, i) => (
         <SliderPrimitive.Thumb
           key={i}
-          className="block h-10 w-10 rounded-full border-2 border-app-blue-medium bg-background shadow-md ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:scale-110"
+          className="block h-10 w-10 rounded-full bg-transparent shadow-none ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-0 disabled:pointer-events-none disabled:opacity-50 hover:scale-110"
         >
           <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
             <Mascot size="xs" animation="pulse" />

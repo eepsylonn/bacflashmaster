@@ -1,6 +1,7 @@
 
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import DiplomeSelector from '@/components/DiplomeSelector';
+import SpecialitySelector from '@/components/SpecialitySelector';
 
 type DiplomeType = 'baccalaureat' | 'toeic' | 'tage-mage' | 'toefl' | 'ielts' | 'cambridge' | 'gmat' | 'brevet' | undefined;
 
@@ -18,15 +19,22 @@ export function DiplomeProvider({ children }: { children: ReactNode }) {
   const [diplome, setDiplomeState] = useState<DiplomeType>(undefined);
   const [isFirstOpen, setIsFirstOpen] = useState(true);
   const [isSelectorOpen, setIsSelectorOpen] = useState(false);
+  const [showSpecialitySelector, setShowSpecialitySelector] = useState(false);
   
   useEffect(() => {
     // Charger le diplôme sélectionné du localStorage
     const savedDiplome = localStorage.getItem('diplomeType');
     const hasSelectedDiplome = localStorage.getItem('diplomeSelected') === 'true';
+    const hasSelectedSpecialities = localStorage.getItem('hasSelectedSpecialities') === 'true';
     
     if (hasSelectedDiplome && savedDiplome) {
       setDiplomeState(savedDiplome as DiplomeType);
       setIsFirstOpen(false);
+      
+      // Si le diplôme est baccalauréat et les spécialités n'ont pas été choisies, montrer le sélecteur de spécialités
+      if (savedDiplome === 'baccalaureat' && !hasSelectedSpecialities) {
+        setShowSpecialitySelector(true);
+      }
     } else {
       setIsFirstOpen(true);
       setIsSelectorOpen(true);
@@ -39,7 +47,17 @@ export function DiplomeProvider({ children }: { children: ReactNode }) {
       localStorage.setItem('diplomeType', newDiplome);
       localStorage.setItem('diplomeSelected', 'true');
       setIsFirstOpen(false);
+      
+      // Si le diplôme est baccalauréat, montrer le sélecteur de spécialités
+      if (newDiplome === 'baccalaureat' && localStorage.getItem('hasSelectedSpecialities') !== 'true') {
+        setShowSpecialitySelector(true);
+      }
     }
+  };
+  
+  const closeSpecialitySelector = () => {
+    setShowSpecialitySelector(false);
+    localStorage.setItem('hasSelectedSpecialities', 'true');
   };
   
   const showDiplomeSelector = () => {
@@ -58,6 +76,10 @@ export function DiplomeProvider({ children }: { children: ReactNode }) {
         onSelectDiplome={(diplome) => setDiplome(diplome as DiplomeType)} 
         isOpen={isSelectorOpen}
         setIsOpen={setIsSelectorOpen}
+      />
+      <SpecialitySelector
+        isOpen={showSpecialitySelector}
+        onClose={closeSpecialitySelector}
       />
       {children}
     </DiplomeContext.Provider>

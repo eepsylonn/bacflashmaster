@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import Header from '@/components/Header';
 import { useDiplome } from '@/contexts/DiplomeContext';
@@ -47,6 +48,7 @@ const Settings = () => {
   const [hideAnsweredCards, setHideAnsweredCards] = useState<boolean>(localStorage.getItem('hideAnsweredCards') === 'true');
   const [writeAnswers, setWriteAnswers] = useState<boolean>(localStorage.getItem('writeAnswers') === 'true');
   const [showMoreDiplomas, setShowMoreDiplomas] = useState<boolean>(false);
+  const [showMoreSpecialities, setShowMoreSpecialities] = useState<boolean>(false);
   const { toast } = useToast();
 
   const bacSpecialitiesData: {
@@ -78,6 +80,13 @@ const Settings = () => {
       color: 'bg-green-100 border-green-300'
     },
     {
+      id: 'NSI',
+      description: 'Numérique et sciences informatiques',
+      category: 'Sciences',
+      icon: '💻',
+      color: 'bg-indigo-100 border-indigo-300'
+    },
+    {
       id: 'SES',
       description: 'Économie, sociologie et science politique',
       category: 'Sciences sociales',
@@ -97,13 +106,6 @@ const Settings = () => {
       category: 'Lettres',
       icon: '📚',
       color: 'bg-pink-100 border-pink-300'
-    },
-    {
-      id: 'NSI',
-      description: 'Numérique et sciences informatiques',
-      category: 'Sciences',
-      icon: '💻',
-      color: 'bg-indigo-100 border-indigo-300'
     },
     {
       id: 'Arts',
@@ -141,6 +143,9 @@ const Settings = () => {
       color: 'bg-amber-100 border-amber-300'
     }
   ];
+
+  // Only show first 4 specialties (SVT et NSI incluses) unless showing more
+  const visibleSpecialities = showMoreSpecialities ? bacSpecialitiesData : bacSpecialitiesData.slice(0, 4);
 
   const groupedSpecialities = bacSpecialitiesData.reduce((acc, item) => {
     if (!acc[item.category]) {
@@ -282,7 +287,7 @@ const Settings = () => {
               
               <CardContent className="p-0">
                 <Tabs defaultValue="diplome" className="w-full">
-                  <TabsList className="w-full grid grid-cols-4 rounded-none h-auto">
+                  <TabsList className="w-full grid grid-cols-4 rounded-none h-auto border-b">
                     {['diplome', 'apparence', 'etude', 'notification'].map((tab, index) => {
                       const labels = ['Diplôme', 'Apparence', 'Étude', 'Notif.'];
                       const icons = [<BookOpen className="h-4 w-4" />, <Palette className="h-4 w-4" />, <PenTool className="h-4 w-4" />, <BellRing className="h-4 w-4" />];
@@ -291,22 +296,12 @@ const Settings = () => {
                         <TabsTrigger 
                           key={tab} 
                           value={tab} 
-                          className="py-2 relative overflow-hidden data-[state=active]:text-app-blue-dark data-[state=active]:font-semibold"
+                          className="py-2 relative overflow-hidden data-[state=active]:bg-transparent"
                         >
                           <div className="flex flex-col items-center justify-center space-y-1 sm:flex-row sm:space-y-0 sm:space-x-1">
                             {icons[index]}
                             <span className="text-xs sm:text-sm">{labels[index]}</span>
                           </div>
-                          <motion.div 
-                            className="absolute bottom-0 left-0 right-0 h-0.5 bg-app-blue-medium"
-                            initial={{ scaleX: 0 }}
-                            animate={{ 
-                              scaleX: tab === "diplome" ? 1 : 0,
-                              opacity: tab === "diplome" ? 1 : 0
-                            }}
-                            transition={{ duration: 0.3 }}
-                            data-state="active"
-                          />
                         </TabsTrigger>
                       );
                     })}
@@ -395,58 +390,128 @@ const Settings = () => {
                             </p>
                           </div>
                           
-                          {categories.map((category) => (
-                            <div key={category} className="mb-4">
-                              <h4 className="text-md font-medium mb-2 bg-gray-100 py-1 px-2 rounded-md">
-                                {category}
-                              </h4>
-                              <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-2`}>
-                                {groupedSpecialities[category].map((speciality) => (
-                                  <motion.div 
-                                    key={speciality.id}
-                                    className={`p-3 rounded-lg border-2 ${
-                                      selectedSpecialities.includes(speciality.id)
-                                        ? `${speciality.color} border-opacity-100 shadow-sm`
-                                        : 'border-gray-200 hover:border-gray-300'
-                                    } transition-all`}
-                                    whileHover={{ y: -2 }}
-                                    whileTap={{ scale: 0.98 }}
-                                  >
-                                    <div className="flex items-start">
-                                      <div 
-                                        className="flex items-center justify-center mr-3"
-                                        onClick={() => toggleSpeciality(speciality.id)}
-                                      >
-                                        <Checkbox 
-                                          id={`speciality-${speciality.id}`}
-                                          checked={selectedSpecialities.includes(speciality.id)}
-                                          onCheckedChange={() => toggleSpeciality(speciality.id)}
-                                          className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
-                                        />
-                                      </div>
-                                      <div
-                                        className="flex-1 cursor-pointer"
-                                        onClick={() => toggleSpeciality(speciality.id)}
-                                      >
-                                        <div className="flex items-center">
-                                          <span className="text-2xl mr-2">{speciality.icon}</span>
-                                          <Label 
-                                            htmlFor={`speciality-${speciality.id}`}
-                                            className="font-medium"
-                                          >
-                                            {speciality.id}
-                                          </Label>
-                                        </div>
-                                        <p className="text-xs text-gray-500 mt-1">
-                                          {speciality.description}
-                                        </p>
-                                      </div>
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                              {visibleSpecialities.map((speciality) => (
+                                <motion.div 
+                                  key={speciality.id}
+                                  className={`p-3 rounded-lg border-2 ${
+                                    selectedSpecialities.includes(speciality.id)
+                                      ? `${speciality.color} border-opacity-100 shadow-sm`
+                                      : 'border-gray-200 hover:border-gray-300'
+                                  } transition-all`}
+                                  whileHover={{ y: -2 }}
+                                  whileTap={{ scale: 0.98 }}
+                                >
+                                  <div className="flex items-start">
+                                    <div 
+                                      className="flex items-center justify-center mr-3"
+                                      onClick={() => toggleSpeciality(speciality.id)}
+                                    >
+                                      <Checkbox 
+                                        id={`speciality-${speciality.id}`}
+                                        checked={selectedSpecialities.includes(speciality.id)}
+                                        onCheckedChange={() => toggleSpeciality(speciality.id)}
+                                        className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
+                                      />
                                     </div>
-                                  </motion.div>
+                                    <div
+                                      className="flex-1 cursor-pointer"
+                                      onClick={() => toggleSpeciality(speciality.id)}
+                                    >
+                                      <div className="flex items-center">
+                                        <span className="text-2xl mr-2">{speciality.icon}</span>
+                                        <Label 
+                                          htmlFor={`speciality-${speciality.id}`}
+                                          className="font-medium"
+                                        >
+                                          {speciality.id}
+                                        </Label>
+                                      </div>
+                                      <p className="text-xs text-gray-500 mt-1">
+                                        {speciality.description}
+                                      </p>
+                                    </div>
+                                  </div>
+                                </motion.div>
+                              ))}
+                            </div>
+                            
+                            <Button 
+                              variant="ghost" 
+                              onClick={() => setShowMoreSpecialities(!showMoreSpecialities)} 
+                              className="w-full mt-2 text-app-blue-dark hover:bg-app-blue-light/10 p-1 h-8"
+                            >
+                              {showMoreSpecialities ? (
+                                <>
+                                  <span>Afficher moins</span>
+                                  <ChevronUp className="ml-1 h-4 w-4" />
+                                </>
+                              ) : (
+                                <>
+                                  <span>Afficher plus</span>
+                                  <ChevronDown className="ml-1 h-4 w-4" />
+                                </>
+                              )}
+                            </Button>
+                            
+                            {showMoreSpecialities && (
+                              <div className="space-y-4">
+                                {categories.map((category) => (
+                                  <div key={category} className="mb-4">
+                                    <h4 className="text-md font-medium mb-2 bg-gray-100 py-1 px-2 rounded-md">
+                                      {category}
+                                    </h4>
+                                    <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-2`}>
+                                      {groupedSpecialities[category].map((speciality) => (
+                                        <motion.div 
+                                          key={speciality.id}
+                                          className={`p-3 rounded-lg border-2 ${
+                                            selectedSpecialities.includes(speciality.id)
+                                              ? `${speciality.color} border-opacity-100 shadow-sm`
+                                              : 'border-gray-200 hover:border-gray-300'
+                                          } transition-all`}
+                                          whileHover={{ y: -2 }}
+                                          whileTap={{ scale: 0.98 }}
+                                        >
+                                          <div className="flex items-start">
+                                            <div 
+                                              className="flex items-center justify-center mr-3"
+                                              onClick={() => toggleSpeciality(speciality.id)}
+                                            >
+                                              <Checkbox 
+                                                id={`speciality-cat-${speciality.id}`}
+                                                checked={selectedSpecialities.includes(speciality.id)}
+                                                onCheckedChange={() => toggleSpeciality(speciality.id)}
+                                                className="h-5 w-5 rounded border-2 data-[state=checked]:bg-app-blue-medium data-[state=checked]:border-app-blue-medium"
+                                              />
+                                            </div>
+                                            <div
+                                              className="flex-1 cursor-pointer"
+                                              onClick={() => toggleSpeciality(speciality.id)}
+                                            >
+                                              <div className="flex items-center">
+                                                <span className="text-2xl mr-2">{speciality.icon}</span>
+                                                <Label 
+                                                  htmlFor={`speciality-cat-${speciality.id}`}
+                                                  className="font-medium"
+                                                >
+                                                  {speciality.id}
+                                                </Label>
+                                              </div>
+                                              <p className="text-xs text-gray-500 mt-1">
+                                                {speciality.description}
+                                              </p>
+                                            </div>
+                                          </div>
+                                        </motion.div>
+                                      ))}
+                                    </div>
+                                  </div>
                                 ))}
                               </div>
-                            </div>
-                          ))}
+                            )}
+                          </div>
                           
                           <div className="flex justify-between mt-4">
                             <Button 

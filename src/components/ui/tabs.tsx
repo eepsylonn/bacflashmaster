@@ -40,7 +40,7 @@ const TabsTrigger = React.forwardRef<
     {props["data-state"] === "active" && (
       <motion.div
         className="absolute inset-0 rounded-sm"
-        layoutId="tab-indicator"
+        layoutId={`tab-indicator-${props.value}`}
         transition={{ 
           type: "spring", 
           bounce: 0.2, 
@@ -77,7 +77,7 @@ const TabsTrigger = React.forwardRef<
             }}
           />
           <motion.div
-            className="absolute top-0 left-0 right-0 h-[2px] bg-white/50"
+            className="absolute bottom-0 left-0 right-0 h-[2px] bg-white/50"
             animate={{
               opacity: [0.3, 0.8, 0.3],
             }}
