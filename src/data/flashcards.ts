@@ -1,9 +1,11 @@
+
 import { Flashcard, NiveauType, DiplomeType } from '@/types';
 import { frenchFlashcards } from './frenchFlashcards';
 import { philosophyFlashcards } from './philosophyFlashcards';
 import { historyPremiereFlashcards } from './historyPremiereFlashcards';
 import { historyTerminaleFlashcards } from './historyTerminaleFlashcards';
 import { geographyFlashcards } from './geographyFlashcards';
+import { detailedGeographyFlashcards } from './geographyDetailedFlashcards';
 
 // Mock flashcard data for the base subjects
 const flashcardsData: Flashcard[] = [
@@ -292,8 +294,11 @@ const flashcardsData: Flashcard[] = [
 // Combine the history flashcards from both levels
 const historyFlashcards = [...historyPremiereFlashcards, ...historyTerminaleFlashcards];
 
+// Combine all geography flashcards
+const allGeographyFlashcards = [...geographyFlashcards, ...detailedGeographyFlashcards];
+
 // Combine the base flashcards with the subject-specific flashcards
-const allFlashcards = [...flashcardsData, ...frenchFlashcards, ...philosophyFlashcards, ...historyFlashcards, ...geographyFlashcards];
+const allFlashcards = [...flashcardsData, ...frenchFlashcards, ...philosophyFlashcards, ...historyFlashcards, ...allGeographyFlashcards];
 
 // Function to get flashcards based on criteria
 export const getFlashcards = (

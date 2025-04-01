@@ -6,6 +6,7 @@ import { philosophyFlashcards } from './philosophyFlashcards';
 import { historyPremiereFlashcards } from './historyPremiereFlashcards';
 import { historyTerminaleFlashcards } from './historyTerminaleFlashcards';
 import { geographyFlashcards } from './geographyFlashcards';
+import { detailedGeographyFlashcards } from './geographyDetailedFlashcards';
 
 // Export all flashcards for use in other files
 export { getFlashcards } from './flashcards';
@@ -19,6 +20,7 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...philosophyFlashcards,
     ...historyPremiereFlashcards,
     ...historyTerminaleFlashcards,
-    ...geographyFlashcards
+    ...geographyFlashcards,
+    ...detailedGeographyFlashcards
   ];
 };
