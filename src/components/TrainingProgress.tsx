@@ -15,10 +15,10 @@ const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgr
   const successRate = currentIndex > 0 ? Math.round((score / currentIndex) * 100) : 0;
   
   return (
-    <div className="mb-8 relative">
+    <div className="mb-8 relative bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700">
       <div className="flex justify-between items-center mb-2">
         <motion.div 
-          className="text-gray-700 font-medium"
+          className="text-gray-700 dark:text-gray-200 font-medium"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.1 }}
@@ -26,7 +26,7 @@ const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgr
           Progression
         </motion.div>
         <motion.div 
-          className="text-sm bg-app-blue-light/20 text-app-blue-dark px-3 py-1 rounded-full"
+          className="text-sm bg-app-blue-light/20 text-app-blue-dark dark:text-blue-300 px-3 py-1 rounded-full"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2 }}
@@ -41,6 +41,7 @@ const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgr
           animate={{ scaleX: 1 }}
           transition={{ duration: 0.5, ease: "easeOut" }}
           style={{ originX: 0 }}
+          className="bg-gray-100 dark:bg-gray-700 rounded-full overflow-hidden"
         >
           <Progress value={progress} className="h-3" />
         </motion.div>
@@ -118,13 +119,13 @@ const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgr
             exit={{ opacity: 0, y: 10 }}
           >
             <Award className={`h-4 w-4 mr-1 ${successRate >= 70 ? 'text-yellow-500' : 'text-gray-400'}`} />
-            <div className="text-sm text-gray-600">
+            <div className="text-sm text-gray-600 dark:text-gray-300">
               Taux de réussite: 
               <motion.span 
                 className={`font-medium ml-1 ${
-                  successRate >= 80 ? 'text-green-600' : 
-                  successRate >= 60 ? 'text-blue-600' : 
-                  successRate >= 40 ? 'text-orange-600' : 'text-red-600'
+                  successRate >= 80 ? 'text-green-600 dark:text-green-400' : 
+                  successRate >= 60 ? 'text-blue-600 dark:text-blue-400' : 
+                  successRate >= 40 ? 'text-orange-600 dark:text-orange-400' : 'text-red-600 dark:text-red-400'
                 }`}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}

@@ -78,7 +78,7 @@ const FlashcardComponent = ({
   return (
     <div className="p-4">
       <div className="relative mx-auto max-w-2xl perspective-1000">
-        <div className="flashcard-container w-full" style={{ minHeight: '320px' }}>
+        <div className="flashcard-container w-full" style={{ minHeight: '400px' }}>
           <AnimatePresence initial={false} mode="wait">
             <motion.div
               key={isFlipped ? 'back' : 'front'}
@@ -86,24 +86,24 @@ const FlashcardComponent = ({
               animate={{ rotateY: 0, opacity: 1 }}
               exit={{ rotateY: isFlipped ? 90 : -90, opacity: 0 }}
               transition={{ duration: 0.4, ease: 'easeInOut' }}
-              style={{ width: '100%', minHeight: '320px' }}
+              style={{ width: '100%', minHeight: '400px' }}
               className="w-full"
             >
               <Card
                 className={`flashcard-${isFlipped ? 'back' : 'front'} p-6 w-full shadow-lg border-2 ${
-                  isFlipped ? 'border-indigo-300 bg-gradient-to-br from-indigo-50 to-blue-50' : 'border-app-blue-light'
+                  isFlipped ? 'border-indigo-300 bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900 dark:to-blue-900 dark:border-indigo-600' : 'border-app-blue-light dark:border-app-blue-medium bg-white dark:bg-gray-800'
                 }`}
-                style={{ minHeight: '320px' }}
+                style={{ minHeight: '400px' }}
               >
                 <div className="flex flex-col h-full">
                   <div className="flex justify-between items-center mb-4">
                     <div>
-                      <span className="text-xs text-gray-500">
-                        Matière: <span className="font-medium text-app-blue-dark">{flashcard.matiere}</span>
+                      <span className="text-xs text-gray-500 dark:text-gray-400">
+                        Matière: <span className="font-medium text-app-blue-dark dark:text-blue-300">{flashcard.matiere}</span>
                       </span>
                       {flashcard.niveau && (
-                        <span className="text-xs text-gray-500 ml-2">
-                          Niveau: <span className="font-medium text-app-blue-dark">{flashcard.niveau}</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400 ml-2">
+                          Niveau: <span className="font-medium text-app-blue-dark dark:text-blue-300">{flashcard.niveau}</span>
                         </span>
                       )}
                     </div>
@@ -113,23 +113,23 @@ const FlashcardComponent = ({
                   <div className="flex-grow flex flex-col justify-center">
                     {isFlipped ? (
                       <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-gray-700 mb-1">Réponse:</h3>
-                        <p className="text-app-blue-dark">{flashcard.answer || "Pas de réponse disponible"}</p>
+                        <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2 bg-yellow-100 dark:bg-yellow-900 p-2 rounded">Réponse:</h3>
+                        <p className="text-app-blue-dark dark:text-blue-300 text-lg p-3 bg-white dark:bg-gray-700 rounded shadow-sm">{flashcard.answer || "Pas de réponse disponible"}</p>
                         
                         {showAnswerButtons && (
-                          <div className="mt-4 flex space-x-2">
+                          <div className="mt-6 flex space-x-2">
                             <Button
                               onClick={onCorrect}
-                              className="flex-1 bg-green-500 hover:bg-green-600 text-white"
+                              className="flex-1 bg-green-500 hover:bg-green-600 text-white py-3 text-base"
                             >
-                              <ThumbsUp className="h-4 w-4 mr-2" />
+                              <ThumbsUp className="h-5 w-5 mr-2" />
                               Correct
                             </Button>
                             <Button
                               onClick={onIncorrect}
-                              className="flex-1 bg-red-500 hover:bg-red-600 text-white"
+                              className="flex-1 bg-red-500 hover:bg-red-600 text-white py-3 text-base"
                             >
-                              <ThumbsDown className="h-4 w-4 mr-2" />
+                              <ThumbsDown className="h-5 w-5 mr-2" />
                               Incorrect
                             </Button>
                           </div>
@@ -137,8 +137,8 @@ const FlashcardComponent = ({
                       </div>
                     ) : (
                       <div className="space-y-4">
-                        <h3 className="text-lg font-semibold text-gray-700 mb-1">Question:</h3>
-                        <p className="text-app-blue-dark">{flashcard.question}</p>
+                        <h3 className="text-xl font-semibold text-gray-700 dark:text-gray-200 mb-2">Question:</h3>
+                        <p className="text-app-blue-dark dark:text-blue-300 text-lg">{flashcard.question}</p>
                         
                         {hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped && (
                           <div className="mt-4">
@@ -156,7 +156,7 @@ const FlashcardComponent = ({
                     {(!isFlipped || !showAnswerButtons) && (
                       <Button
                         onClick={onFlip}
-                        className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white"
+                        className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white py-3 text-base"
                         disabled={hasWriteAnswerEnabled && !hasSubmittedAnswer && !isFlipped}
                       >
                         {isFlipped ? 'Retour à la question' : 'Voir la réponse'}
