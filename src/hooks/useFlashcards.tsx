@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, NiveauType, DiplomeType } from '@/types';
 import { getFlashcards } from '@/data/flashcards';
@@ -103,7 +104,9 @@ export const useFlashcards = () => {
   };
 
   const markCorrect = () => {
-    setScore(score + 1);
+    // Garantir que le score ne dépasse pas le nombre de questions
+    setScore(prev => Math.min(prev + 1, currentQuestions.length));
+    
     if (currentIndex < currentQuestions.length) {
       setAnsweredQuestions(prev => [
         ...prev, 
@@ -113,6 +116,7 @@ export const useFlashcards = () => {
         }
       ]);
     }
+    
     if (currentIndex < currentQuestions.length - 1) {
       nextQuestion();
     } else {
@@ -123,6 +127,7 @@ export const useFlashcards = () => {
   };
 
   const markIncorrect = () => {
+    // Le score reste inchangé, mais on enregistre la réponse comme incorrecte
     if (currentIndex < currentQuestions.length) {
       setAnsweredQuestions(prev => [
         ...prev, 
@@ -132,6 +137,7 @@ export const useFlashcards = () => {
         }
       ]);
     }
+    
     if (currentIndex < currentQuestions.length - 1) {
       nextQuestion();
     } else {
@@ -165,11 +171,13 @@ export const useFlashcards = () => {
   };
 
   const finishTraining = () => {
-    const correctAnswers = answeredQuestions.filter(q => q.isCorrect).length;
+    const correctAnswers = Math.max(0, answeredQuestions.filter(q => q.isCorrect).length);
     const totalQuestions = currentQuestions.length;
     
+    // S'assurer que le pourcentage est entre 0 et 100
     const pourcentage = Math.min(Math.max((correctAnswers / totalQuestions) * 100, 0), 100);
-    const note = (correctAnswers / totalQuestions) * 20;
+    // S'assurer que la note est entre 0 et 20
+    const note = Math.min(Math.max((correctAnswers / totalQuestions) * 20, 0), 20);
     
     const result: TrainingResult = {
       id: Date.now().toString(),

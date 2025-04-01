@@ -11,8 +11,15 @@ interface TrainingProgressProps {
 
 const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgressProps) => {
   const progress = Math.round((currentIndex / totalQuestions) * 100);
-  const incorrect = currentIndex - score;
-  const successRate = currentIndex > 0 ? Math.round((score / currentIndex) * 100) : 0;
+  
+  // S'assurer que les valeurs incorrectes ne sont jamais négatives
+  const safeScore = Math.max(0, score);
+  const incorrect = Math.max(0, currentIndex - safeScore);
+  
+  // Assurer que le taux de réussite est entre 0% et 100%
+  const successRate = currentIndex > 0 
+    ? Math.min(100, Math.max(0, Math.round((safeScore / currentIndex) * 100))) 
+    : 0;
   
   return (
     <motion.div 
@@ -139,12 +146,12 @@ const TrainingProgress = ({ currentIndex, totalQuestions, score }: TrainingProgr
             <CheckCircle className="h-5 w-5 mr-2" />
             <motion.span 
               className="text-sm font-medium"
-              key={score}
+              key={safeScore}
               initial={{ scale: 1.5 }}
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 500, damping: 5 }}
             >
-              {score}
+              {safeScore}
             </motion.span>
           </div>
         </motion.div>
