@@ -38,6 +38,7 @@ const FlashcardComponent = ({
   const [showAnswer, setShowAnswer] = useState<boolean>(false);
   const [answeredLastQuestion, setAnsweredLastQuestion] = useState<boolean>(false);
   const [showNextButtonAtLastQuestion, setShowNextButtonAtLastQuestion] = useState<boolean>(false);
+  const [lastQuestionAnswered, setLastQuestionAnswered] = useState<boolean>(false);
   
   useEffect(() => {
     const writeAnswersEnabled = localStorage.getItem('writeAnswers') === 'true';
@@ -59,6 +60,7 @@ const FlashcardComponent = ({
     setShowAnswer(false);
     setAnsweredLastQuestion(false);
     setShowNextButtonAtLastQuestion(false);
+    setLastQuestionAnswered(false);
   }, [flashcard]);
   
   const handleAnswerSubmit = (answer: string, isCorrect: boolean) => {
@@ -112,24 +114,25 @@ const FlashcardComponent = ({
   };
 
   const handleCorrect = () => {
-    onCorrect();
     if (isLastQuestion) {
-      setAnsweredLastQuestion(true);
+      onCorrect();
+      setLastQuestionAnswered(true);
+    } else {
+      onCorrect();
     }
   };
 
   const handleIncorrect = () => {
-    onIncorrect();
     if (isLastQuestion) {
-      setAnsweredLastQuestion(true);
+      onIncorrect();
+      setLastQuestionAnswered(true);
+    } else {
+      onIncorrect();
     }
   };
 
   const handleShowAnswer = () => {
     setShowAnswer(true);
-    if (isLastQuestion) {
-      setAnsweredLastQuestion(true);
-    }
   };
 
   const cardVariants = {
@@ -368,7 +371,7 @@ const FlashcardComponent = ({
                           </div>
                         ) : (
                           <>
-                            {isLastQuestion && answeredLastQuestion ? (
+                            {isLastQuestion && (lastQuestionAnswered || answeredLastQuestion) ? (
                               <motion.div 
                                 className="w-full mb-4"
                                 variants={buttonVariants}
@@ -549,7 +552,25 @@ const FlashcardComponent = ({
                               </motion.div>
                               
                               <AnimatePresence>
-                                {!answeredLastQuestion ? (
+                                {isLastQuestion && lastQuestionAnswered ? (
+                                  <motion.div 
+                                    className="w-full mt-4"
+                                    initial={{ opacity: 0, y: 10, scale: 0.9 }}
+                                    animate={{ opacity: 1, y: 0, scale: 1 }}
+                                    transition={{ delay: 0.3, duration: 0.4, type: "spring" }}
+                                    variants={buttonVariants}
+                                    whileHover="hover"
+                                    whileTap="tap"
+                                  >
+                                    <Button
+                                      onClick={finishTraining}
+                                      className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-4 text-lg shadow-lg"
+                                    >
+                                      <CheckSquare2 className="h-5 w-5 mr-2" />
+                                      Finir le test
+                                    </Button>
+                                  </motion.div>
+                                ) : (
                                   <motion.div
                                     initial={{ opacity: 0, y: 10 }}
                                     animate={{ opacity: 1, y: 0 }}
@@ -587,24 +608,6 @@ const FlashcardComponent = ({
                                         Incorrect
                                       </Button>
                                     </motion.div>
-                                  </motion.div>
-                                ) : (
-                                  <motion.div 
-                                    className="w-full mt-4"
-                                    initial={{ opacity: 0, y: 10, scale: 0.9 }}
-                                    animate={{ opacity: 1, y: 0, scale: 1 }}
-                                    transition={{ delay: 0.3, duration: 0.4, type: "spring" }}
-                                    variants={buttonVariants}
-                                    whileHover="hover"
-                                    whileTap="tap"
-                                  >
-                                    <Button
-                                      onClick={finishTraining}
-                                      className="w-full bg-gradient-to-r from-emerald-500 to-green-600 text-white py-4 text-lg shadow-lg"
-                                    >
-                                      <CheckSquare2 className="h-5 w-5 mr-2" />
-                                      Finir le test
-                                    </Button>
                                   </motion.div>
                                 )}
                               </AnimatePresence>
@@ -645,7 +648,7 @@ const FlashcardComponent = ({
                   </motion.div>
                 )}
                 
-                {(isFlipped && isLastQuestion && answeredLastQuestion && !hasSubmittedAnswer) && (
+                {(isFlipped && isLastQuestion && (lastQuestionAnswered || answeredLastQuestion) && !hasSubmittedAnswer) && (
                   <motion.div 
                     className="w-full"
                     variants={buttonVariants}
