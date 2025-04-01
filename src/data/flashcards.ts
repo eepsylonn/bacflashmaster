@@ -1,5 +1,6 @@
 
 import { Flashcard, DiplomeType } from '@/types';
+import { toeicExtraFlashcards, tageMageExtraFlashcards, bacExtraFlashcards } from './extraFlashcards';
 
 // Fonction pour générer un ID unique
 const generateId = () => {
@@ -830,6 +831,10 @@ const allFlashcards: Flashcard[] = [
   ...sesTerminale,
   ...toeicFlashcards,
   ...tageMageFlashcards,
+  // Ajouter les flashcards supplémentaires
+  ...toeicExtraFlashcards,
+  ...tageMageExtraFlashcards,
+  ...bacExtraFlashcards
 ];
 
 export const getFlashcards = (

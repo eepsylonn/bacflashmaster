@@ -1,15 +1,15 @@
 
 import { useState, useEffect } from 'react';
-import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { Button } from '@/components/ui/button';
+import { Dialog, DialogContent } from '@/components/ui/dialog';
 import { Card } from '@/components/ui/card';
 import { motion } from 'framer-motion';
-import Mascot from '@/components/Mascot';
 import { GraduationCap, BookOpenCheck, BrainCircuit } from 'lucide-react';
 import { useIsMobile } from '@/hooks/use-mobile';
 
 interface DiplomeSelectorProps {
   onSelectDiplome: (diplome: string) => void;
+  isOpen: boolean;
+  setIsOpen: (isOpen: boolean) => void;
 }
 
 const diplomes = [
@@ -33,18 +33,8 @@ const diplomes = [
   }
 ];
 
-const DiplomeSelector = ({ onSelectDiplome }: DiplomeSelectorProps) => {
-  const [isOpen, setIsOpen] = useState(false);
+const DiplomeSelector = ({ onSelectDiplome, isOpen, setIsOpen }: DiplomeSelectorProps) => {
   const isMobile = useIsMobile();
-  
-  useEffect(() => {
-    // Vérifier si c'est la première ouverture de l'app
-    const isFirstOpen = localStorage.getItem('diplomeSelected') !== 'true';
-    
-    if (isFirstOpen) {
-      setIsOpen(true);
-    }
-  }, []);
   
   const handleSelectDiplome = (diplomeId: string) => {
     localStorage.setItem('diplomeSelected', 'true');
@@ -54,20 +44,11 @@ const DiplomeSelector = ({ onSelectDiplome }: DiplomeSelectorProps) => {
   };
   
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <div className="hidden">Trigger invisible</div>
-      </PopoverTrigger>
-      <PopoverContent 
-        className={`w-full p-0 ${isMobile ? 'max-w-[90vw]' : 'max-w-md'}`} 
-        align="center"
-        side="bottom"
-        sideOffset={5}
-      >
-        <Card className="border-2 border-app-blue-light overflow-hidden">
+    <Dialog open={isOpen} onOpenChange={setIsOpen} modal={true}>
+      <DialogContent className="p-0 border-0 max-w-md mx-auto" overlayClassName="backdrop-blur-md">
+        <Card className="border-2 border-app-blue-light overflow-hidden shadow-xl">
           <div className="bg-gradient-to-r from-app-blue-dark to-indigo-800 text-white p-4 sm:p-6">
             <div className="flex items-center justify-center mb-4">
-              <Mascot size={isMobile ? "md" : "lg"} animation="wave" className="mr-2" />
               <h2 className="text-xl sm:text-2xl font-bold">Bienvenue sur FlashBac'</h2>
             </div>
             <p className="text-center text-white/90 text-sm sm:text-base">
@@ -97,8 +78,8 @@ const DiplomeSelector = ({ onSelectDiplome }: DiplomeSelectorProps) => {
             </div>
           </div>
         </Card>
-      </PopoverContent>
-    </Popover>
+      </DialogContent>
+    </Dialog>
   );
 };
 
