@@ -8,6 +8,7 @@ import TrainingProgress from '@/components/TrainingProgress';
 import TrainingResultPage from '@/pages/TrainingResult';
 import { useFlashcards } from '@/hooks/useFlashcards';
 import { motion } from 'framer-motion';
+import { NiveauType } from '@/types';
 
 const Training = () => {
   const location = useLocation();
@@ -70,7 +71,7 @@ const Training = () => {
                 matiere={matiere}
                 setMatiere={setMatiere}
                 niveau={niveau}
-                setNiveau={setNiveau}
+                setNiveau={(newNiveau: NiveauType) => setNiveau(newNiveau)}
                 nombreQuestions={nombreQuestions}
                 setNombreQuestions={setNombreQuestions}
                 onStartTraining={startTraining}
