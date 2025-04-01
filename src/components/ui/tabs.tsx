@@ -43,13 +43,13 @@ const TabsTrigger = React.forwardRef<
         layoutId={`tab-indicator-${props.value}`}
         transition={{ 
           type: "spring", 
-          bounce: 0.5, 
-          duration: 0.6 
+          bounce: 0.2, 
+          duration: 0.3 
         }}
         initial={{ opacity: 0 }}
         animate={{ 
           opacity: 1,
-          boxShadow: "0 4px 12px rgba(0, 0, 0, 0.1)" 
+          boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)" 
         }}
         style={{ 
           position: "absolute",
