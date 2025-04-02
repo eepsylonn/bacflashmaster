@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -8,6 +9,7 @@ import TrainingResultPage from '@/pages/TrainingResult';
 import { useFlashcards } from '@/hooks/useFlashcards';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';
+import Mascot from '@/components/Mascot';
 
 const isOralComprehensionSubject = (matiere: string | undefined): boolean => {
   if (!matiere) return false;
@@ -107,11 +109,34 @@ const Training = () => {
     );
   }
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { staggerChildren: 0.3 }
+    },
+    exit: { 
+      opacity: 0,
+      transition: { staggerChildren: 0.1, staggerDirection: -1 }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    visible: { opacity: 1, y: 0 },
+    exit: { opacity: 0, y: -20 }
+  };
+
   return (
-    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-indigo-50">
+    <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-indigo-50 relative overflow-hidden">
+      {/* Background decorative elements */}
+      <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-app-blue-light/10 to-purple-200/10 rounded-full blur-3xl -z-10 animate-float"></div>
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-gradient-to-tr from-yellow-100/10 to-app-blue-light/10 rounded-full blur-3xl -z-10" style={{ animationDelay: '2s' }}></div>
+      
       <Header />
       
-      <main className="flex-grow py-12">
+      <main className="flex-grow py-12 relative z-10">
         <div className="container mx-auto px-4">
           <AnimatePresence mode="wait">
             {!training ? (
@@ -121,8 +146,16 @@ const Training = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.3 }}
+                transition={{ duration: 0.5 }}
               >
+                <motion.div 
+                  className="absolute top-0 left-1/2 transform -translate-x-1/2 -translate-y-16 opacity-70 pointer-events-none"
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                >
+                  <Mascot size="xl" animation="wave" withGlow />
+                </motion.div>
+                
                 <TrainingSelector
                   matiere={matiere}
                   setMatiere={setMatiere}
@@ -136,30 +169,41 @@ const Training = () => {
             ) : (
               <motion.div 
                 key="training"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
+                variants={containerVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
                 className="max-w-4xl mx-auto"
               >
-                <TrainingProgress
-                  currentIndex={currentIndex}
-                  totalQuestions={currentQuestions.length}
-                  score={score}
-                />
-                
-                {currentQuestion && (
-                  <FlashcardComponentWrapper
-                    flashcard={currentQuestion}
-                    isFlipped={isFlipped}
-                    onFlip={flipCard}
-                    onCorrect={markCorrect}
-                    onIncorrect={markIncorrect}
-                    onNext={nextQuestion}
-                    showAnswerButtons={isFlipped}
-                    isLastQuestion={isLastQuestion}
-                    finishTraining={finishTraining}
+                <motion.div variants={itemVariants}>
+                  <TrainingProgress
+                    currentIndex={currentIndex}
+                    totalQuestions={currentQuestions.length}
+                    score={score}
                   />
-                )}
+                </motion.div>
+                
+                <AnimatePresence mode="wait">
+                  {currentQuestion && (
+                    <motion.div
+                      key={currentIndex}
+                      variants={itemVariants}
+                      transition={{ duration: 0.4 }}
+                    >
+                      <FlashcardComponentWrapper
+                        flashcard={currentQuestion}
+                        isFlipped={isFlipped}
+                        onFlip={flipCard}
+                        onCorrect={markCorrect}
+                        onIncorrect={markIncorrect}
+                        onNext={nextQuestion}
+                        showAnswerButtons={isFlipped}
+                        isLastQuestion={isLastQuestion}
+                        finishTraining={finishTraining}
+                      />
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </motion.div>
             )}
           </AnimatePresence>
