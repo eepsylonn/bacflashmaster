@@ -1,11 +1,13 @@
+
 import { useState, useEffect } from 'react';
 import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, NiveauType, DiplomeType } from '@/types';
 import { getFlashcards } from '@/data/flashcards';
 import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useDiplome } from '@/contexts/DiplomeContext';
+import { standardizeMatiere, standardizeNiveau } from '@/utils/standardization';
 
-// Cache for loaded text files
+// Cache pour les fichiers texte chargés
 const textCache: Record<string, string> = {};
 
 export const useFlashcards = () => {
@@ -95,7 +97,7 @@ export const useFlashcards = () => {
 
     console.log(`Démarrage de l'entraînement: niveau=${niveau}, matière=${matiere}, diplôme=${diplome}`);
     
-    // Nous passons explicitement le niveau à getFlashcards pour un filtrage correct
+    // Utilisation de getFlashcards avec standardisation implicite
     const questions = getFlashcards(matiere, niveau, nombreQuestions, diplome);
     
     if (questions.length === 0) {
