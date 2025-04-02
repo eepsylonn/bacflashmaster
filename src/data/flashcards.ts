@@ -137,7 +137,7 @@ const matiereMapping: Record<string, string> = {
   
   // GMAT
   'Quantitative': 'Quantitative',
-  'Verbal': 'Verbal',
+  'GMAT Verbal': 'Verbal',
   'Integrated Reasoning': 'Integrated Reasoning',
   'Analytical Writing': 'Analytical Writing',
   
