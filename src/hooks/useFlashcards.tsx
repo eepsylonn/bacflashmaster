@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, NiveauType, DiplomeType } from '@/types';
 import { getFlashcards } from '@/data/flashcards';
@@ -64,46 +63,13 @@ export const useFlashcards = () => {
         description: "Aucune question n'est disponible pour les critères sélectionnés",
         variant: "destructive"
       });
+      console.error(`Aucune question trouvée pour: niveau=${niveau}, matière=${matiere}, diplôme=${diplome}`);
       return;
     }
 
     console.log(`Questions récupérées: ${questions.length}`);
+    console.log('Première question:', questions[0]);
     
-    // Vérification des niveaux des questions récupérées pour le débogage
-    if (niveau && niveau !== 'both') {
-      const niveauCount = questions.filter(q => q.niveau === niveau).length;
-      console.log(`Questions de niveau ${niveau}: ${niveauCount} (doit être égal au total: ${questions.length})`);
-      
-      // Vérification supplémentaire pour s'assurer qu'il n'y a pas de questions du mauvais niveau
-      if (diplome === 'brevet') {
-        const autreNiveau = niveau === 'troisieme' ? 'quatrieme' : 'troisieme';
-        const autreNiveauCount = questions.filter(q => q.niveau === autreNiveau).length;
-        console.log(`Questions de niveau ${autreNiveau}: ${autreNiveauCount} (doit être 0)`);
-        
-        if (autreNiveauCount > 0) {
-          console.error(`ERREUR: ${autreNiveauCount} questions du niveau ${autreNiveau} trouvées alors que seul le niveau ${niveau} est demandé`);
-        }
-      } else if (diplome === 'baccalaureat') {
-        const autreNiveau = niveau === 'premiere' ? 'terminale' : 'premiere';
-        const autreNiveauCount = questions.filter(q => q.niveau === autreNiveau).length;
-        console.log(`Questions de niveau ${autreNiveau}: ${autreNiveauCount} (doit être 0)`);
-        
-        if (autreNiveauCount > 0) {
-          console.error(`ERREUR: ${autreNiveauCount} questions du niveau ${autreNiveau} trouvées alors que seul le niveau ${niveau} est demandé`);
-        }
-      }
-    } else if (niveau === 'both') {
-      if (diplome === 'brevet') {
-        const troisiemeCount = questions.filter(q => q.niveau === 'troisieme').length;
-        const quatriemeCount = questions.filter(q => q.niveau === 'quatrieme').length;
-        console.log(`Avec niveau=both pour le brevet, mélange des deux niveaux: troisième=${troisiemeCount}, quatrième=${quatriemeCount}`);
-      } else if (diplome === 'baccalaureat') {
-        const premiereCount = questions.filter(q => q.niveau === 'premiere').length;
-        const terminaleCount = questions.filter(q => q.niveau === 'terminale').length;
-        console.log(`Avec niveau=both pour le baccalauréat, mélange des deux niveaux: première=${premiereCount}, terminale=${terminaleCount}`);
-      }
-    }
-
     setCurrentQuestions(questions);
     setAnsweredQuestions([]);
     setCurrentIndex(0);
