@@ -114,14 +114,6 @@ const matiereMapping: Record<string, string> = {
   'TOEFL Grammaire': 'TOEFL Grammar',
   'TOEFL Vocabulaire': 'TOEFL Vocabulary',
   
-  // Direct mappings for TOEFL (removed duplicate)
-  'TOEFL Reading': 'TOEFL Reading',
-  'TOEFL Writing': 'TOEFL Writing',
-  'TOEFL Speaking': 'TOEFL Speaking',
-  'TOEFL Listening': 'TOEFL Listening',
-  'TOEFL Grammar': 'TOEFL Grammar',
-  'TOEFL Vocabulary': 'TOEFL Vocabulary',
-  
   // TAGE MAGE
   'Calcul': 'TAGE MAGE - Calcul',
   'Logique': 'TAGE MAGE - Logique',
