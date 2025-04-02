@@ -19,31 +19,42 @@ export const signInWithEmailOrUsername = async (
   emailOrUsername: string, 
   password: string
 ) => {
-  // Première tentative: essayer avec l'email
-  const { data: emailData, error: emailError } = await supabase.auth.signInWithPassword({
-    email: emailOrUsername,
-    password,
-  });
-
-  // Si ça marche avec l'email, retourner le résultat
-  if (!emailError) {
-    return { data: emailData, error: null };
+  // Cas spécial pour le compte admin (username: admin, password: admin)
+  if (emailOrUsername === 'admin' && password === 'admin') {
+    // Pour le compte admin, on utilise l'email associé (admin@example.com)
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: 'admin@example.com',
+      password,
+    });
+    return { data, error };
   }
 
-  // Si l'email échoue, essayons de récupérer l'email associé au nom d'utilisateur
-  const { data: usernameData, error: usernameError } = await supabase
+  // Vérifier si l'entrée est un email
+  const isEmail = emailOrUsername.includes('@');
+
+  // Si c'est un email, essayer de se connecter directement
+  if (isEmail) {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: emailOrUsername,
+      password,
+    });
+    return { data, error };
+  }
+
+  // Si c'est un nom d'utilisateur, chercher l'email associé
+  const { data: userData, error: userError } = await supabase
     .from('profiles')
     .select('email')
     .eq('username', emailOrUsername)
     .single();
 
-  if (usernameError || !usernameData?.email) {
+  if (userError || !userData?.email) {
     return { data: null, error: new Error('Identifiants invalides.') };
   }
 
-  // Maintenant, essayons de se connecter avec l'email récupéré
+  // Connexion avec l'email récupéré
   const { data, error } = await supabase.auth.signInWithPassword({
-    email: usernameData.email,
+    email: userData.email,
     password,
   });
 
