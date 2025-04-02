@@ -34,7 +34,9 @@ const FlashcardComponentWrapper: React.FC<FlashcardComponentWrapperProps> = (pro
         if (flashcard.text.startsWith('/')) {
           setLoading(true);
           try {
-            const response = await fetch(flashcard.text);
+            // Use encodeURI to properly encode the path
+            const encodedPath = encodeURI(flashcard.text);
+            const response = await fetch(encodedPath);
             if (response.ok) {
               const textContent = await response.text();
               setText(textContent);

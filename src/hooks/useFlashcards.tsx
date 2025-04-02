@@ -50,7 +50,7 @@ export const useFlashcards = () => {
 
   const preloadTextFiles = async (questions: Flashcard[]) => {
     const textPaths = questions
-      .filter(q => q.text && !textCache[q.text])
+      .filter(q => q.text && typeof q.text === 'string' && q.text.startsWith('/') && !textCache[q.text])
       .map(q => q.text as string);
     
     if (textPaths.length === 0) return;
@@ -60,7 +60,9 @@ export const useFlashcards = () => {
     for (const path of textPaths) {
       if (!textCache[path]) {
         try {
-          const response = await fetch(path);
+          // Use encodeURI to properly encode the path
+          const encodedPath = encodeURI(path);
+          const response = await fetch(encodedPath);
           if (response.ok) {
             const text = await response.text();
             textCache[path] = text;
