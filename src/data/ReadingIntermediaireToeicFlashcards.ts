@@ -1,60 +1,61 @@
+
 import { Flashcard } from "@/types";
 
-// Fonction pour générer un ID unique
-const generateId = () => {
+// Helper function to generate IDs
+const generateId = (): string => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
-export const ReadingIntermediaireToeicFlashcards: Flashcard[] = [
+export const readingIntermediaireToeicFlashcards: Flashcard[] = [
   {
-    id: "rm28djsm92ns03js",
-    question: "According to the annual report, what was the revenue increase percentage in fiscal year 2023?",
-    answer: "15%",
+    id: "234jk324jn24",
+    question: "According to the annual report, what was the company's revenue growth percentage?",
+    answer: "12.5%",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic",
     text: "/texts/toeic/intermediaire/rapport-annuel.txt"
   },
   {
-    id: "fj38dj10smskwod",
-    question: "How many new employees joined the company in 2023?",
-    answer: "230",
+    id: "983j4n2kj3n4",
+    question: "What new market did the company expand into last year?",
+    answer: "Southeast Asia",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic",
     text: "/texts/toeic/intermediaire/rapport-annuel.txt"
   },
   {
-    id: "d93mc74ksplq12",
-    question: "Which of the company's products experienced exceptional growth with a 28% increase in sales?",
-    answer: "InnoTech Pro",
+    id: "2j3n4k2j3n4k",
+    question: "How many new employees were hired during the fiscal year?",
+    answer: "215",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic",
     text: "/texts/toeic/intermediaire/rapport-annuel.txt"
   },
   {
-    id: "vmc2i3kal2903dk",
-    question: "What percentage of global sales did North America represent?",
-    answer: "45%",
+    id: "234n23k4j2n3",
+    question: "What was cited as the main challenge for the upcoming year?",
+    answer: "Supply chain disruptions",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic",
     text: "/texts/toeic/intermediaire/rapport-annuel.txt"
   },
   {
-    id: "lpo3x90sk3mdn",
-    question: "How much did the company invest in research and development?",
-    answer: "$150 million",
+    id: "32j4n23kj4n2",
+    question: "What percentage of revenue was invested in research and development?",
+    answer: "8.3%",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic",
     text: "/texts/toeic/intermediaire/rapport-annuel.txt"
   },
   {
-    id: "3k9kdm30dk2ls",
-    question: "How many subscriptions did the CloudConnect platform achieve in its first six months?",
-    answer: "50,000",
+    id: "n23k4j2n3k4j",
+    question: "What new sustainability initiative was launched last quarter?",
+    answer: "Carbon-neutral manufacturing",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic",
@@ -62,82 +63,85 @@ export const ReadingIntermediaireToeicFlashcards: Flashcard[] = [
   },
   {
     id: generateId(),
-    question: "Read the memo: 'Due to system maintenance, the network will be unavailable from 11 PM Friday until 2 AM Saturday. Please save all work before leaving on Friday.' What should employees do before the weekend?",
-    answer: "Save their work before leaving the office on Friday",
+    question: "According to the company policy, what is the procedure for requesting overtime approval?",
+    answer: "Submit request form to department manager at least 48 hours in advance",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the advertisement: 'Early bird special: Book your conference tickets before June 30 and receive a 15% discount. Regular prices apply after this date.' When is the deadline for discounted tickets?",
-    answer: "June 30",
+    question: "What does the training manual indicate is the first step in the customer complaint resolution process?",
+    answer: "Acknowledge the customer's concern without interrupting",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the email: 'The quarterly sales report shows a 12% increase compared to last year, but we're still 5% below our target for this fiscal year.' How is the company performing compared to its targets?",
-    answer: "Below expectations despite improvement",
+    question: "According to the technical specifications, what is the maximum operating temperature for the industrial cooling system?",
+    answer: "95 degrees Celsius",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the notice: 'The staff parking garage will be closed for repairs from May 10-14. Alternative parking is available at the public garage on Pine Street at a reduced daily rate of $5 with employee ID.' Where should employees park during the repairs?",
-    answer: "At the public garage on Pine Street",
+    question: "What information must be included in all purchase requisitions according to the procurement guidelines?",
+    answer: "Budget code, detailed item description, and business justification",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the policy: 'Reimbursement requests must be submitted within 30 days of purchase and require original receipts as well as manager approval. Requests submitted after this period will not be processed.' What is NOT required for reimbursement?",
-    answer: "A digital copy of the receipt",
+    question: "Based on the marketing report, which demographic showed the highest response rate to the spring campaign?",
+    answer: "Urban professionals aged 25-34",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the newsletter excerpt: 'The annual company picnic, originally scheduled for July 15, has been postponed until August 5 due to venue availability issues. The location and time remain unchanged.' What has changed about the company picnic?",
-    answer: "Only the date has changed",
+    question: "According to the quality control protocol, how often must calibration checks be performed on measurement equipment?",
+    answer: "Every 90 days or after 500 hours of operation, whichever comes first",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the job posting: 'Seeking a Marketing Coordinator with minimum 3 years of experience in digital marketing. Candidates must be proficient in social media management and content creation. Knowledge of graphic design software is preferred but not required.' What is a mandatory qualification for this position?",
-    answer: "Experience in digital marketing",
+    question: "What does the travel policy state regarding reimbursement for meals during international business trips?",
+    answer: "Actual expenses up to $75 per day with itemized receipts required",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the warranty: 'This product is guaranteed for 2 years from the date of purchase against manufacturing defects. The warranty does not cover damage resulting from improper use, accidents, or natural wear and tear.' What is covered by this warranty?",
-    answer: "Manufacturing defects only",
+    question: "According to the project timeline, when is the client presentation for Phase 2 scheduled?",
+    answer: "The third week of October",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the announcement: 'The company will transition to a new email system next month. All employees must complete the online training module by September 15. Failure to complete the training may result in temporary loss of email access when the new system launches on October 1.' What happens if an employee doesn't complete the training?",
-    answer: "They may lose email access temporarily",
+    question: "What action does the emergency response procedure require when the fire alarm activates?",
+    answer: "Immediately evacuate via designated routes and assemble at designated meeting points",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the report excerpt: 'While customer satisfaction ratings improved by 7% this quarter, response times for customer service inquiries increased from an average of 12 hours to 18 hours.' What aspect of customer service has worsened?",
-    answer: "Response times",
+    question: "According to the warehouse inventory guidelines, what is the maximum number of pallets that can be stacked in Zone C?",
+    answer: "Three high for standard goods, two high for fragile items",
     matiere: "TOEIC Reading",
     niveau: "intermediaire",
     diplome: "toeic"
   },
 ];
+
+// For backwards compatibility
+export const ReadingIntermediaireToeicFlashcards = readingIntermediaireToeicFlashcards;

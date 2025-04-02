@@ -1,6 +1,12 @@
+
 import { Flashcard } from "@/types";
 
-export const ReadingAvanceToeicFlashcards: Flashcard[] = [
+// Helper function to generate IDs
+const generateId = (): string => {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+};
+
+export const readingAvanceToeicFlashcards: Flashcard[] = [
   {
     id: "a83h2j3kd9smx",
     question: "According to the market analysis report, what is the projected size of the global healthcare technology market by 2027?",
@@ -136,3 +142,6 @@ export const ReadingAvanceToeicFlashcards: Flashcard[] = [
     diplome: "toeic"
   },
 ];
+
+// For backwards compatibility
+export const ReadingAvanceToeicFlashcards = readingAvanceToeicFlashcards;

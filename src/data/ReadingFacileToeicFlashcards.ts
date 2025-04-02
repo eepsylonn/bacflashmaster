@@ -1,9 +1,15 @@
+
 import { Flashcard } from "@/types";
 
-export const ReadingFacileToeicFlashcards: Flashcard[] = [
+// Helper function to generate IDs
+const generateId = (): string => {
+  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
+};
+
+export const readingFacileToeicFlashcards: Flashcard[] = [
   {
-    id: "ij0rugvlknjwarzpjc33we",
-    question: "Based on the email, when will the order be delivered?",
+    id: "jk345n2k3j43",
+    question: "What is the date of the office supplies delivery?",
     answer: "Tuesday, May 15th",
     matiere: "TOEIC Reading",
     niveau: "facile",
@@ -11,8 +17,17 @@ export const ReadingFacileToeicFlashcards: Flashcard[] = [
     text: "/texts/toeic/facile/email-commercial.txt"
   },
   {
-    id: "po9i23hdj83kdnc9si2",
-    question: "What is the total amount for the order mentioned in the email?",
+    id: "d9234kj2n3kj",
+    question: "How many boxes of printer paper were ordered?",
+    answer: "10 boxes",
+    matiere: "TOEIC Reading",
+    niveau: "facile",
+    diplome: "toeic",
+    text: "/texts/toeic/facile/email-commercial.txt"
+  },
+  {
+    id: "23k4n23j4n2",
+    question: "What is the total amount for the order?",
     answer: "$450",
     matiere: "TOEIC Reading",
     niveau: "facile",
@@ -20,17 +35,26 @@ export const ReadingFacileToeicFlashcards: Flashcard[] = [
     text: "/texts/toeic/facile/email-commercial.txt"
   },
   {
-    id: "qpwo3ed913j3q0edksao",
-    question: "How many black ink cartridges were ordered according to the email?",
-    answer: "24",
+    id: "l2m34n2k3j4n",
+    question: "What is the phone number for customer service?",
+    answer: "555-123-4567",
     matiere: "TOEIC Reading",
     niveau: "facile",
     diplome: "toeic",
     text: "/texts/toeic/facile/email-commercial.txt"
   },
   {
-    id: "zxm38shd9w2ijs92j3d",
-    question: "What is the order number mentioned in the email?",
+    id: "n2k3j4n2k3j4",
+    question: "Who is the sender of the email?",
+    answer: "Sarah Thompson",
+    matiere: "TOEIC Reading",
+    niveau: "facile",
+    diplome: "toeic",
+    text: "/texts/toeic/facile/email-commercial.txt"
+  },
+  {
+    id: "2j34n2k3j4n2",
+    question: "What is the order number?",
     answer: "#45678",
     matiere: "TOEIC Reading",
     niveau: "facile",
@@ -38,9 +62,9 @@ export const ReadingFacileToeicFlashcards: Flashcard[] = [
     text: "/texts/toeic/facile/email-commercial.txt"
   },
   {
-    id: "kdjf92j3dkflapdkf29j",
-    question: "What is the payment method used for this order?",
-    answer: "Company credit card",
+    id: generateId(),
+    question: "Read the email and answer: How will the payment be processed?",
+    answer: "Charged to the company credit card",
     matiere: "TOEIC Reading",
     niveau: "facile",
     diplome: "toeic",
@@ -48,82 +72,77 @@ export const ReadingFacileToeicFlashcards: Flashcard[] = [
   },
   {
     id: generateId(),
-    question: "Read the notice: 'Employees must wash hands before returning to work.' Where would you most likely see this?",
-    answer: "In a restaurant kitchen or food preparation area",
+    question: "According to the memo, when is the quarterly review meeting scheduled?",
+    answer: "Next Tuesday at 10 AM",
     matiere: "TOEIC Reading",
     niveau: "facile",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the sign: 'No parking between 8 AM and 6 PM.' What time can you park here?",
-    answer: "After 6 PM and before 8 AM",
+    question: "What is required from all department heads according to the notice?",
+    answer: "Monthly progress reports",
     matiere: "TOEIC Reading",
     niveau: "facile",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the email: 'The meeting is rescheduled for Friday at 2 PM.' What was changed?",
-    answer: "The time and/or date of the meeting",
+    question: "Based on the advertisement, what is the main selling point of the new office chair?",
+    answer: "Ergonomic design for improved posture",
     matiere: "TOEIC Reading",
     niveau: "facile",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the notice: 'Sale! 50% off all items this weekend only.' When will the discount end?",
-    answer: "At the end of the weekend",
+    question: "According to the schedule, which day will the maintenance crew service the elevators?",
+    answer: "Wednesday",
     matiere: "TOEIC Reading",
     niveau: "facile",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the message: 'Please submit your reports by Monday.' When is the deadline?",
-    answer: "Monday",
+    question: "What does the policy state about parking in reserved spaces?",
+    answer: "Vehicles will be towed at owner's expense",
     matiere: "TOEIC Reading",
     niveau: "facile",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the sign: 'Exit Only. Do Not Enter.' What should you do here?",
-    answer: "Only use this door to leave, not to enter",
+    question: "Based on the invoice, when is the payment due?",
+    answer: "Within 30 days of receipt",
     matiere: "TOEIC Reading",
     niveau: "facile",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the note: 'Out of order. Please use stairs.' What is not working?",
-    answer: "An elevator or escalator",
+    question: "What is required for all visitors according to the safety guidelines?",
+    answer: "Sign in at reception and wear identification badges",
     matiere: "TOEIC Reading",
     niveau: "facile",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the announcement: 'Free coffee for customers on Monday mornings.' Who gets free coffee?",
-    answer: "Customers, but only on Monday mornings",
+    question: "What option does the rental agreement offer for lease extension?",
+    answer: "Monthly extension with 15% premium",
     matiere: "TOEIC Reading",
     niveau: "facile",
     diplome: "toeic"
   },
   {
     id: generateId(),
-    question: "Read the notice: 'Return library books by 5 PM.' What happens after 5 PM?",
-    answer: "You cannot return books / You may incur a late fee",
-    matiere: "TOEIC Reading",
-    niveau: "facile",
-    diplome: "toeic"
-  },
-  {
-    id: generateId(),
-    question: "Read the sign: 'Please turn off your mobile phones.' Where would you most likely see this?",
-    answer: "In a theater, meeting room, hospital, or classroom",
+    question: "What is the maximum occupancy of Conference Room B according to the facility guidelines?",
+    answer: "25 people",
     matiere: "TOEIC Reading",
     niveau: "facile",
     diplome: "toeic"
   },
 ];
+
+// For backwards compatibility
+export const ReadingFacileToeicFlashcards = readingFacileToeicFlashcards;
