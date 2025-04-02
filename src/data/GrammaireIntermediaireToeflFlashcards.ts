@@ -1,5 +1,5 @@
 
-import { Flashcard } from "@/types";
+import { Flashcard } from '@/types';
 
 // Helper function to generate IDs
 const generateId = (): string => {
@@ -9,84 +9,44 @@ const generateId = (): string => {
 export const grammaireIntermediaireToeflFlashcards: Flashcard[] = [
   {
     id: generateId(),
-    question: "Complete the sentence with the correct verb form: 'Had the participant _____ the instructions more carefully, they would not have made so many errors in the experiment.'",
-    answer: "followed",
+    question: "Explain the difference between restrictive and non-restrictive relative clauses, including appropriate punctuation.",
+    answer: "Restrictive relative clauses provide essential information to identify the noun they modify and do not use commas (e.g., 'The book that I bought yesterday is excellent'). Non-restrictive relative clauses provide additional, non-essential information and are set off by commas (e.g., 'The book, which I bought yesterday, is excellent'). Non-restrictive clauses often use 'which' rather than 'that.'",
     matiere: "TOEFL Grammar",
     niveau: "intermediaire",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Identify the correct gerund or infinitive: 'The researcher avoided _____ conclusions without sufficient data, despite pressure _____ preliminary results.'",
-    answer: "drawing, to publish",
+    question: "What is the difference between the past perfect and past perfect continuous tenses?",
+    answer: "The past perfect (had + past participle) emphasizes the completion of an action before another past action (e.g., 'I had finished my homework before dinner'). The past perfect continuous (had been + present participle) emphasizes the duration of an ongoing past action that occurred before another past action (e.g., 'I had been studying for three hours before my friend called').",
     matiere: "TOEFL Grammar",
     niveau: "intermediaire",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Select the correct conditional form: 'If the government _____ stricter regulations, businesses _____ their environmental impact sooner.'",
-    answer: "had implemented, would have reduced",
+    question: "How do you form and use reduced relative clauses?",
+    answer: "Reduced relative clauses are formed by removing the relative pronoun (who, which, that) and the form of 'be' from a relative clause. Active voice clauses with continuous tenses become present participles (e.g., 'The woman who is standing there' → 'The woman standing there'). Passive voice clauses become past participles (e.g., 'The building that was destroyed' → 'The building destroyed'). Reduced relative clauses can only be formed when the relative pronoun is the subject of the relative clause.",
     matiere: "TOEFL Grammar",
     niveau: "intermediaire",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Choose the correct parallel structure: 'The professor emphasized the importance of taking detailed notes, _____ to all lectures, and _____ actively in discussions.'",
-    answer: "listening, participating",
+    question: "Explain the concept of subject-verb agreement with collective nouns.",
+    answer: "Collective nouns (e.g., team, family, committee) can take either singular or plural verbs depending on whether the group is viewed as a single unit or as individuals. In American English, collective nouns typically take singular verbs (e.g., 'The team is winning'), while British English often uses plural verbs when emphasizing the individuals in the group (e.g., 'The team are arguing among themselves'). Context determines whether the collective is acting as a unit or as separate individuals.",
     matiere: "TOEFL Grammar",
     niveau: "intermediaire",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Complete the sentence with appropriate transitions: '_____ the experiment showed promising results, _____, several limitations must be acknowledged before drawing definitive conclusions.'",
-    answer: "Although/While/Though, however/nevertheless",
+    question: "What are parallel structures and why are they important in academic writing?",
+    answer: "Parallel structures are phrases or clauses that are similar in form to show that the ideas they express are equal in importance. Elements in a series, items in a list, or comparative structures should maintain the same grammatical form (noun, verb, adjective, etc.). For example: 'She enjoys swimming, hiking, and camping' (all gerunds) rather than 'She enjoys swimming, to hike, and camping.' Parallel structures improve clarity, rhythm, and readability in academic writing while highlighting relationships between ideas.",
     matiere: "TOEFL Grammar",
     niveau: "intermediaire",
     diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Identify the correct passive construction: 'The revolutionary theory _____ by the physicist in 1905, but it _____ by the scientific community until decades later.'",
-    answer: "was proposed, was not accepted",
-    matiere: "TOEFL Grammar",
-    niveau: "intermediaire",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Select the correct noun clause: 'The research team could not determine _____ was responsible for the anomalous results or _____ they should proceed with the experiment.'",
-    answer: "what/who, how",
-    matiere: "TOEFL Grammar",
-    niveau: "intermediaire",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Choose the correct article usage: '_____ urban development has profound effects on _____ environment, particularly in areas with _____ high population density.'",
-    answer: "The, the, a",
-    matiere: "TOEFL Grammar",
-    niveau: "intermediaire",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Identify the correct reported speech: 'The lecturer said, \"Students must submit their assignments by next Friday.\" The lecturer announced that students _____ their assignments by the following Friday.'",
-    answer: "had to/must submit",
-    matiere: "TOEFL Grammar",
-    niveau: "intermediaire",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Select the correct preposition combination: 'The disagreement _____ the two theories led _____ an interesting debate _____ the scholars at the conference.'",
-    answer: "between, to, among",
-    matiere: "TOEFL Grammar",
-    niveau: "intermediaire",
-    diplome: "toefl"
-  },
+  }
 ];
 
 // For backwards compatibility

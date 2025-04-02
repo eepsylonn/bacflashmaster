@@ -11,6 +11,9 @@ import { writingAvanceIELTSFlashcards } from './WritingAvanceIELTSFlashcards';
 import { academicFacileIELTSFlashcards } from './AcademicFacileIELTSFlashcards';
 import { academicIntermediaireIELTSFlashcards } from './AcademicIntermediaireIELTSFlashcards';
 import { academicAvanceIELTSFlashcards } from './AcademicAvanceIELTSFlashcards';
+import { readingFacileIELTSFlashcards } from './ReadingFacileIELTSFlashcards';
+import { readingIntermediaireIELTSFlashcards } from './ReadingIntermediaireIELTSFlashcards';
+import { readingAvanceIELTSFlashcards } from './ReadingAvanceIELTSFlashcards';
 
 import { vocabularyFacileCambridgeFlashcards } from './VocabularyFacileCambridgeFlashcards';
 import { vocabularyIntermediaireCambridgeFlashcards } from './VocabularyIntermediaireCambridgeFlashcards';
@@ -23,6 +26,19 @@ import { writingAvanceCambridgeFlashcards } from './WritingAvanceCambridgeFlashc
 
 import { speakingFacileToeflFlashcards } from './SpeakingFacileToeflFlashcards';
 import { speakingIntermediaireToeflFlashcards } from './SpeakingIntermediaireToeflFlashcards';
+import { speakingAvanceToeflFlashcards } from './SpeakingAvanceToeflFlashcards';
+import { readingFacileToeflFlashcards } from './ReadingFacileToeflFlashcards';
+import { readingIntermediaireToeflFlashcards } from './ReadingIntermediaireToeflFlashcards';
+import { readingAvanceToeflFlashcards } from './ReadingAvanceToeflFlashcards';
+import { writingFacileToeflFlashcards } from './WritingFacileToeflFlashcards';
+import { writingIntermediaireToeflFlashcards } from './WritingIntermediaireToeflFlashcards';
+import { writingAvanceToeflFlashcards } from './WritingAvanceToeflFlashcards';
+import { grammaireFacileToeflFlashcards } from './GrammaireFacileToeflFlashcards';
+import { grammaireIntermediaireToeflFlashcards } from './GrammaireIntermediaireToeflFlashcards';
+import { grammaireAvanceToeflFlashcards } from './GrammaireAvanceToeflFlashcards';
+import { vocabularyFacileToeflFlashcards } from './VocabularyFacileToeflFlashcards';
+import { vocabularyIntermediaireToeflFlashcards } from './VocabularyIntermediaireToeflFlashcards';
+import { vocabularyAvanceToeflFlashcards } from './VocabularyAvanceToeflFlashcards';
 
 import { mathematiquesCalculsTrioisemeBrevetFlashcards } from './MathematiquesCalculsTrioisemeBrevetFlashcards';
 
@@ -41,6 +57,9 @@ export const allFlashcards: Flashcard[] = [
   ...academicFacileIELTSFlashcards,
   ...academicIntermediaireIELTSFlashcards,
   ...academicAvanceIELTSFlashcards,
+  ...readingFacileIELTSFlashcards,
+  ...readingIntermediaireIELTSFlashcards,
+  ...readingAvanceIELTSFlashcards,
   
   ...vocabularyFacileCambridgeFlashcards,
   ...vocabularyIntermediaireCambridgeFlashcards,
@@ -53,6 +72,19 @@ export const allFlashcards: Flashcard[] = [
   
   ...speakingFacileToeflFlashcards,
   ...speakingIntermediaireToeflFlashcards,
+  ...speakingAvanceToeflFlashcards,
+  ...readingFacileToeflFlashcards,
+  ...readingIntermediaireToeflFlashcards,
+  ...readingAvanceToeflFlashcards,
+  ...writingFacileToeflFlashcards,
+  ...writingIntermediaireToeflFlashcards,
+  ...writingAvanceToeflFlashcards,
+  ...grammaireFacileToeflFlashcards,
+  ...grammaireIntermediaireToeflFlashcards,
+  ...grammaireAvanceToeflFlashcards,
+  ...vocabularyFacileToeflFlashcards,
+  ...vocabularyIntermediaireToeflFlashcards,
+  ...vocabularyAvanceToeflFlashcards,
   
   ...mathematiquesCalculsTrioisemeBrevetFlashcards,
 ];

@@ -1,5 +1,5 @@
 
-import { Flashcard } from "@/types";
+import { Flashcard } from '@/types';
 
 // Helper function to generate IDs
 const generateId = (): string => {
@@ -9,84 +9,44 @@ const generateId = (): string => {
 export const grammaireAvanceToeflFlashcards: Flashcard[] = [
   {
     id: generateId(),
-    question: "Complete the sentence with the correct subjunctive form: 'The ethics committee insists that each researcher _____ strict confidentiality protocols and _____ any potential conflicts of interest before proceeding with human subjects research.'",
-    answer: "maintain, disclose",
+    question: "Explain the concept of subjunctive mood in English and provide examples of common constructions that require it.",
+    answer: "The subjunctive mood expresses hypothetical, wishful, imaginary, or conditional situations rather than facts. It's often used in that-clauses following verbs of demand, recommendation, suggestion, or necessity (e.g., 'The professor insisted that the student submit the assignment on time' - not 'submits'). It's also used in conditional sentences expressing impossibility (e.g., 'If I were you...' - not 'was'), and in fixed expressions like 'be that as it may' or 'come what may.'",
     matiere: "TOEFL Grammar",
     niveau: "avance",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Identify the correct inverted conditional: '_____ the research team to obtain additional funding, they _____ able to extend their longitudinal study for another five years, significantly enhancing the validity of their findings.'",
-    answer: "Were, would be",
+    question: "Describe the function and usage of fronting and inversion for emphasis in academic English.",
+    answer: "Fronting involves placing an element that would normally occur later in a sentence at the beginning for emphasis or to create cohesion. For example: 'Particularly significant is the relationship between...' (instead of 'The relationship is particularly significant'). Inversion refers to reversing the normal subject-verb order, often following negative or limiting adverbials. For example: 'Not only did the experiment confirm our hypothesis, but it also revealed...' These techniques add variety and emphasis in academic writing but should be used judiciously to maintain clarity.",
     matiere: "TOEFL Grammar",
     niveau: "avance",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Select the appropriate reduced relative clauses: 'The theory _____ in the journal last month has generated considerable debate among scholars _____ in quantum mechanics.'",
-    answer: "published, specializing",
+    question: "Analyze the grammatical and semantic differences between participial, infinitive, and gerund clauses as sentence complements.",
+    answer: "Participial clauses (-ing or -ed forms) often express simultaneous action or result (e.g., 'The researchers conducted the experiment, collecting data over six months'). Infinitive clauses (to + base verb) typically express purpose, intention, or potential (e.g., 'The study aims to identify key factors'). Gerund clauses (-ing form as noun) represent actions as concepts or processes (e.g., 'Conducting longitudinal studies requires significant resources'). The choice between these forms often affects meaning; compare 'She remembered to lock the door' (remembered the task) versus 'She remembered locking the door' (remembered the action already performed).",
     matiere: "TOEFL Grammar",
     niveau: "avance",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Choose the correct cleft sentence construction: '_____ by implementing a comprehensive methodological approach _____ the researchers were able to control for previously unexamined variables.'",
-    answer: "It was, that",
+    question: "Explain how modality is expressed in academic English and how modal expressions contribute to cautious or nuanced claims.",
+    answer: "Modality in academic English refers to expressions of likelihood, certainty, necessity, or obligation. It allows writers to present claims with appropriate caution (hedging) or force (boosting). Modal auxiliaries (may, might, could, should), adverbs (possibly, certainly, necessarily), adjectives (likely, probable, essential), and lexical verbs (suggest, indicate, appear) all express different degrees of modality. For example, 'These results suggest that...' is more cautious than 'These results prove that...' Skilled academic writers use modality to accurately reflect the strength of evidence while acknowledging limitations.",
     matiere: "TOEFL Grammar",
     niveau: "avance",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Identify the correct participle clauses: '_____ the limitations of previous studies, the team developed a novel approach, _____ multiple analytical frameworks to address the research question.'",
-    answer: "Recognizing, integrating",
+    question: "Discuss how complex noun phrases function in academic discourse, including pre- and post-modification structures.",
+    answer: "Complex noun phrases in academic writing condense information and create precise references. Pre-modification uses adjectives, nouns, or participles before the head noun (e.g., 'a comprehensive longitudinal population-based study'). Post-modification uses prepositional phrases, relative clauses, or non-finite clauses after the head noun (e.g., 'the methodology adopted by researchers working in developing countries'). These structures allow precise specification but require careful construction to avoid ambiguity or excessive complexity. Skilled academic writers balance information density with readability, often unpacking complex noun phrases in subsequent sentences.",
     matiere: "TOEFL Grammar",
     niveau: "avance",
     diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Select the correct nominalization: 'The _____ of greenhouse gases has led to the _____ of global temperatures, despite initial _____ by some regarding the scientific consensus.'",
-    answer: "accumulation, elevation, skepticism",
-    matiere: "TOEFL Grammar",
-    niveau: "avance",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Choose the correct complex preposition phrases: '_____ the theoretical framework proposed by Johnson, several anomalies remain unexplained, _____ suggesting the need for further refinement of the model.'",
-    answer: "In spite of/Despite/Notwithstanding, thereby/thus",
-    matiere: "TOEFL Grammar",
-    niveau: "avance",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Identify the correct complex coordination: 'The research not only challenges conventional wisdom regarding cognitive development, _____ presents compelling evidence for alternative explanatory models, _____ raises important questions about research methodology in the field.'",
-    answer: "but also, and",
-    matiere: "TOEFL Grammar",
-    niveau: "avance",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Select the correct emphatic structure: '_____ through rigorous experimental design and meticulous data analysis _____ the researchers able to identify the causal mechanism underlying the observed phenomenon.'",
-    answer: "Only, were",
-    matiere: "TOEFL Grammar",
-    niveau: "avance",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Choose the correct fronted negative adverbial with inversion: '_____ the researchers consider alternative hypotheses, nor _____ adequately address methodological criticisms raised by peers in the field.'",
-    answer: "Never did, did they",
-    matiere: "TOEFL Grammar",
-    niveau: "avance",
-    diplome: "toefl"
-  },
+  }
 ];
 
 // For backwards compatibility

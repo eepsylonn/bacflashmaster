@@ -5,21 +5,59 @@
 
 // Standardisation des noms de matières
 export const standardizeMatiere = (matiere: string): string => {
-  // Mapping pour les matières de Cambridge
-  if (matiere === "Vocabulary" || matiere === "IELTS Vocabulary" || matiere === "TOEFL Vocabulary") {
+  // Standardize vocabulary subjects
+  if (matiere === "Vocabulary" || 
+      matiere === "IELTS Vocabulary" || 
+      matiere === "TOEFL Vocabulary" ||
+      matiere === "Cambridge Vocabulary" ||
+      matiere === "Vocabulaire") {
     return "Vocabulary";
   }
-  if (matiere === "Speaking" || matiere === "IELTS Speaking" || matiere === "TOEFL Speaking") {
+  
+  // Standardize speaking subjects
+  if (matiere === "Speaking" || 
+      matiere === "IELTS Speaking" || 
+      matiere === "TOEFL Speaking" ||
+      matiere === "Cambridge Speaking" ||
+      matiere === "Expression orale") {
     return "Speaking";
   }
-  if (matiere === "Writing" || matiere === "IELTS Writing" || matiere === "TOEFL Writing") {
+  
+  // Standardize writing subjects
+  if (matiere === "Writing" || 
+      matiere === "IELTS Writing" || 
+      matiere === "TOEFL Writing" ||
+      matiere === "Cambridge Writing" ||
+      matiere === "Expression écrite") {
     return "Writing";
   }
-  if (matiere === "IELTS Academic" || matiere === "TOEFL Academic" || matiere === "Academic") {
+  
+  // Standardize academic subjects
+  if (matiere === "IELTS Academic" || 
+      matiere === "TOEFL Academic" || 
+      matiere === "Academic") {
     return "Academic";
   }
   
-  // Si aucune correspondance n'est trouvée, retourner la matière d'origine
+  // Standardize reading subjects
+  if (matiere === "Reading" || 
+      matiere === "IELTS Reading" || 
+      matiere === "TOEFL Reading" ||
+      matiere === "Cambridge Reading" ||
+      matiere === "Compréhension écrite") {
+    return "Reading";
+  }
+  
+  // Standardize grammar subjects
+  if (matiere === "Grammar" || 
+      matiere === "IELTS Grammar" || 
+      matiere === "TOEFL Grammar" ||
+      matiere === "Cambridge Grammar" ||
+      matiere === "Grammaire") {
+    return "Grammar";
+  }
+  
+  // If no standardization match is found, return the original subject
   return matiere;
 };
 

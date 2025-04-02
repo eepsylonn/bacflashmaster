@@ -1,5 +1,5 @@
 
-import { Flashcard } from "@/types";
+import { Flashcard } from '@/types';
 
 // Helper function to generate IDs
 const generateId = (): string => {
@@ -9,84 +9,44 @@ const generateId = (): string => {
 export const grammaireFacileToeflFlashcards: Flashcard[] = [
   {
     id: generateId(),
-    question: "Choose the correct verb form: 'The professor _____ the lecture with a summary of the main points.'",
-    answer: "concluded",
+    question: "What is the correct use of the present perfect tense?",
+    answer: "The present perfect tense (have/has + past participle) is used to describe actions that started in the past and continue to the present or have relevance to the present moment. Example: 'I have lived in Paris for three years.' (and still live there)",
     matiere: "TOEFL Grammar",
     niveau: "facile",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Select the correct article: 'The researchers published _____ interesting article about climate change in _____ scientific journal.'",
-    answer: "an, a",
+    question: "Explain the difference between 'few' and 'a few'.",
+    answer: "'Few' has a negative connotation, meaning 'almost none' (e.g., 'Few students passed the exam' suggests most failed). 'A few' has a positive connotation, meaning 'some' (e.g., 'A few students passed the exam' suggests that some successfully passed).",
     matiere: "TOEFL Grammar",
     niveau: "facile",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Choose the correct preposition: 'According _____ the study, there has been a significant increase _____ student participation.'",
-    answer: "to, in",
+    question: "When should you use the definite article 'the'?",
+    answer: "Use 'the' when referring to: 1) Something specific previously mentioned, 2) Something unique or one of a kind, 3) When the noun is made specific by an adjective clause or phrase, 4) With superlative adjectives, 5) With ordinal numbers, 6) With certain geographical features and locations.",
     matiere: "TOEFL Grammar",
     niveau: "facile",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Choose the correct verb tense: 'By the time the conference begins next month, the research team _____ their project.'",
-    answer: "will have completed",
+    question: "What is a run-on sentence and how can it be corrected?",
+    answer: "A run-on sentence occurs when two independent clauses are joined without proper punctuation or connecting words. It can be corrected by: 1) Adding a period to create separate sentences, 2) Adding a semicolon between clauses, 3) Adding a comma and coordinating conjunction (and, but, or, nor, for, so, yet), or 4) Adding a subordinating conjunction to create a dependent clause.",
     matiere: "TOEFL Grammar",
     niveau: "facile",
     diplome: "toefl"
   },
   {
     id: generateId(),
-    question: "Identify the correct relative pronoun: 'The book _____ was assigned for the course covers topics _____ are essential for the exam.'",
-    answer: "that/which, that/which",
+    question: "What is the correct order of adjectives in English?",
+    answer: "The general order is: opinion/value, size, age/temperature, shape, color, origin, material, purpose. Example: 'A beautiful large old rectangular brown Italian wooden dining table.'",
     matiere: "TOEFL Grammar",
     niveau: "facile",
     diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Select the correct conjunction: 'The student studied diligently, _____ he still found the exam challenging.'",
-    answer: "but/yet/however",
-    matiere: "TOEFL Grammar",
-    niveau: "facile",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Choose the correct modal verb: 'Students _____ submit their applications by Friday if they want to be considered for the scholarship.'",
-    answer: "must",
-    matiere: "TOEFL Grammar",
-    niveau: "facile",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Identify the correct plural form: 'The analysis of the economic _____ shows that several _____ contributed to the financial crisis.'",
-    answer: "phenomena, factors",
-    matiere: "TOEFL Grammar",
-    niveau: "facile",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Select the correct adverb placement: 'The professor _____ explained the concept _____ so the students could understand it.'",
-    answer: "clearly, (no adverb needed)",
-    matiere: "TOEFL Grammar",
-    niveau: "facile",
-    diplome: "toefl"
-  },
-  {
-    id: generateId(),
-    question: "Choose the correct comparative form: 'The updated version of the textbook is _____ than the previous edition, but it's also _____.'",
-    answer: "more comprehensive, more expensive",
-    matiere: "TOEFL Grammar",
-    niveau: "facile",
-    diplome: "toefl"
-  },
+  }
 ];
 
 // For backwards compatibility
