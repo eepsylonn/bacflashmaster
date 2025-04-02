@@ -2,7 +2,6 @@
 import { createContext, useState, useContext, useEffect, ReactNode } from 'react';
 import DiplomeSelector from '@/components/DiplomeSelector';
 import SpecialitySelector from '@/components/SpecialitySelector';
-import { UserPreferencesProvider } from '@/contexts/UserPreferencesContext';
 
 type DiplomeType = 'baccalaureat' | 'toeic' | 'tage-mage' | 'toefl' | 'ielts' | 'cambridge' | 'gmat' | 'brevet' | undefined;
 
@@ -82,13 +81,11 @@ export function DiplomeProvider({ children }: { children: ReactNode }) {
         isOpen={isSelectorOpen}
         setIsOpen={setIsSelectorOpen}
       />
-      <UserPreferencesProvider>
-        <SpecialitySelector
-          isOpen={showSpecialitySelector}
-          onClose={closeSpecialitySelector}
-        />
-        {children}
-      </UserPreferencesProvider>
+      <SpecialitySelector
+        isOpen={showSpecialitySelector}
+        onClose={closeSpecialitySelector}
+      />
+      {children}
     </DiplomeContext.Provider>
   );
 }
