@@ -63,6 +63,12 @@ const FlashcardComponent = ({
     setLastQuestionAnswered(false);
   }, [flashcard]);
   
+  const formatAnswer = (text: string) => {
+    return text
+      .replace(/([0-9]+\)|\([0-9]+\)|[a-z]\)|\([a-z]\))\s*/g, '\n$1 ')
+      .trim();
+  };
+
   const handleAnswerSubmit = (answer: string, isCorrect: boolean) => {
     setHasSubmittedAnswer(true);
     setAnswerCorrectness(isCorrect);
@@ -301,7 +307,7 @@ const FlashcardComponent = ({
                       animate="visible"
                       className="text-app-blue-dark dark:text-blue-200 text-lg p-5 bg-white dark:bg-gray-700/90 rounded-lg shadow-md border border-gray-100 dark:border-gray-600"
                     >
-                      <p className="font-medium">{flashcard.answer || "Pas de réponse disponible"}</p>
+                      <p className="font-medium whitespace-pre-line">{formatAnswer(flashcard.answer || "Pas de réponse disponible")}</p>
                     </motion.div>
                     
                     {(showAnswerButtons || hasSubmittedAnswer) && (
@@ -548,7 +554,7 @@ const FlashcardComponent = ({
                                 transition={{ delay: 0.3, duration: 0.4 }}
                                 className="text-app-blue-dark dark:text-blue-200 text-lg bg-white/80 dark:bg-gray-800/80 p-4 rounded-md shadow-inner"
                               >
-                                <p className="font-medium">{flashcard.answer || "Pas de réponse disponible"}</p>
+                                <p className="font-medium whitespace-pre-line">{formatAnswer(flashcard.answer || "Pas de réponse disponible")}</p>
                               </motion.div>
                               
                               <AnimatePresence>

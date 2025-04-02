@@ -54,6 +54,14 @@ const WriteAnswer = ({ onSubmit, correctAnswer }: WriteAnswerProps) => {
     setTimeout(() => setIsTyping(false), 500);
   };
 
+  // Fonction pour formater la réponse avec des sauts de ligne pour les options
+  const formatAnswer = (text: string) => {
+    // On remplace les options numérotées ou avec des lettres par des options avec retour à la ligne
+    return text
+      .replace(/([0-9]+\)|\([0-9]+\)|[a-z]\)|\([a-z]\))\s*/g, '\n$1 ')
+      .trim();
+  };
+
   useEffect(() => {
     return () => {
       // Reset state on unmount
@@ -196,8 +204,8 @@ const WriteAnswer = ({ onSubmit, correctAnswer }: WriteAnswerProps) => {
                   transition={{ delay: 0.5 }}
                 >
                   <span className="font-medium">Réponse correcte:</span> 
-                  <p className="mt-1 p-2 bg-green-50/50 dark:bg-green-900/20 rounded border border-green-100 dark:border-green-800 text-gray-800 dark:text-gray-200">
-                    {correctAnswer}
+                  <p className="mt-1 p-2 bg-green-50/50 dark:bg-green-900/20 rounded border border-green-100 dark:border-green-800 text-gray-800 dark:text-gray-200 whitespace-pre-line">
+                    {formatAnswer(correctAnswer)}
                   </p>
                 </motion.div>
               )}
