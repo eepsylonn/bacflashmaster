@@ -391,7 +391,7 @@ const allFlashcards = [
     ...anglaisFlashcards
 ];
 
-// Function to get flashcards based on criteria - corrected to ensure strict filtering by niveau
+// Function to get flashcards based on criteria - corrected for strict filtering by niveau
 export const getFlashcards = (
   matiere?: string, 
   niveau?: NiveauType, 
@@ -426,11 +426,28 @@ export const getFlashcards = (
       if (filteredFlashcards.length > 0) {
         console.log('Exemples de cartes après filtrage par niveau:');
         filteredFlashcards.slice(0, 3).forEach(card => {
-          console.log(`ID: ${card.id}, Matière: ${card.matiere}, Niveau: ${card.niveau}`);
+          console.log(`ID: ${card.id}, Matière: ${card.matiere}, Niveau: ${card.niveau}, Diplôme: ${card.diplome}`);
         });
       }
     } else {
-      console.log(`Niveau 'both' sélectionné, pas de filtrage par niveau appliqué`);
+      // For "both" option in brevet (quatrieme and troisieme)
+      if (diplome === 'brevet') {
+        console.log(`Niveau 'both' sélectionné pour le brevet, inclusion des niveaux troisieme et quatrieme uniquement`);
+        filteredFlashcards = filteredFlashcards.filter(card => 
+          card.niveau === 'troisieme' || card.niveau === 'quatrieme'
+        );
+      } 
+      // For "both" option in baccalaureat (premiere and terminale)
+      else if (diplome === 'baccalaureat') {
+        console.log(`Niveau 'both' sélectionné pour le baccalauréat, inclusion des niveaux premiere et terminale uniquement`);
+        filteredFlashcards = filteredFlashcards.filter(card => 
+          card.niveau === 'premiere' || card.niveau === 'terminale'
+        );
+      }
+      // For other diploma types with "facile", "intermediaire", "avance" levels
+      else {
+        console.log(`Niveau 'both' sélectionné pour ${diplome}, inclusion de tous les niveaux`);
+      }
     }
   }
 
