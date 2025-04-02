@@ -51,20 +51,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           
           if (storedSession) {
             const sessionData = JSON.parse(storedSession);
-            console.log("Session locale récupérée:", sessionData);
             setSession(sessionData.session);
             setUser(sessionData.session?.user ?? null);
             
             if (sessionData.session?.user) {
-              // Vérifier si c'est l'admin en mode développement
-              const isAdminAccount = 
-                sessionData.session.user.email === 'admin@example.com' || 
-                sessionData.session.user.user_metadata?.role === 'admin';
-                
-              console.log("Vérification admin:", isAdminAccount, sessionData.session.user);
-              
-              if (isAdminAccount) {
-                console.log("Utilisateur admin détecté! Active les fonctionnalités admin.");
+              // Si c'est l'admin en mode développement
+              if (sessionData.session.user.email === 'admin@example.com') {
+                console.log("Utilisateur admin détecté");
                 const adminProfile = {
                   id: sessionData.session.user.id,
                   username: 'admin',
@@ -75,7 +68,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 setUserProfile(adminProfile);
                 setIsAdmin(true);
               } else {
-                console.log("Utilisateur standard détecté");
                 const userProfile = {
                   id: sessionData.session.user.id,
                   username: sessionData.session.user.user_metadata?.username || sessionData.session.user.email?.split('@')[0],
@@ -130,8 +122,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Écouter les changements d'authentification
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
-        console.log("Changement d'état d'authentification:", _event, session?.user);
-        
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(true);
@@ -141,14 +131,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             // Mode développement local
             localStorage.setItem('supabase.auth.session', JSON.stringify({ session }));
             
-            // Vérifier si c'est l'admin en mode développement
-            const isAdminAccount = 
-              session.user.email === 'admin@example.com' || 
-              session.user.user_metadata?.role === 'admin';
-            
-            console.log("Est admin?", isAdminAccount);
-            
-            if (isAdminAccount) {
+            // Si c'est l'admin en mode développement
+            if (session.user.email === 'admin@example.com') {
               console.log("Admin connecté en mode dev");
               const adminProfile = {
                 id: session.user.id,
@@ -225,7 +209,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (isLocalDev) {
       // En mode développement, on considère l'admin comme abonné
-      if (user.email === 'admin@example.com' || user.user_metadata?.role === 'admin') {
+      if (user.email === 'admin@example.com') {
         return true;
       }
       

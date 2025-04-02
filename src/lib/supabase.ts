@@ -15,8 +15,6 @@ const isLocalDev =
    supabaseUrl === 'https://your-supabase-url.supabase.co' ||
    supabaseAnonKey === 'your-anon-key');
 
-console.log("Mode développement local:", isLocalDev);
-
 // Création du client Supabase
 export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
   auth: {
@@ -36,30 +34,22 @@ export const signInWithEmailOrUsername = async (
     console.log('Mode développement local activé, simulation de connexion');
     
     // Cas spécial pour le compte admin (username: admin, password: admin)
-    if ((emailOrUsername === 'admin' || emailOrUsername === 'admin@example.com') && password === 'admin') {
-      console.log("Connexion administrateur simulée");
+    if (emailOrUsername === 'admin' && password === 'admin') {
       const mockAdminUser = {
         id: '00000000-0000-0000-0000-000000000000',
         email: 'admin@example.com',
-        user_metadata: { 
-          username: 'admin',
-          role: 'admin' // Ajout explicite du rôle admin dans les métadonnées
-        },
+        user_metadata: { username: 'admin' },
       };
       
-      // Simuler une connexion réussie et stocker en localStorage
-      const mockSession = { 
-        access_token: 'mock-token', 
-        refresh_token: 'mock-refresh-token',
-        user: mockAdminUser
-      };
-      
-      localStorage.setItem('supabase.auth.session', JSON.stringify({ session: mockSession }));
-      
+      // Simuler une connexion réussie
       return { 
         data: { 
           user: mockAdminUser,
-          session: mockSession
+          session: { 
+            access_token: 'mock-token', 
+            refresh_token: 'mock-refresh-token',
+            user: mockAdminUser
+          }
         }, 
         error: null 
       };
@@ -70,24 +60,17 @@ export const signInWithEmailOrUsername = async (
       const mockUser = {
         id: '12345678-1234-1234-1234-123456789012',
         email: emailOrUsername.includes('@') ? emailOrUsername : `${emailOrUsername}@example.com`,
-        user_metadata: { 
-          username: emailOrUsername.includes('@') ? emailOrUsername.split('@')[0] : emailOrUsername,
-          role: 'user'
-        },
+        user_metadata: { username: emailOrUsername.includes('@') ? emailOrUsername.split('@')[0] : emailOrUsername },
       };
-      
-      const mockSession = { 
-        access_token: 'mock-token', 
-        refresh_token: 'mock-refresh-token',
-        user: mockUser
-      };
-      
-      localStorage.setItem('supabase.auth.session', JSON.stringify({ session: mockSession }));
       
       return { 
         data: { 
           user: mockUser,
-          session: mockSession
+          session: { 
+            access_token: 'mock-token', 
+            refresh_token: 'mock-refresh-token',
+            user: mockUser
+          }
         }, 
         error: null 
       };

@@ -1,6 +1,7 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase, signInWithEmailOrUsername } from '@/lib/supabase';
 import Header from '@/components/Header';
 import { Card } from '@/components/ui/card';
@@ -16,7 +17,7 @@ import { useAuth } from '@/contexts/AuthContext';
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, isAdmin } = useAuth();
+  const { user } = useAuth();
   const [view, setView] = useState<'sign_in' | 'sign_up'>('sign_in');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,19 +32,11 @@ const Login = () => {
   
   const [showPassword, setShowPassword] = useState(false);
   
-  // Si l'utilisateur est déjà connecté, rediriger vers la page appropriée
-  useEffect(() => {
-    if (user) {
-      // Rediriger l'administrateur vers le panneau d'administration
-      if (isAdmin) {
-        console.log("Redirection automatique de l'admin vers le panneau d'administration");
-        navigate('/admin');
-      } else {
-        // Les utilisateurs normaux vont à la page d'accueil
-        navigate('/');
-      }
-    }
-  }, [user, isAdmin, navigate]);
+  // Si l'utilisateur est déjà connecté, rediriger vers la page d'accueil
+  if (user) {
+    navigate('/');
+    return null;
+  }
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -55,7 +48,6 @@ const Login = () => {
     setIsLoading(true);
     
     try {
-      console.log("Tentative de connexion avec:", credentials.emailOrUsername, credentials.password);
       const { data, error } = await signInWithEmailOrUsername(
         credentials.emailOrUsername,
         credentials.password
@@ -65,17 +57,14 @@ const Login = () => {
         throw error;
       }
       
-      console.log("Réponse de connexion:", data);
-      
       // Connexion réussie
       toast({
         title: "Connexion réussie",
         description: "Vous êtes maintenant connecté.",
       });
       
-      // La redirection se fait dans l'useEffect
+      navigate('/');
     } catch (error: any) {
-      console.error("Erreur de connexion:", error);
       toast({
         title: "Échec de la connexion",
         description: error.message || "Identifiants incorrects. Veuillez réessayer.",
