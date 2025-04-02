@@ -23,6 +23,12 @@ import { speakingIntermediaireCambridgeFlashcards } from './SpeakingIntermediair
 import { speakingAvanceCambridgeFlashcards } from './SpeakingAvanceCambridgeFlashcards';
 import { writingFacileCambridgeFlashcards } from './WritingFacileCambridgeFlashcards';
 import { writingAvanceCambridgeFlashcards } from './WritingAvanceCambridgeFlashcards';
+import { grammaireFacileCambridgeFlashcards } from './GrammaireFacileCambridgeFlashcards';
+import { grammaireIntermediaireCambridgeFlashcards } from './GrammaireIntermediaireCambridgeFlashcards';
+import { grammaireAvanceCambridgeFlashcards } from './GrammaireAvanceCambridgeFlashcards';
+import { readingUseFacileCambridgeFlashcards } from './ReadingUseFacileCambridgeFlashcards';
+import { readingUseIntermediaireCambridgeFlashcards } from './ReadingUseIntermediaireCambridgeFlashcards';
+import { readingUseAvanceCambridgeFlashcards } from './ReadingUseAvanceCambridgeFlashcards';
 
 import { speakingFacileToeflFlashcards } from './SpeakingFacileToeflFlashcards';
 import { speakingIntermediaireToeflFlashcards } from './SpeakingIntermediaireToeflFlashcards';
@@ -69,6 +75,12 @@ export const allFlashcards: Flashcard[] = [
   ...speakingAvanceCambridgeFlashcards,
   ...writingFacileCambridgeFlashcards,
   ...writingAvanceCambridgeFlashcards,
+  ...grammaireFacileCambridgeFlashcards,
+  ...grammaireIntermediaireCambridgeFlashcards,
+  ...grammaireAvanceCambridgeFlashcards,
+  ...readingUseFacileCambridgeFlashcards,
+  ...readingUseIntermediaireCambridgeFlashcards,
+  ...readingUseAvanceCambridgeFlashcards,
   
   ...speakingFacileToeflFlashcards,
   ...speakingIntermediaireToeflFlashcards,

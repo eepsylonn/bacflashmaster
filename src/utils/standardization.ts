@@ -44,6 +44,7 @@ export const standardizeMatiere = (matiere: string): string => {
       matiere === "IELTS Reading" || 
       matiere === "TOEFL Reading" ||
       matiere === "Cambridge Reading" ||
+      matiere === "Reading & Use of English" ||
       matiere === "Compréhension écrite") {
     return "Reading";
   }
