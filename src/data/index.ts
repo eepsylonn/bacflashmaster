@@ -21,11 +21,25 @@ import { listeningFacileToeicFlashcards } from './ListeningFacileToeicFlashcards
 import { listeningIntermediaireToeicFlashcards } from './ListeningIntermediaireToeicFlashcards';
 import { listeningAvanceToeicFlashcards } from './ListeningAvanceToeicFlashcards';
 import { grammaireFacileToeicFlashcards } from './GrammaireFacileToeicFlashcards';
-import { grammaireIntermediaireToeicFlashcards } from './GrammaireIntermediaireToeicFlashcards';
-import { grammaireAvanceToeicFlashcards } from './GrammaireAvanceToeicFlashcards';
+import { grammaireIntermediaireTageMageFlashcards } from './GrammaireIntermediaireToeicFlashcards';
+import { grammaireAvanceTageMageFlashcards } from './GrammaireAvanceToeicFlashcards';
 import { vocabulaireFacileToeicFlashcards } from './VocabulaireFacileToeicFlashcards';
-import { vocabulaireIntermediaireToeicFlashcards } from './VocabulaireIntermediaireToeicFlashcards';
-import { vocabulaireAvanceToeicFlashcards } from './VocabulaireAvanceToeicFlashcards';
+import { vocabulaireIntermediaireTageMageFlashcards } from './VocabulaireIntermediaireToeicFlashcards';
+import { vocabulaireAvanceTageMageFlashcards } from './VocabulaireAvanceToeicFlashcards';
+
+// Importations des flashcards TAGE MAGE par matière et niveau
+import { calculFacileTageMageFlashcards } from './CalculFacileTageMageFlashcards';
+import { calculIntermediaireTageMageFlashcards } from './CalculIntermediaireTageMageFlashcards';
+import { calculAvanceTageMageFlashcards } from './CalculAvanceTageMageFlashcards';
+import { logiqueFacileTageMageFlashcards } from './LogiqueFacileTageMageFlashcards';
+import { logiqueIntermediaireTageMageFlashcards } from './LogiqueIntermediaireTageMageFlashcards';
+import { logiqueAvanceTageMageFlashcards } from './LogiqueAvanceTageMageFlashcards';
+import { verbalFacileTageMageFlashcards } from './VerbalFacileTageMageFlashcards';
+import { verbalIntermediaireTageMageFlashcards } from './VerbalIntermediaireTageMageFlashcards';
+import { verbalAvanceTageMageFlashcards } from './VerbalAvanceTageMageFlashcards';
+import { problemeFacileTageMageFlashcards } from './ProblemeFacileTageMageFlashcards';
+import { problemeIntermediaireTageMageFlashcards } from './ProblemeIntermediaireTageMageFlashcards';
+import { problemeAvanceTageMageFlashcards } from './ProblemeAvanceTageMageFlashcards';
 
 // Export all flashcards for use in other files
 export { getFlashcards } from './flashcards';
@@ -53,10 +67,22 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...listeningIntermediaireToeicFlashcards,
     ...listeningAvanceToeicFlashcards,
     ...grammaireFacileToeicFlashcards,
-    ...grammaireIntermediaireToeicFlashcards,
-    ...grammaireAvanceToeicFlashcards,
+    ...grammaireIntermediaireTageMageFlashcards,
+    ...grammaireAvanceTageMageFlashcards,
     ...vocabulaireFacileToeicFlashcards,
-    ...vocabulaireIntermediaireToeicFlashcards,
-    ...vocabulaireAvanceToeicFlashcards
+    ...vocabulaireIntermediaireTageMageFlashcards,
+    ...vocabulaireAvanceTageMageFlashcards,
+    ...calculFacileTageMageFlashcards,
+    ...calculIntermediaireTageMageFlashcards,
+    ...calculAvanceTageMageFlashcards,
+    ...logiqueFacileTageMageFlashcards,
+    ...logiqueIntermediaireTageMageFlashcards,
+    ...logiqueAvanceTageMageFlashcards,
+    ...verbalFacileTageMageFlashcards,
+    ...verbalIntermediaireTageMageFlashcards,
+    ...verbalAvanceTageMageFlashcards,
+    ...problemeFacileTageMageFlashcards,
+    ...problemeIntermediaireTageMageFlashcards,
+    ...problemeAvanceTageMageFlashcards
   ];
 };

@@ -25,6 +25,20 @@ import { vocabulaireFacileToeicFlashcards } from './VocabulaireFacileToeicFlashc
 import { vocabulaireIntermediaireToeicFlashcards } from './VocabulaireIntermediaireToeicFlashcards';
 import { vocabulaireAvanceToeicFlashcards } from './VocabulaireAvanceToeicFlashcards';
 
+// Nouvelles importations pour les flashcards TAGE MAGE par matière et niveau
+import { calculFacileTageMageFlashcards } from './CalculFacileTageMageFlashcards';
+import { calculIntermediaireTageMageFlashcards } from './CalculIntermediaireTageMageFlashcards';
+import { calculAvanceTageMageFlashcards } from './CalculAvanceTageMageFlashcards';
+import { logiqueFacileTageMageFlashcards } from './LogiqueFacileTageMageFlashcards';
+import { logiqueIntermediaireTageMageFlashcards } from './LogiqueIntermediaireTageMageFlashcards';
+import { logiqueAvanceTageMageFlashcards } from './LogiqueAvanceTageMageFlashcards';
+import { verbalFacileTageMageFlashcards } from './VerbalFacileTageMageFlashcards';
+import { verbalIntermediaireTageMageFlashcards } from './VerbalIntermediaireTageMageFlashcards';
+import { verbalAvanceTageMageFlashcards } from './VerbalAvanceTageMageFlashcards';
+import { problemeFacileTageMageFlashcards } from './ProblemeFacileTageMageFlashcards';
+import { problemeIntermediaireTageMageFlashcards } from './ProblemeIntermediaireTageMageFlashcards';
+import { problemeAvanceTageMageFlashcards } from './ProblemeAvanceTageMageFlashcards';
+
 // Mock flashcard data for the base subjects
 const flashcardsData: Flashcard[] = [
   // Baccalauréat flashcards
@@ -388,6 +402,31 @@ const toeicVocabularyFlashcards = [
   ...vocabulaireAvanceToeicFlashcards
 ];
 
+// Nouvelle combinaison pour les flashcards TAGE MAGE par matière
+const tageMageCalculFlashcards = [
+  ...calculFacileTageMageFlashcards,
+  ...calculIntermediaireTageMageFlashcards,
+  ...calculAvanceTageMageFlashcards
+];
+
+const tageMageLogiqueFlashcards = [
+  ...logiqueFacileTageMageFlashcards,
+  ...logiqueIntermediaireTageMageFlashcards,
+  ...logiqueAvanceTageMageFlashcards
+];
+
+const tageMageVerbalFlashcards = [
+  ...verbalFacileTageMageFlashcards,
+  ...verbalIntermediaireTageMageFlashcards,
+  ...verbalAvanceTageMageFlashcards
+];
+
+const tageMageProblemeFlashcards = [
+  ...problemeFacileTageMageFlashcards,
+  ...problemeIntermediaireTageMageFlashcards,
+  ...problemeAvanceTageMageFlashcards
+];
+
 // Combine the history flashcards from both levels
 const historyFlashcards = [
     ...historyPremiereFlashcards,
@@ -430,7 +469,11 @@ const allFlashcards = [
     ...toeicReadingFlashcards,
     ...toeicListeningFlashcards,
     ...toeicGrammarFlashcards,
-    ...toeicVocabularyFlashcards
+    ...toeicVocabularyFlashcards,
+    ...tageMageCalculFlashcards,
+    ...tageMageLogiqueFlashcards,
+    ...tageMageVerbalFlashcards,
+    ...tageMageProblemeFlashcards
 ];
 
 // Function to get flashcards based on criteria - corrected for strict filtering by niveau
