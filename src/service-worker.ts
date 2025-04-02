@@ -102,6 +102,7 @@ const URLS_TO_CACHE = [
   '/statistiques',
   '/historique',
   '/reglages',
+  // Audio files for TOEIC listening
   '/audio/toeic/facile/conversation-email.mp3',
   '/audio/toeic/facile/commande-cafe.mp3',
   '/audio/toeic/facile/annonce-train.mp3',
@@ -131,7 +132,23 @@ const URLS_TO_CACHE = [
   '/audio/toeic/avance/segments-marche.mp3',
   '/audio/toeic/avance/consommation-energie.mp3',
   '/audio/toeic/avance/mesures-securite.mp3',
-  '/audio/toeic/avance/reglementations-futures.mp3'
+  '/audio/toeic/avance/reglementations-futures.mp3',
+  // Text files for reading comprehension
+  '/texts/toeic/facile/email-commercial.txt',
+  '/texts/toeic/facile/annonce-conference.txt',
+  '/texts/toeic/facile/memo-interne.txt',
+  '/texts/toeic/facile/description-poste.txt',
+  '/texts/toeic/facile/procedures-bureau.txt',
+  '/texts/toeic/intermediaire/rapport-annuel.txt',
+  '/texts/toeic/intermediaire/conditions-contrat.txt',
+  '/texts/toeic/intermediaire/manuel-employe.txt',
+  '/texts/toeic/intermediaire/article-journal.txt',
+  '/texts/toeic/intermediaire/correspondance-entreprise.txt',
+  '/texts/toeic/avance/etude-marche.txt',
+  '/texts/toeic/avance/proposition-commerciale.txt',
+  '/texts/toeic/avance/reclamation-client.txt',
+  '/texts/toeic/avance/documents-juridiques.txt',
+  '/texts/toeic/avance/strategie-entreprise.txt'
 ];
 
 self.addEventListener('install', (event) => {

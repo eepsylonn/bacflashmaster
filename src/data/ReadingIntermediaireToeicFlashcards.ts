@@ -1,12 +1,65 @@
-
-import { Flashcard } from '@/types';
+import { Flashcard } from "@/types";
 
 // Fonction pour générer un ID unique
 const generateId = () => {
   return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
 };
 
-export const readingIntermediaireToeicFlashcards: Flashcard[] = [
+export const ReadingIntermediaireToeicFlashcards: Flashcard[] = [
+  {
+    id: "rm28djsm92ns03js",
+    question: "According to the annual report, what was the revenue increase percentage in fiscal year 2023?",
+    answer: "15%",
+    matiere: "TOEIC Reading",
+    niveau: "intermediaire",
+    diplome: "toeic",
+    text: "/texts/toeic/intermediaire/rapport-annuel.txt"
+  },
+  {
+    id: "fj38dj10smskwod",
+    question: "How many new employees joined the company in 2023?",
+    answer: "230",
+    matiere: "TOEIC Reading",
+    niveau: "intermediaire",
+    diplome: "toeic",
+    text: "/texts/toeic/intermediaire/rapport-annuel.txt"
+  },
+  {
+    id: "d93mc74ksplq12",
+    question: "Which of the company's products experienced exceptional growth with a 28% increase in sales?",
+    answer: "InnoTech Pro",
+    matiere: "TOEIC Reading",
+    niveau: "intermediaire",
+    diplome: "toeic",
+    text: "/texts/toeic/intermediaire/rapport-annuel.txt"
+  },
+  {
+    id: "vmc2i3kal2903dk",
+    question: "What percentage of global sales did North America represent?",
+    answer: "45%",
+    matiere: "TOEIC Reading",
+    niveau: "intermediaire",
+    diplome: "toeic",
+    text: "/texts/toeic/intermediaire/rapport-annuel.txt"
+  },
+  {
+    id: "lpo3x90sk3mdn",
+    question: "How much did the company invest in research and development?",
+    answer: "$150 million",
+    matiere: "TOEIC Reading",
+    niveau: "intermediaire",
+    diplome: "toeic",
+    text: "/texts/toeic/intermediaire/rapport-annuel.txt"
+  },
+  {
+    id: "3k9kdm30dk2ls",
+    question: "How many subscriptions did the CloudConnect platform achieve in its first six months?",
+    answer: "50,000",
+    matiere: "TOEIC Reading",
+    niveau: "intermediaire",
+    diplome: "toeic",
+    text: "/texts/toeic/intermediaire/rapport-annuel.txt"
+  },
   {
     id: generateId(),
     question: "Read the memo: 'Due to system maintenance, the network will be unavailable from 11 PM Friday until 2 AM Saturday. Please save all work before leaving on Friday.' What should employees do before the weekend?",

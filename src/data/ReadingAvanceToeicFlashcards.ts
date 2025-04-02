@@ -1,12 +1,60 @@
+import { Flashcard } from "@/types";
 
-import { Flashcard } from '@/types';
-
-// Fonction pour générer un ID unique
-const generateId = () => {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-};
-
-export const readingAvanceToeicFlashcards: Flashcard[] = [
+export const ReadingAvanceToeicFlashcards: Flashcard[] = [
+  {
+    id: "a83h2j3kd9smx",
+    question: "According to the market analysis report, what is the projected size of the global healthcare technology market by 2027?",
+    answer: "$509.2 billion",
+    matiere: "TOEIC Reading",
+    niveau: "avance",
+    diplome: "toeic",
+    text: "/texts/toeic/avance/etude-marche.txt"
+  },
+  {
+    id: "l2m9sk29dj20d",
+    question: "What percentage of adults aged 18-34 use at least one health monitoring wearable according to the report?",
+    answer: "62%",
+    matiere: "TOEIC Reading",
+    niveau: "avance",
+    diplome: "toeic",
+    text: "/texts/toeic/avance/etude-marche.txt"
+  },
+  {
+    id: "o2l9mkjd2k9jd",
+    question: "What is the reported market share of MedTech Innovations?",
+    answer: "18.3%",
+    matiere: "TOEIC Reading",
+    niveau: "avance",
+    diplome: "toeic",
+    text: "/texts/toeic/avance/etude-marche.txt"
+  },
+  {
+    id: "ijk3n2kl3n3k9",
+    question: "By what percentage did investments in AI-powered diagnostic tools increase in 2022 compared to the previous year?",
+    answer: "34%",
+    matiere: "TOEIC Reading",
+    niveau: "avance",
+    diplome: "toeic",
+    text: "/texts/toeic/avance/etude-marche.txt"
+  },
+  {
+    id: "q2ok9ls9dk20d",
+    question: "What percentage of healthcare IT managers identify integration with existing infrastructure as a significant barrier to adoption?",
+    answer: "82%",
+    matiere: "TOEIC Reading",
+    niveau: "avance",
+    diplome: "toeic",
+    text: "/texts/toeic/avance/etude-marche.txt"
+  },
+  {
+    id: "b28jdk9sm20dj",
+    question: "What is the annual growth rate of the healthcare technology market in the Asia-Pacific region?",
+    answer: "16.8%",
+    matiere: "TOEIC Reading",
+    niveau: "avance",
+    diplome: "toeic",
+    text: "/texts/toeic/avance/etude-marche.txt"
+  },
   {
     id: generateId(),
     question: "Read the excerpt: 'Despite the implementation of stringent cost-cutting measures in Q3, including a 15% reduction in operational expenditures, the corporation's profit margins continued to deteriorate due to unforeseen market volatility and increased competition in emerging markets.' What is the main challenge faced by the corporation?",

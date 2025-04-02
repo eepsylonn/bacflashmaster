@@ -5,6 +5,9 @@ import { useToast } from '@/components/ui/use-toast';
 import { useNavigate } from 'react-router-dom';
 import { useDiplome } from '@/contexts/DiplomeContext';
 
+// Cache for loaded text files
+const textCache: Record<string, string> = {};
+
 export const useFlashcards = () => {
   const [matiere, setMatiere] = useState<string | undefined>(undefined);
   const [niveau, setNiveau] = useState<NiveauType | undefined>(undefined);
@@ -19,6 +22,7 @@ export const useFlashcards = () => {
   const [trainingHistory, setTrainingHistory] = useState<TrainingResult[]>([]);
   const [showResult, setShowResult] = useState<boolean>(false);
   const [currentResult, setCurrentResult] = useState<TrainingResult | null>(null);
+  const [loadingText, setLoadingText] = useState<boolean>(false);
   const { toast } = useToast();
   const navigate = useNavigate();
   const { diplome } = useDiplome();
@@ -42,7 +46,44 @@ export const useFlashcards = () => {
     }
   }, [trainingHistory]);
 
-  const startTraining = () => {
+  const preloadTextFiles = async (questions: Flashcard[]) => {
+    const textPaths = questions
+      .filter(q => q.text && !textCache[q.text])
+      .map(q => q.text as string);
+    
+    if (textPaths.length === 0) return;
+    
+    setLoadingText(true);
+    
+    for (const path of textPaths) {
+      if (!textCache[path]) {
+        try {
+          const response = await fetch(path);
+          if (response.ok) {
+            const text = await response.text();
+            textCache[path] = text;
+            
+            // Update the question with the actual text content
+            questions.forEach(q => {
+              if (q.text === path) {
+                q.text = text;
+              }
+            });
+            
+            console.log(`Préchargement du texte réussi: ${path}`);
+          } else {
+            console.error(`Échec du préchargement du texte: ${path}`);
+          }
+        } catch (error) {
+          console.error(`Erreur lors du préchargement du texte: ${path}`, error);
+        }
+      }
+    }
+    
+    setLoadingText(false);
+  };
+
+  const startTraining = async () => {
     if (!matiere) {
       toast({
         title: "Sélection requise",
@@ -69,6 +110,9 @@ export const useFlashcards = () => {
 
     console.log(`Questions récupérées: ${questions.length}`);
     console.log('Première question:', questions[0]);
+    
+    // Précharger les textes si nécessaire
+    await preloadTextFiles(questions);
     
     setCurrentQuestions(questions);
     setAnsweredQuestions([]);
@@ -244,6 +288,7 @@ export const useFlashcards = () => {
     finishTraining,
     continueAfterResult,
     calculateImprovementRate,
+    loadingText,
     currentQuestion: currentQuestions[currentIndex]
   };
 };

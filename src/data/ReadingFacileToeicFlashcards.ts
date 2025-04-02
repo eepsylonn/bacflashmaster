@@ -1,12 +1,51 @@
+import { Flashcard } from "@/types";
 
-import { Flashcard } from '@/types';
-
-// Fonction pour générer un ID unique
-const generateId = () => {
-  return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
-};
-
-export const readingFacileToeicFlashcards: Flashcard[] = [
+export const ReadingFacileToeicFlashcards: Flashcard[] = [
+  {
+    id: "ij0rugvlknjwarzpjc33we",
+    question: "Based on the email, when will the order be delivered?",
+    answer: "Tuesday, May 15th",
+    matiere: "TOEIC Reading",
+    niveau: "facile",
+    diplome: "toeic",
+    text: "/texts/toeic/facile/email-commercial.txt"
+  },
+  {
+    id: "po9i23hdj83kdnc9si2",
+    question: "What is the total amount for the order mentioned in the email?",
+    answer: "$450",
+    matiere: "TOEIC Reading",
+    niveau: "facile",
+    diplome: "toeic",
+    text: "/texts/toeic/facile/email-commercial.txt"
+  },
+  {
+    id: "qpwo3ed913j3q0edksao",
+    question: "How many black ink cartridges were ordered according to the email?",
+    answer: "24",
+    matiere: "TOEIC Reading",
+    niveau: "facile",
+    diplome: "toeic",
+    text: "/texts/toeic/facile/email-commercial.txt"
+  },
+  {
+    id: "zxm38shd9w2ijs92j3d",
+    question: "What is the order number mentioned in the email?",
+    answer: "#45678",
+    matiere: "TOEIC Reading",
+    niveau: "facile",
+    diplome: "toeic",
+    text: "/texts/toeic/facile/email-commercial.txt"
+  },
+  {
+    id: "kdjf92j3dkflapdkf29j",
+    question: "What is the payment method used for this order?",
+    answer: "Company credit card",
+    matiere: "TOEIC Reading",
+    niveau: "facile",
+    diplome: "toeic",
+    text: "/texts/toeic/facile/email-commercial.txt"
+  },
   {
     id: generateId(),
     question: "Read the notice: 'Employees must wash hands before returning to work.' Where would you most likely see this?",

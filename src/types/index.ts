@@ -1,4 +1,3 @@
-
 export type DiplomeType = 'baccalaureat' | 'toeic' | 'tage-mage' | 'toefl' | 'ielts' | 'cambridge' | 'gmat' | 'brevet';
 export type NiveauType = 'premiere' | 'terminale' | 'facile' | 'intermediaire' | 'avance' | 'sixieme' | 'cinquieme' | 'quatrieme' | 'troisieme' | 'both';
 
@@ -22,11 +21,10 @@ export interface Flashcard {
   answer: string;
   matiere: string;
   niveau: NiveauType;
-  image?: string;
-  audio?: string; // URL ou chemin vers le fichier audio
-  userCorrectCount?: number;
-  userWrongCount?: number;
   diplome?: DiplomeType;
+  text?: string;
+  audio?: string;
+  options?: string[];
 }
 
 export interface AnsweredQuestion {

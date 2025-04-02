@@ -1,0 +1,25 @@
+
+Subject: Office Supplies Order Confirmation
+
+Dear Mr. Johnson,
+
+Thank you for your recent order of office supplies from Office Solutions Inc. We are pleased to confirm that your order #45678 has been processed and will be delivered to your office on Tuesday, May 15th.
+
+Your order includes:
+- 10 boxes of printer paper
+- 24 black ink cartridges
+- 12 colored ink cartridges
+- 50 file folders
+- 5 packs of sticky notes
+
+The total amount for this order is $450, which will be charged to the company credit card as per your instructions. A detailed invoice will be included with your delivery.
+
+If you need to make any changes to your order or have any questions, please contact our customer service department at 555-123-4567 or email us at support@officesolutions.com.
+
+We appreciate your business and look forward to serving you again.
+
+Best regards,
+
+Sarah Thompson
+Sales Representative
+Office Solutions Inc.
