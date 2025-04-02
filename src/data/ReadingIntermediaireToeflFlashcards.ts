@@ -1,5 +1,5 @@
 
-import { Flashcard } from "@/types";
+import { Flashcard } from '@/types';
 
 // Helper function to generate IDs
 const generateId = (): string => {
