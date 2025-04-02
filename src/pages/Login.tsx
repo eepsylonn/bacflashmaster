@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ThemeSupa } from '@supabase/auth-ui-shared';
@@ -17,9 +16,10 @@ import { useAuth } from '@/contexts/AuthContext';
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, isAdmin } = useAuth();
+  const { user, isAdmin, isLoading } = useAuth();
   const [view, setView] = useState<'sign_in' | 'sign_up'>('sign_in');
   const [isLoading, setIsLoading] = useState(false);
+  const [adminLoginSuccess, setAdminLoginSuccess] = useState(false);
 
   // Formulaire de connexion
   const [credentials, setCredentials] = useState({
@@ -34,14 +34,22 @@ const Login = () => {
   
   // Rediriger vers le panel admin si l'utilisateur est admin
   useEffect(() => {
-    if (isAdmin) {
-      console.log("Utilisateur admin détecté, redirection vers le panel admin");
-      navigate('/admin');
-    } else if (user) {
-      // Si l'utilisateur est connecté mais n'est pas admin, rediriger vers la page d'accueil
-      navigate('/');
+    console.log("useEffect dans Login - isAdmin:", isAdmin, "user:", user, "adminLoginSuccess:", adminLoginSuccess);
+    
+    if (!isLoading) {
+      if (isAdmin) {
+        console.log("Utilisateur admin détecté, redirection vers le panel admin");
+        navigate('/admin');
+      } else if (user && adminLoginSuccess) {
+        console.log("Login réussi avec admin, mais isAdmin pas encore défini, redirection vers /admin");
+        navigate('/admin');
+      } else if (user && !isAdmin) {
+        // Si l'utilisateur est connecté mais n'est pas admin, rediriger vers la page d'accueil
+        console.log("Utilisateur non-admin connecté, redirection vers la page d'accueil");
+        navigate('/');
+      }
     }
-  }, [user, isAdmin, navigate]);
+  }, [user, isAdmin, navigate, isLoading, adminLoginSuccess]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -53,6 +61,15 @@ const Login = () => {
     setIsLoading(true);
     
     try {
+      console.log("Tentative de connexion avec:", credentials.emailOrUsername);
+      
+      // Détection de connexion admin
+      const isAdminAttempt = credentials.emailOrUsername === 'admin' && credentials.password === 'admin';
+      if (isAdminAttempt) {
+        console.log("Tentative de connexion admin détectée");
+        setAdminLoginSuccess(true);
+      }
+      
       const { data, error } = await signInWithEmailOrUsername(
         credentials.emailOrUsername,
         credentials.password
@@ -62,19 +79,28 @@ const Login = () => {
         throw error;
       }
       
+      console.log("Connexion réussie, données:", data?.user);
+      
       // Connexion réussie
       toast({
         title: "Connexion réussie",
         description: "Vous êtes maintenant connecté.",
       });
       
-      // La redirection sera gérée par l'useEffect
+      // Si c'est un admin, forcer la redirection vers /admin
+      if (isAdminAttempt) {
+        console.log("Redirection immédiate vers /admin après connexion admin");
+        navigate('/admin');
+      }
+      // La redirection sera gérée par l'useEffect pour les autres cas
     } catch (error: any) {
+      console.error("Erreur de connexion:", error);
       toast({
         title: "Échec de la connexion",
         description: error.message || "Identifiants incorrects. Veuillez réessayer.",
         variant: "destructive",
       });
+      setAdminLoginSuccess(false);
     } finally {
       setIsLoading(false);
     }

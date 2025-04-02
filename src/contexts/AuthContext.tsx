@@ -45,6 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const setData = async () => {
       try {
+        console.log("Initialisation des données d'authentification");
         if (isLocalDev) {
           // Vérifier si l'utilisateur est connecté en local (localStorage)
           const storedSession = localStorage.getItem('supabase.auth.session');

@@ -35,6 +35,7 @@ export const signInWithEmailOrUsername = async (
     
     // Cas spécial pour le compte admin (username: admin, password: admin)
     if (emailOrUsername === 'admin' && password === 'admin') {
+      console.log("Connexion admin détectée, création d'une session admin simulée");
       const mockAdminUser = {
         id: '00000000-0000-0000-0000-000000000000',
         email: 'admin@example.com',
@@ -42,7 +43,7 @@ export const signInWithEmailOrUsername = async (
       };
       
       // Simuler une connexion réussie
-      return { 
+      const sessionData = { 
         data: { 
           user: mockAdminUser,
           session: { 
@@ -53,6 +54,15 @@ export const signInWithEmailOrUsername = async (
         }, 
         error: null 
       };
+      
+      // Enregistrer la session dans localStorage
+      localStorage.setItem('supabase.auth.session', JSON.stringify({ 
+        session: sessionData.data.session 
+      }));
+      
+      console.log("Session admin enregistrée dans localStorage:", sessionData);
+      
+      return sessionData;
     }
     
     // Pour les autres utilisateurs en mode développement
@@ -63,7 +73,7 @@ export const signInWithEmailOrUsername = async (
         user_metadata: { username: emailOrUsername.includes('@') ? emailOrUsername.split('@')[0] : emailOrUsername },
       };
       
-      return { 
+      const sessionData = { 
         data: { 
           user: mockUser,
           session: { 
@@ -74,6 +84,13 @@ export const signInWithEmailOrUsername = async (
         }, 
         error: null 
       };
+      
+      // Enregistrer la session dans localStorage
+      localStorage.setItem('supabase.auth.session', JSON.stringify({ 
+        session: sessionData.data.session 
+      }));
+      
+      return sessionData;
     }
     
     return { data: null, error: new Error('Identifiants invalides.') };
