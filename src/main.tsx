@@ -31,9 +31,11 @@ if (window.matchMedia('(max-width: 768px)').matches) {
   }, { passive: false });
   
   // Prévenir le comportement de défilement du navigateur sur iOS
-  document.addEventListener('touchmove', function(event) {
-    if (event.scale !== 1) {
+  document.addEventListener('touchmove', function(event: TouchEvent) {
+    // Instead of checking `event.scale`, check multi-touch or pinch-zoom
+    if (event.touches.length > 1) {
       event.preventDefault();
     }
   }, { passive: false });
 }
+
