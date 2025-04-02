@@ -1,32 +1,39 @@
 
-import * as React from "react"
-import * as ProgressPrimitive from "@radix-ui/react-progress"
-import { motion } from "framer-motion"
+import * as React from "react";
+import * as ProgressPrimitive from "@radix-ui/react-progress";
+import { motion } from "framer-motion";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root>
 >(({ className, value, ...props }, ref) => {
-  // S'assurer que la valeur est comprise entre 0 et 100
+  // Ensure value is between 0 and 100
   const safeValue = Math.min(Math.max(value || 0, 0), 100);
   
   return (
     <ProgressPrimitive.Root
       ref={ref}
       className={cn(
-        "relative h-6 w-full overflow-hidden rounded-full bg-secondary/30",
+        "relative h-6 w-full overflow-hidden rounded-full bg-gray-200/80",
         className
       )}
+      style={{ 
+        boxShadow: "inset 0 1px 2px rgba(0,0,0,0.1)",
+      }}
       {...props}
     >
       <ProgressPrimitive.Indicator
-        className="h-full w-full flex-1 bg-gradient-to-r from-blue-400 to-app-blue-medium transition-all relative overflow-hidden rounded-full"
-        style={{ transform: `translateX(-${100 - safeValue}%)` }}
+        className="h-full w-full flex-1 bg-gradient-to-r from-blue-400 to-app-blue-dark transition-all relative overflow-hidden rounded-full"
+        style={{ 
+          transform: `translateX(-${100 - safeValue}%)`,
+          boxShadow: "0 1px 2px rgba(0,120,255,0.3)",
+        }}
       >
+        {/* iOS-style shine effect */}
         <motion.div 
-          className="absolute inset-0 opacity-40"
+          className="absolute inset-0 opacity-50"
           style={{
             background: "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%)",
             width: "50%" 
@@ -40,36 +47,39 @@ const Progress = React.forwardRef<
             ease: "linear"
           }}
         />
-        <motion.div
-          className="absolute top-0 left-0 h-full w-full"
-          style={{
-            background: "linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.3) 50%, transparent 100%)",
-            backgroundSize: "200% 100%"
-          }}
-          animate={{
-            backgroundPosition: ["0% 0%", "200% 0%"]
-          }}
-          transition={{
-            duration: 2,
-            repeat: Infinity,
-            ease: "linear"
+        
+        {/* iOS-style subtle texture */}
+        <div 
+          className="absolute inset-0"
+          style={{ 
+            backgroundImage: "linear-gradient(0deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent)",
+            backgroundSize: "4px 4px",
+            opacity: 0.3
           }}
         />
+        
+        {/* iOS-style glow effect */}
         <motion.div
-          className="absolute top-0 right-0 bottom-0 w-4 bg-white/20"
+          className="absolute inset-0"
+          style={{
+            background: "radial-gradient(circle, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0) 70%)",
+            backgroundSize: "50% 100%",
+            backgroundPosition: "0% 0%",
+          }}
           animate={{
-            opacity: [0.2, 0.5, 0.2]
+            backgroundPosition: ["0% 0%", "100% 0%", "0% 0%"]
           }}
           transition={{
-            duration: 1.5,
+            duration: 3,
             repeat: Infinity,
             ease: "easeInOut"
           }}
         />
       </ProgressPrimitive.Indicator>
     </ProgressPrimitive.Root>
-  )
-})
-Progress.displayName = ProgressPrimitive.Root.displayName
+  );
+});
 
-export { Progress }
+Progress.displayName = ProgressPrimitive.Root.displayName;
+
+export { Progress };
