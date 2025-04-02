@@ -82,11 +82,13 @@ export function DiplomeProvider({ children }: { children: ReactNode }) {
         isOpen={isSelectorOpen}
         setIsOpen={setIsSelectorOpen}
       />
-      <SpecialitySelector
-        isOpen={showSpecialitySelector}
-        onClose={closeSpecialitySelector}
-      />
-      {children}
+      <UserPreferencesProvider>
+        <SpecialitySelector
+          isOpen={showSpecialitySelector}
+          onClose={closeSpecialitySelector}
+        />
+        {children}
+      </UserPreferencesProvider>
     </DiplomeContext.Provider>
   );
 }

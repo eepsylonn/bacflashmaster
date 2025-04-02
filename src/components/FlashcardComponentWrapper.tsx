@@ -6,8 +6,6 @@ import { Flashcard } from '@/types';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { motion } from 'framer-motion';
-import { BookOpen } from 'lucide-react';
 
 interface FlashcardComponentWrapperProps {
   flashcard: Flashcard;
@@ -63,78 +61,19 @@ const FlashcardComponentWrapper: React.FC<FlashcardComponentWrapperProps> = (pro
     loadText();
   }, [flashcard, isReadingComprehension]);
 
-  // Animation variants pour le conteneur principal
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: { 
-      opacity: 1,
-      transition: { 
-        when: "beforeChildren", 
-        staggerChildren: 0.2,
-        duration: 0.5 
-      }
-    }
-  };
-
-  // Animation variants pour les éléments enfants
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: { 
-      y: 0, 
-      opacity: 1,
-      transition: { duration: 0.5 }
-    }
-  };
-
   return (
-    <motion.div 
-      className={`space-y-4 ${isMobile ? 'px-2' : 'space-y-6'}`}
-      variants={containerVariants}
-      initial="hidden"
-      animate="visible"
-    >
+    <div className={`space-y-4 ${isMobile ? 'px-2' : 'space-y-6'}`}>
       {isReadingComprehension && (
         loading ? (
-          <motion.div variants={itemVariants}>
-            <Card className={`mb-4 p-4 ${isMobile ? 'max-h-[40vh] overflow-auto' : 'mb-6 p-6'}`}>
-              <div className="flex items-center justify-center mb-4">
-                <BookOpen className="h-6 w-6 text-app-blue-medium mr-2" />
-                <h3 className="text-lg font-medium text-app-blue-dark">Chargement du texte...</h3>
-              </div>
-              <Skeleton className={`${isMobile ? 'h-[200px]' : 'h-[300px]'} w-full`} />
-            </Card>
-          </motion.div>
+          <Card className={`mb-4 p-4 ${isMobile ? 'max-h-[40vh] overflow-auto' : 'mb-6 p-6'}`}>
+            <Skeleton className={`${isMobile ? 'h-[200px]' : 'h-[300px]'} w-full`} />
+          </Card>
         ) : (
-          <motion.div 
-            variants={itemVariants}
-            className="relative"
-          >
-            {text && (
-              <>
-                <motion.div 
-                  className="absolute -top-2 -right-2 z-10 bg-app-blue-light text-white rounded-full px-2 py-1 text-xs font-bold shadow-lg"
-                  animate={{ 
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 2, -2, 0],
-                  }}
-                  transition={{ 
-                    duration: 2, 
-                    repeat: Infinity,
-                    repeatDelay: 3
-                  }}
-                >
-                  Texte
-                </motion.div>
-                <ReadingTextDisplay text={text} />
-              </>
-            )}
-          </motion.div>
+          text && <ReadingTextDisplay text={text} />
         )
       )}
-      <motion.div variants={itemVariants}>
-        <FlashcardComponent {...props} />
-      </motion.div>
-    </motion.div>
+      <FlashcardComponent {...props} />
+    </div>
   );
 };
 
