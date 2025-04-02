@@ -1,4 +1,3 @@
-
 import { Flashcard, NiveauType, DiplomeType } from '@/types';
 import { philosophyFlashcards } from './philosophyFlashcards';
 import { historyPremiereFlashcards } from './historyPremiereFlashcards';
@@ -11,6 +10,20 @@ import { emcPremiereFlashcards } from './emcPremiereFlashcards';
 import { emcTerminaleFlashcards } from './emcTerminaleFlashcards';
 import { anglaisPremiereFlashcards } from './anglaisPremiereFlashcards';
 import { anglaisTerminaleFlashcards } from './anglaisTerminaleFlashcards';
+
+// Nouvelles importations pour les flashcards TOEIC par matière et niveau
+import { readingFacileToeicFlashcards } from './ReadingFacileToeicFlashcards';
+import { readingIntermediaireToeicFlashcards } from './ReadingIntermediaireToeicFlashcards';
+import { readingAvanceToeicFlashcards } from './ReadingAvanceToeicFlashcards';
+import { listeningFacileToeicFlashcards } from './ListeningFacileToeicFlashcards';
+import { listeningIntermediaireToeicFlashcards } from './ListeningIntermediaireToeicFlashcards';
+import { listeningAvanceToeicFlashcards } from './ListeningAvanceToeicFlashcards';
+import { grammaireFacileToeicFlashcards } from './GrammaireFacileToeicFlashcards';
+import { grammaireIntermediaireToeicFlashcards } from './GrammaireIntermediaireToeicFlashcards';
+import { grammaireAvanceToeicFlashcards } from './GrammaireAvanceToeicFlashcards';
+import { vocabulaireFacileToeicFlashcards } from './VocabulaireFacileToeicFlashcards';
+import { vocabulaireIntermediaireToeicFlashcards } from './VocabulaireIntermediaireToeicFlashcards';
+import { vocabulaireAvanceToeicFlashcards } from './VocabulaireAvanceToeicFlashcards';
 
 // Mock flashcard data for the base subjects
 const flashcardsData: Flashcard[] = [
@@ -350,6 +363,31 @@ const flashcardsData: Flashcard[] = [
   }
 ];
 
+// Nouvelle combinaison pour les flashcards TOEIC par matière
+const toeicReadingFlashcards = [
+  ...readingFacileToeicFlashcards,
+  ...readingIntermediaireToeicFlashcards,
+  ...readingAvanceToeicFlashcards
+];
+
+const toeicListeningFlashcards = [
+  ...listeningFacileToeicFlashcards,
+  ...listeningIntermediaireToeicFlashcards,
+  ...listeningAvanceToeicFlashcards
+];
+
+const toeicGrammarFlashcards = [
+  ...grammaireFacileToeicFlashcards,
+  ...grammaireIntermediaireToeicFlashcards,
+  ...grammaireAvanceToeicFlashcards
+];
+
+const toeicVocabularyFlashcards = [
+  ...vocabulaireFacileToeicFlashcards,
+  ...vocabulaireIntermediaireToeicFlashcards,
+  ...vocabulaireAvanceToeicFlashcards
+];
+
 // Combine the history flashcards from both levels
 const historyFlashcards = [
     ...historyPremiereFlashcards,
@@ -388,7 +426,11 @@ const allFlashcards = [
     ...physiqueChimieFlashcards,
     ...geographieFlashcards,
     ...emcFlashcards,
-    ...anglaisFlashcards
+    ...anglaisFlashcards,
+    ...toeicReadingFlashcards,
+    ...toeicListeningFlashcards,
+    ...toeicGrammarFlashcards,
+    ...toeicVocabularyFlashcards
 ];
 
 // Function to get flashcards based on criteria - corrected for strict filtering by niveau

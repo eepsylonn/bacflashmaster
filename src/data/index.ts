@@ -13,6 +13,20 @@ import { emcTerminaleFlashcards } from './emcTerminaleFlashcards';
 import { anglaisPremiereFlashcards } from './anglaisPremiereFlashcards';
 import { anglaisTerminaleFlashcards } from './anglaisTerminaleFlashcards';
 
+// Importations des flashcards TOEIC par matière et niveau
+import { readingFacileToeicFlashcards } from './ReadingFacileToeicFlashcards';
+import { readingIntermediaireToeicFlashcards } from './ReadingIntermediaireToeicFlashcards';
+import { readingAvanceToeicFlashcards } from './ReadingAvanceToeicFlashcards';
+import { listeningFacileToeicFlashcards } from './ListeningFacileToeicFlashcards';
+import { listeningIntermediaireToeicFlashcards } from './ListeningIntermediaireToeicFlashcards';
+import { listeningAvanceToeicFlashcards } from './ListeningAvanceToeicFlashcards';
+import { grammaireFacileToeicFlashcards } from './GrammaireFacileToeicFlashcards';
+import { grammaireIntermediaireToeicFlashcards } from './GrammaireIntermediaireToeicFlashcards';
+import { grammaireAvanceToeicFlashcards } from './GrammaireAvanceToeicFlashcards';
+import { vocabulaireFacileToeicFlashcards } from './VocabulaireFacileToeicFlashcards';
+import { vocabulaireIntermediaireToeicFlashcards } from './VocabulaireIntermediaireToeicFlashcards';
+import { vocabulaireAvanceToeicFlashcards } from './VocabulaireAvanceToeicFlashcards';
+
 // Export all flashcards for use in other files
 export { getFlashcards } from './flashcards';
 
@@ -31,6 +45,18 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...emcPremiereFlashcards,
     ...emcTerminaleFlashcards,
     ...anglaisPremiereFlashcards,
-    ...anglaisTerminaleFlashcards
+    ...anglaisTerminaleFlashcards,
+    ...readingFacileToeicFlashcards,
+    ...readingIntermediaireToeicFlashcards,
+    ...readingAvanceToeicFlashcards,
+    ...listeningFacileToeicFlashcards,
+    ...listeningIntermediaireToeicFlashcards,
+    ...listeningAvanceToeicFlashcards,
+    ...grammaireFacileToeicFlashcards,
+    ...grammaireIntermediaireToeicFlashcards,
+    ...grammaireAvanceToeicFlashcards,
+    ...vocabulaireFacileToeicFlashcards,
+    ...vocabulaireIntermediaireToeicFlashcards,
+    ...vocabulaireAvanceToeicFlashcards
   ];
 };
