@@ -2,11 +2,16 @@
 {
   "name": "bacflashmaster",
   "short_name": "Flashcards",
+  "description": "Application d'apprentissage par flashcards pour préparer le BAC, TOEIC et TAGE MAGE",
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
   "theme_color": "#3B82F6",
   "orientation": "portrait",
+  "categories": ["education", "learning", "flashcards"],
+  "lang": "fr",
+  "dir": "ltr",
+  "prefer_related_applications": false,
   "icons": [
     {
       "src": "/icon-192x192.png",
@@ -19,6 +24,41 @@
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any maskable"
+    },
+    {
+      "src": "/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    }
+  ],
+  "screenshots": [
+    {
+      "src": "/screenshot-phone.png",
+      "sizes": "750x1334",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Screenshot de l'application sur mobile"
+    },
+    {
+      "src": "/screenshot-desktop.png",
+      "sizes": "1280x800",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Screenshot de l'application sur ordinateur"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Examen",
+      "url": "/examen",
+      "description": "Commencer un examen",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Entraînement",
+      "url": "/training",
+      "description": "Mode entraînement",
+      "icons": [{ "src": "/icon-192x192.png", "sizes": "192x192" }]
     }
   ]
 }
