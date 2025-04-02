@@ -95,60 +95,12 @@
 
   body {
     @apply bg-background text-foreground;
-    background-image: 
-      radial-gradient(circle at top right, rgba(120, 170, 255, 0.1) 0%, transparent 50%),
-      radial-gradient(circle at bottom left, rgba(25, 75, 180, 0.07) 0%, transparent 50%);
-  }
-  
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
-    height: 8px;
-  }
-  
-  ::-webkit-scrollbar-track {
-    background: rgba(241, 245, 249, 0.8);
-    border-radius: 12px;
-  }
-  
-  ::-webkit-scrollbar-thumb {
-    background: linear-gradient(to bottom, rgba(120, 170, 255, 0.6), rgba(25, 75, 180, 0.6));
-    border-radius: 12px;
-    border: 2px solid rgba(241, 245, 249, 0.8);
-  }
-  
-  ::-webkit-scrollbar-thumb:hover {
-    background: linear-gradient(to bottom, rgba(120, 170, 255, 0.8), rgba(25, 75, 180, 0.8));
   }
 }
 
 @layer utilities {
   .text-gradient-title {
     @apply bg-gradient-to-r from-yellow-300 via-yellow-200 to-yellow-300 inline-block text-transparent bg-clip-text;
-  }
-  
-  .text-gradient-blue {
-    @apply bg-gradient-to-r from-app-blue-light to-app-blue-dark inline-block text-transparent bg-clip-text;
-  }
-  
-  .bg-gradient-blue {
-    @apply bg-gradient-to-r from-app-blue-light to-app-blue-dark;
-  }
-  
-  .bg-glass {
-    @apply bg-white/70 backdrop-blur-md border border-white/80 shadow-lg;
-  }
-  
-  .card-highlight {
-    @apply border-2 border-app-blue-light/30 shadow-lg transition-all hover:shadow-app-blue-light/20 hover:border-app-blue-light/50;
-  }
-  
-  .button-bounce {
-    @apply transition-transform hover:scale-105 active:scale-95;
-  }
-  
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-app-blue-medium/50 focus:ring-offset-2;
   }
   
   .delay-75 {
@@ -186,38 +138,6 @@
   }
 }
 
-/* Animation definitions */
-@keyframes float {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-10px); }
-}
-
-@keyframes pulse-shadow {
-  0%, 100% { box-shadow: 0 0 15px 0 rgba(120, 170, 255, 0.3); }
-  50% { box-shadow: 0 0 25px 5px rgba(120, 170, 255, 0.5); }
-}
-
-@keyframes gradient-shift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
-}
-
-/* Classes animation */
-.animate-float {
-  animation: float 4s ease-in-out infinite;
-}
-
-.animate-pulse-shadow {
-  animation: pulse-shadow 3s ease-in-out infinite;
-}
-
-.animate-gradient {
-  background-size: 200% 200%;
-  animation: gradient-shift 5s ease infinite;
-}
-
-/* Flashcard styles */
 .flashcard {
   perspective: 1000px;
   transform-style: preserve-3d;
@@ -240,50 +160,4 @@
 
 .flashcard-back {
   transform: rotateY(180deg);
-}
-
-/* Glass card effect */
-.glass-card {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-}
-
-/* Hover effects for buttons */
-.hover-lift {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.hover-lift:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
-}
-
-/* Progress bar animation */
-.progress-animation {
-  position: relative;
-  overflow: hidden;
-}
-
-.progress-animation::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
-  animation: progress-shine 2s infinite;
-}
-
-@keyframes progress-shine {
-  0% { transform: translateX(-100%); }
-  60%, 100% { transform: translateX(100%); }
 }
