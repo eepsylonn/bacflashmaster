@@ -43,15 +43,17 @@ export interface UserPreferences {
   preferredNiveau?: NiveauType;
 }
 
-// Add the BacSpecialite type that's referenced in some components
+// Updated BacSpecialite type to match the actual values used in components
 export type BacSpecialite = 
-  | 'mathematiques'
-  | 'physique-chimie'
-  | 'svt'
-  | 'ses'
-  | 'hggsp'
-  | 'llce'
-  | 'humanites'
-  | 'arts'
-  | 'nsi'
-  | 'litterature-hda';
+  | 'Mathématiques'
+  | 'Physique-Chimie'
+  | 'SVT'
+  | 'SES'
+  | 'HGGSP'
+  | 'Humanités-Littérature-Philosophie'
+  | 'Arts'
+  | 'NSI'
+  | 'Mathématiques expertes'
+  | 'Mathématiques complémentaires'
+  | 'LVC'
+  | 'Latin/Grec';
