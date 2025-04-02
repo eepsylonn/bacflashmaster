@@ -16,18 +16,17 @@ const Progress = React.forwardRef<
     <ProgressPrimitive.Root
       ref={ref}
       className={cn(
-        "relative h-6 w-full overflow-hidden rounded-full bg-gradient-to-r from-blue-50 to-indigo-50 shadow-inner",
+        "relative h-6 w-full overflow-hidden rounded-full bg-secondary/30",
         className
       )}
       {...props}
     >
       <ProgressPrimitive.Indicator
-        className="h-full w-full flex-1 bg-gradient-to-r from-app-blue-light via-app-blue-medium to-app-blue-dark transition-all relative overflow-hidden rounded-full"
+        className="h-full w-full flex-1 bg-gradient-to-r from-blue-400 to-app-blue-medium transition-all relative overflow-hidden rounded-full"
         style={{ transform: `translateX(-${100 - safeValue}%)` }}
       >
-        {/* Animation d'éclat principal */}
         <motion.div 
-          className="absolute inset-0 opacity-50"
+          className="absolute inset-0 opacity-40"
           style={{
             background: "linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.8) 50%, rgba(255,255,255,0) 100%)",
             width: "50%" 
@@ -41,8 +40,6 @@ const Progress = React.forwardRef<
             ease: "linear"
           }}
         />
-        
-        {/* Animation d'éclat secondaire */}
         <motion.div
           className="absolute top-0 left-0 h-full w-full"
           style={{
@@ -58,34 +55,17 @@ const Progress = React.forwardRef<
             ease: "linear"
           }}
         />
-        
-        {/* Petites bulles */}
-        <div className="absolute inset-0 overflow-hidden">
-          {[...Array(5)].map((_, i) => (
-            <motion.div
-              key={i}
-              className="absolute rounded-full bg-white/30"
-              style={{
-                width: 4 + Math.random() * 6,
-                height: 4 + Math.random() * 6,
-                left: `${Math.random() * 100}%`,
-                bottom: 0,
-              }}
-              animate={{
-                y: [0, -24 * Math.random()],
-                opacity: [0, 0.7, 0],
-              }}
-              transition={{
-                duration: 1 + Math.random(),
-                repeat: Infinity,
-                repeatDelay: Math.random() * 2,
-              }}
-            />
-          ))}
-        </div>
-        
-        {/* Reflet en haut */}
-        <div className="absolute top-0 left-0 right-0 h-1 bg-white/30" />
+        <motion.div
+          className="absolute top-0 right-0 bottom-0 w-4 bg-white/20"
+          animate={{
+            opacity: [0.2, 0.5, 0.2]
+          }}
+          transition={{
+            duration: 1.5,
+            repeat: Infinity,
+            ease: "easeInOut"
+          }}
+        />
       </ProgressPrimitive.Indicator>
     </ProgressPrimitive.Root>
   )
