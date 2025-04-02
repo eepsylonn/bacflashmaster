@@ -174,7 +174,7 @@ const Header = () => {
 
             {/* Boutons utilisateur - déplacés en haut à droite de manière absolue */}
             <div className="absolute top-5 right-4 md:right-8 flex items-center gap-2">
-              {isAdmin && (
+              {isAdmin ? (
                 <Button 
                   variant="ghost"
                   className="text-white hover:bg-white/20"
@@ -183,9 +183,18 @@ const Header = () => {
                   <Bell className="h-5 w-5 mr-2" />
                   Panel Admin
                 </Button>
+              ) : user ? null : (
+                <Button 
+                  variant="ghost"
+                  className="text-white hover:bg-white/20"
+                  onClick={() => navigate('/login')}
+                >
+                  <LogIn className="h-5 w-5 mr-2" />
+                  {isMobile ? '' : 'Se connecter'}
+                </Button>
               )}
               
-              {user ? (
+              {user && (
                 <DropdownMenu>
                   <DropdownMenuTrigger asChild>
                     <Button variant="ghost" className="text-white hover:bg-white/20">
@@ -213,15 +222,6 @@ const Header = () => {
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
-              ) : (
-                <Button 
-                  variant="ghost"
-                  className="text-white hover:bg-white/20"
-                  onClick={() => navigate('/login')}
-                >
-                  <LogIn className="h-5 w-5 mr-2" />
-                  {isMobile ? '' : 'Se connecter'}
-                </Button>
               )}
             </div>
           </div>
