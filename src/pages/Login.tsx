@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase, signInWithEmailOrUsername } from '@/lib/supabase';
 import Header from '@/components/Header';
@@ -16,7 +16,7 @@ import { useAuth } from '@/contexts/AuthContext';
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user } = useAuth();
+  const { user, isAdmin } = useAuth();
   const [view, setView] = useState<'sign_in' | 'sign_up'>('sign_in');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -31,11 +31,19 @@ const Login = () => {
   
   const [showPassword, setShowPassword] = useState(false);
   
-  // Si l'utilisateur est déjà connecté, rediriger vers la page d'accueil
-  if (user) {
-    navigate('/');
-    return null;
-  }
+  // Si l'utilisateur est déjà connecté, rediriger vers la page appropriée
+  useEffect(() => {
+    if (user) {
+      // Rediriger l'administrateur vers le panneau d'administration
+      if (isAdmin) {
+        console.log("Redirection automatique de l'admin vers le panneau d'administration");
+        navigate('/admin');
+      } else {
+        // Les utilisateurs normaux vont à la page d'accueil
+        navigate('/');
+      }
+    }
+  }, [user, isAdmin, navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -65,7 +73,7 @@ const Login = () => {
         description: "Vous êtes maintenant connecté.",
       });
       
-      navigate('/');
+      // La redirection se fait dans l'useEffect
     } catch (error: any) {
       console.error("Erreur de connexion:", error);
       toast({

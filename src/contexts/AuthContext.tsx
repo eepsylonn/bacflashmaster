@@ -64,7 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               console.log("Vérification admin:", isAdminAccount, sessionData.session.user);
               
               if (isAdminAccount) {
-                console.log("Utilisateur admin détecté!");
+                console.log("Utilisateur admin détecté! Active les fonctionnalités admin.");
                 const adminProfile = {
                   id: sessionData.session.user.id,
                   username: 'admin',
