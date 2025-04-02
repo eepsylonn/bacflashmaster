@@ -45,6 +45,11 @@ const Training = () => {
     }
   }, [location.search, setMatiere]);
 
+  // Afficher les détails de la configuration actuelle pour le débogage
+  useEffect(() => {
+    console.log(`Configuration d'entraînement: matière=${matiere}, niveau=${niveau}, nombreQuestions=${nombreQuestions}`);
+  }, [matiere, niveau, nombreQuestions]);
+
   // Calculer le taux d'amélioration pour afficher dans la page de résultat
   const improvementRate = currentResult 
     ? calculateImprovementRate(currentResult.pourcentage, currentResult.matiere)

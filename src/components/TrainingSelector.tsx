@@ -169,7 +169,16 @@ const TrainingSelector = ({
     if (matiere && !matieres.includes(matiere)) {
       setMatiere(matieres[0]);
     }
-  }, [diplome, matiere, matieres, setMatiere]);
+    
+    if (!niveau && defaultNiveau) {
+      console.log(`Aucun niveau sélectionné, utilisation du niveau par défaut: ${defaultNiveau}`);
+      if (defaultNiveau === 'both') {
+        setNiveau(undefined);
+      } else {
+        setNiveau(defaultNiveau as NiveauType);
+      }
+    }
+  }, [diplome, matiere, matieres, setMatiere, niveau, defaultNiveau, setNiveau]);
 
   const showSpecialitiesMessage = diplome === 'baccalaureat' && selectedSpecialities.length === 0;
   
@@ -179,8 +188,10 @@ const TrainingSelector = ({
     if (diplome === 'baccalaureat') {
       if (selectedMatiere === 'Français') {
         setNiveau('premiere');
+        console.log('Matière Français sélectionnée: niveau fixé à première');
       } else if (selectedMatiere === 'Philosophie') {
         setNiveau('terminale');
+        console.log('Matière Philosophie sélectionnée: niveau fixé à terminale');
       }
     }
   };
@@ -194,8 +205,10 @@ const TrainingSelector = ({
     
     if (value === "both") {
       setNiveau(undefined);
+      console.log('Niveau "Les deux" sélectionné: niveau défini comme undefined');
     } else {
       setNiveau(value as NiveauType);
+      console.log(`Niveau spécifique sélectionné: ${value}`);
     }
   };
   

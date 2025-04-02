@@ -53,9 +53,9 @@ export const useFlashcards = () => {
       return;
     }
 
-    console.log(`Démarrage de l'entraînement avec niveau=${niveau}, matière=${matiere}`);
+    console.log(`Démarrage de l'entraînement: niveau=${niveau}, matière=${matiere}, diplôme=${diplome}`);
     
-    // Nous nous assurons que le niveau est correctement passé à getFlashcards
+    // Nous passons explicitement le niveau à getFlashcards pour un filtrage correct
     const questions = getFlashcards(matiere, niveau, nombreQuestions, diplome);
     
     if (questions.length === 0) {
@@ -69,10 +69,24 @@ export const useFlashcards = () => {
 
     console.log(`Questions récupérées: ${questions.length}`);
     
-    // Log pour vérifier les niveaux des questions récupérées
-    const premiereCount = questions.filter(q => q.niveau === 'premiere').length;
-    const terminaleCount = questions.filter(q => q.niveau === 'terminale').length;
-    console.log(`Questions de première: ${premiereCount}, Questions de terminale: ${terminaleCount}`);
+    // Vérification des niveaux des questions récupérées pour le débogage
+    if (niveau === 'premiere' || niveau === 'terminale') {
+      const niveauCount = questions.filter(q => q.niveau === niveau).length;
+      console.log(`Questions de niveau ${niveau}: ${niveauCount} (doit être égal au total: ${questions.length})`);
+      
+      // Vérification supplémentaire pour s'assurer qu'il n'y a pas de questions du mauvais niveau
+      const autreNiveau = niveau === 'premiere' ? 'terminale' : 'premiere';
+      const autreNiveauCount = questions.filter(q => q.niveau === autreNiveau).length;
+      console.log(`Questions de niveau ${autreNiveau}: ${autreNiveauCount} (doit être 0)`);
+      
+      if (autreNiveauCount > 0) {
+        console.error(`ERREUR: ${autreNiveauCount} questions du niveau ${autreNiveau} trouvées alors que seul le niveau ${niveau} est demandé`);
+      }
+    } else if (niveau === 'both' || niveau === undefined) {
+      const premiereCount = questions.filter(q => q.niveau === 'premiere').length;
+      const terminaleCount = questions.filter(q => q.niveau === 'terminale').length;
+      console.log(`Avec niveau=${niveau}, mélange des deux niveaux: première=${premiereCount}, terminale=${terminaleCount}`);
+    }
 
     setCurrentQuestions(questions);
     setAnsweredQuestions([]);
