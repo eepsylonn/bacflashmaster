@@ -1,4 +1,5 @@
 
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import StatsChart from '@/components/StatsChart';
 import StatsSummary from '@/components/StatsSummary';
@@ -6,8 +7,13 @@ import { useFlashcards } from '@/hooks/useFlashcards';
 import { useStats } from '@/hooks/useStats';
 import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
+import { useAuth } from '@/contexts/AuthContext';
+import { Lock } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 
 const Statistics = () => {
+  const { isSubscribed } = useAuth();
+  const navigate = useNavigate();
   const { trainingHistory } = useFlashcards();
   const { 
     selectedMatiere, 
@@ -18,6 +24,44 @@ const Statistics = () => {
     improvementRate, 
     weakestSubject 
   } = useStats(trainingHistory);
+
+  // Si l'utilisateur n'est pas abonné, afficher une page de blocage
+  if (!isSubscribed) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-indigo-50">
+        <Header />
+        
+        <main className="flex-grow flex items-center justify-center">
+          <div className="max-w-md w-full p-8 bg-white rounded-xl shadow-lg text-center">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="flex justify-center mb-6">
+                <Lock className="h-16 w-16 text-app-blue-dark" />
+              </div>
+              
+              <h2 className="text-2xl font-bold mb-4 text-app-blue-dark">Statistiques Verrouillées</h2>
+              <p className="text-gray-600 mb-6">
+                Les statistiques détaillées sont disponibles uniquement pour les utilisateurs premium. 
+                Abonnez-vous pour accéder à des analyses complètes de vos performances.
+              </p>
+              
+              <div className="flex justify-center">
+                <Button 
+                  onClick={() => navigate('/subscription')}
+                  className="bg-gradient-to-r from-app-blue-medium to-app-blue-dark"
+                >
+                  Voir les offres d'abonnement
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        </main>
+      </div>
+    );
+  }
   
   return (
     <div className="min-h-screen flex flex-col">

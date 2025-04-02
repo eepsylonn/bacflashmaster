@@ -6,6 +6,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { DiplomeProvider } from "@/contexts/DiplomeContext";
 import { UserPreferencesProvider } from "@/contexts/UserPreferencesContext";
+import { AuthProvider } from "@/contexts/AuthContext";
 import Index from "./pages/Index";
 import Training from "./pages/Training";
 import Exam from "./pages/Exam";
@@ -15,6 +16,9 @@ import Statistics from "./pages/Statistics";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
 import Methodology from "./pages/Methodology";
+import Login from "./pages/Login";
+import Subscription from "./pages/Subscription";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -23,21 +27,26 @@ const App = () => (
     <TooltipProvider>
       <UserPreferencesProvider>
         <DiplomeProvider>
-          <Toaster />
-          <Sonner />
-          <BrowserRouter>
-            <Routes>
-              <Route path="/" element={<Index />} />
-              <Route path="/methodologie" element={<Methodology />} />
-              <Route path="/entrainement" element={<Training />} />
-              <Route path="/examen" element={<Exam />} />
-              <Route path="/historique" element={<History />} />
-              <Route path="/historique/:id" element={<HistoryDetail />} />
-              <Route path="/statistiques" element={<Statistics />} />
-              <Route path="/reglages" element={<Settings />} />
-              <Route path="*" element={<NotFound />} />
-            </Routes>
-          </BrowserRouter>
+          <AuthProvider>
+            <Toaster />
+            <Sonner />
+            <BrowserRouter>
+              <Routes>
+                <Route path="/" element={<Index />} />
+                <Route path="/methodologie" element={<Methodology />} />
+                <Route path="/entrainement" element={<Training />} />
+                <Route path="/examen" element={<Exam />} />
+                <Route path="/historique" element={<History />} />
+                <Route path="/historique/:id" element={<HistoryDetail />} />
+                <Route path="/statistiques" element={<Statistics />} />
+                <Route path="/reglages" element={<Settings />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/subscription" element={<Subscription />} />
+                <Route path="/admin" element={<Admin />} />
+                <Route path="*" element={<NotFound />} />
+              </Routes>
+            </BrowserRouter>
+          </AuthProvider>
         </DiplomeProvider>
       </UserPreferencesProvider>
     </TooltipProvider>

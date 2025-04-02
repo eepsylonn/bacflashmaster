@@ -1,4 +1,5 @@
 
+import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import FlashcardComponent from '@/components/FlashcardComponent';
 import TrainingProgress from '@/components/TrainingProgress';
@@ -9,6 +10,8 @@ import { useFlashcards } from '@/hooks/useFlashcards';
 import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
 import { useDiplome } from '@/contexts/DiplomeContext';
+import { useAuth } from '@/contexts/AuthContext';
+import { Lock } from 'lucide-react';
 
 const Exam = () => {
   const {
@@ -31,6 +34,8 @@ const Exam = () => {
   } = useFlashcards();
   
   const { diplome } = useDiplome();
+  const { isSubscribed } = useAuth();
+  const navigate = useNavigate();
   
   // Textes spécifiques selon le diplôme
   const getExamTitle = () => {
@@ -61,6 +66,44 @@ const Exam = () => {
 
   // Déterminer si c'est la dernière question
   const isLastQuestion = currentIndex === currentQuestions.length - 1;
+
+  // Si l'utilisateur n'est pas abonné, afficher une page de blocage
+  if (!isSubscribed) {
+    return (
+      <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-indigo-50">
+        <Header />
+        
+        <main className="flex-grow flex items-center justify-center">
+          <div className="max-w-md w-full p-8 bg-white rounded-xl shadow-lg text-center">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.5 }}
+            >
+              <div className="flex justify-center mb-6">
+                <Lock className="h-16 w-16 text-app-blue-dark" />
+              </div>
+              
+              <h2 className="text-2xl font-bold mb-4 text-app-blue-dark">Mode Examen Verrouillé</h2>
+              <p className="text-gray-600 mb-6">
+                Le mode examen est disponible uniquement pour les utilisateurs premium. 
+                Abonnez-vous pour accéder à des simulations d'examens complètes.
+              </p>
+              
+              <div className="flex justify-center">
+                <Button 
+                  onClick={() => navigate('/subscription')}
+                  className="bg-gradient-to-r from-app-blue-medium to-app-blue-dark"
+                >
+                  Voir les offres d'abonnement
+                </Button>
+              </div>
+            </motion.div>
+          </div>
+        </main>
+      </div>
+    );
+  }
 
   if (showResult && currentResult) {
     return (

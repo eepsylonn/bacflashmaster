@@ -5,7 +5,17 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
 import { useIsMobile } from '@/hooks/use-mobile';
-import { Settings } from 'lucide-react';
+import { Settings, LogIn, LogOut, Lock, User, Bell } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Button } from '@/components/ui/button';
 
 const Header = () => {
   const location = useLocation();
@@ -13,14 +23,15 @@ const Header = () => {
   const [activeTab, setActiveTab] = useState('/');
   const tabsContainerRef = useRef<HTMLDivElement>(null);
   const isMobile = useIsMobile();
+  const { user, isAdmin, isSubscribed, signOut } = useAuth();
   
   const tabs = [
-    { value: '/', label: 'Accueil' },
-    { value: '/methodologie', label: 'Fiches' },
-    { value: '/entrainement', label: 'Entraînement' },
-    { value: '/examen', label: 'Examen' },
-    { value: '/historique', label: 'Historique' },
-    { value: '/statistiques', label: 'Statistiques' },
+    { value: '/', label: 'Accueil', locked: false },
+    { value: '/methodologie', label: 'Fiches', locked: !isSubscribed },
+    { value: '/entrainement', label: 'Entraînement', locked: false },
+    { value: '/examen', label: 'Examen', locked: !isSubscribed },
+    { value: '/historique', label: 'Historique', locked: false },
+    { value: '/statistiques', label: 'Statistiques', locked: !isSubscribed },
   ];
   
   // Effet pour définir l'onglet actif en fonction de la route
@@ -42,6 +53,20 @@ const Header = () => {
       tabsContainerRef.current.scrollLeft = scrollPosition;
     }
   }, [location.pathname]);
+
+  const handleTabClick = (tab: typeof tabs[0]) => {
+    if (tab.locked) {
+      // Rediriger vers la page d'abonnement si l'onglet est verrouillé
+      navigate('/subscription');
+    } else {
+      navigate(tab.value);
+    }
+  };
+
+  const handleLogout = async () => {
+    await signOut();
+    navigate('/');
+  };
   
   return (
     <header className="relative">
@@ -49,7 +74,7 @@ const Header = () => {
       <div className="bg-gradient-to-r from-app-blue-dark to-indigo-800 text-white py-5 shadow-lg">
         <div className="container px-4 mx-auto">
           {/* Logo et titre */}
-          <div className="flex justify-center items-center mb-5">
+          <div className="flex justify-between items-center mb-5">
             <Link to="/" className="text-3xl font-bold flex items-center gap-2 group">
               <motion.div
                 initial={{ rotate: 0 }}
@@ -142,6 +167,59 @@ const Header = () => {
                 </motion.span>
               </span>
             </Link>
+
+            {/* Boutons utilisateur */}
+            <div className="flex items-center gap-2">
+              {isAdmin && (
+                <Button 
+                  variant="ghost"
+                  className="text-white hover:bg-white/20"
+                  onClick={() => navigate('/admin')}
+                >
+                  <Bell className="h-5 w-5 mr-2" />
+                  Panel Admin
+                </Button>
+              )}
+              
+              {user ? (
+                <DropdownMenu>
+                  <DropdownMenuTrigger asChild>
+                    <Button variant="ghost" className="text-white hover:bg-white/20">
+                      <User className="h-5 w-5 mr-2" />
+                      {isMobile ? '' : user.email?.split('@')[0] || 'Mon Compte'}
+                    </Button>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent align="end" className="w-56">
+                    <DropdownMenuLabel>Mon Compte</DropdownMenuLabel>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate('/subscription')}>
+                      {isSubscribed ? (
+                        <>Abonnement (Actif)</>
+                      ) : (
+                        <>S'abonner</>
+                      )}
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => navigate('/reglages')}>
+                      Réglages
+                    </DropdownMenuItem>
+                    <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={handleLogout}>
+                      <LogOut className="h-4 w-4 mr-2" />
+                      Déconnexion
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              ) : (
+                <Button 
+                  variant="ghost"
+                  className="text-white hover:bg-white/20"
+                  onClick={() => navigate('/login')}
+                >
+                  <LogIn className="h-5 w-5 mr-2" />
+                  {isMobile ? '' : 'Se connecter'}
+                </Button>
+              )}
+            </div>
           </div>
           
           {/* Onglets avec défilement horizontal */}
@@ -159,13 +237,16 @@ const Header = () => {
                 <button
                   key={tab.value}
                   data-path={tab.value}
-                  onClick={() => navigate(tab.value)}
+                  onClick={() => handleTabClick(tab)}
                   className={`relative px-3 py-2 rounded-md text-sm transition-all ${isMobile ? 'min-w-[80px]' : 'min-w-[100px]'} whitespace-nowrap
                     ${activeTab === tab.value 
                       ? 'text-white font-medium z-20' 
                       : 'text-white/70 hover:text-white hover:bg-white/10 z-10'}`}
                 >
-                  <span>{tab.label}</span>
+                  <div className="flex items-center justify-center">
+                    {tab.locked && <Lock className="h-3 w-3 mr-1" />}
+                    <span>{tab.label}</span>
+                  </div>
                   
                   {/* Indicateur d'onglet actif pour chaque onglet */}
                   {activeTab === tab.value && (
