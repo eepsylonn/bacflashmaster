@@ -26,18 +26,16 @@ export interface AnsweredQuestion {
 }
 
 export interface TrainingResult {
-  id?: string;
-  date: string; // Changed from Date to string to fix TS error
+  id: string;
+  date: string;
   matiere: string;
-  niveau: string;
-  diplome: string;
-  totalQuestions: number;
-  correctAnswers: number;
+  niveau: NiveauType;
+  nombreQuestions: number;
+  score: number;
   pourcentage: number;
-  nombreQuestions?: number;
-  score?: number;
-  note?: number;
-  questions?: AnsweredQuestion[]; // Changed from Flashcard[] to AnsweredQuestion[]
+  note: number;
+  questions: AnsweredQuestion[];
+  diplome: DiplomeType;
 }
 
 export interface UserPreferences {

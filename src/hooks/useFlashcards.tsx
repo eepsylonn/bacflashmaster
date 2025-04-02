@@ -1,278 +1,294 @@
-import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Flashcard, TrainingResult, AnsweredQuestion } from '@/types';
-import { useLocalStorage } from './useLocalStorage';
-import { 
-  filterFlashcards, 
-  getStandardizedMatiere, 
-  getStandardizedNiveau,
-  getStandardizedDiplome
-} from '@/utils/flashcardUtils';
-import { shuffleArray } from '@/utils/arrayUtils';
-import { allFlashcards } from '@/data/flashcards';
-import { v4 as uuidv4 } from 'uuid';
+import { useState, useEffect } from 'react';
+import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, NiveauType, DiplomeType } from '@/types';
+import { getFlashcards } from '@/data/flashcards';
+import { useToast } from '@/components/ui/use-toast';
+import { useNavigate } from 'react-router-dom';
+import { useDiplome } from '@/contexts/DiplomeContext';
 
-export function useFlashcards() {
-  // States for configuration
+// Cache for loaded text files
+const textCache: Record<string, string> = {};
+
+export const useFlashcards = () => {
   const [matiere, setMatiere] = useState<string | undefined>(undefined);
-  const [niveau, setNiveau] = useState<string | undefined>(undefined);
-  const [nombreQuestions, setNombreQuestions] = useState<number>(10);
-  
-  // States for training
-  const [training, setTraining] = useState(false);
+  const [niveau, setNiveau] = useState<NiveauType | undefined>(undefined);
+  const [nombreQuestions, setNombreQuestions] = useState<NombreQuestions>(20);
   const [currentQuestions, setCurrentQuestions] = useState<Flashcard[]>([]);
+  const [answeredQuestions, setAnsweredQuestions] = useState<AnsweredQuestion[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const [score, setScore] = useState(0);
   const [isFlipped, setIsFlipped] = useState(false);
-  const [showResult, setShowResult] = useState(false);
+  const [score, setScore] = useState(0);
+  const [training, setTraining] = useState<boolean>(false);
+  const [examMode, setExamMode] = useState<boolean>(false);
+  const [trainingHistory, setTrainingHistory] = useState<TrainingResult[]>([]);
+  const [showResult, setShowResult] = useState<boolean>(false);
   const [currentResult, setCurrentResult] = useState<TrainingResult | null>(null);
-  
-  // Local storage for past results
-  const [pastResults, setPastResults] = useLocalStorage<TrainingResult[]>('pastResults', []);
+  const [loadingText, setLoadingText] = useState<boolean>(false);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+  const { diplome } = useDiplome();
+  const [pendingAnswer, setPendingAnswer] = useState<{isCorrect: boolean} | null>(null);
 
-  // Get the current question
-  const currentQuestion = useMemo(() => {
-    if (currentQuestions.length > 0 && currentIndex < currentQuestions.length) {
-      return currentQuestions[currentIndex];
+  useEffect(() => {
+    const savedHistory = localStorage.getItem('trainingHistory');
+    if (savedHistory) {
+      try {
+        const parsed = JSON.parse(savedHistory);
+        setTrainingHistory(parsed);
+      } catch (error) {
+        console.error('Error parsing training history:', error);
+      }
     }
-    return null;
-  }, [currentQuestions, currentIndex]);
+  }, []);
 
-  // Start training session
-  const startTraining = useCallback(() => {
-    if (!matiere || !niveau) return;
+  useEffect(() => {
+    if (trainingHistory.length > 0) {
+      localStorage.setItem('trainingHistory', JSON.stringify(trainingHistory));
+    }
+  }, [trainingHistory]);
+
+  const preloadTextFiles = async (questions: Flashcard[]) => {
+    const textPaths = questions
+      .filter(q => q.text && !textCache[q.text])
+      .map(q => q.text as string);
     
-    // Filter flashcards by subject and level
-    const standardizedMatiere = getStandardizedMatiere(matiere);
-    const standardizedNiveau = getStandardizedNiveau(niveau);
+    if (textPaths.length === 0) return;
     
-    let filteredCards = allFlashcards.filter(card => 
-      getStandardizedMatiere(card.matiere) === standardizedMatiere && 
-      getStandardizedNiveau(card.niveau) === standardizedNiveau
-    );
+    setLoadingText(true);
     
-    // If no cards, try without standardization as fallback
-    if (filteredCards.length === 0) {
-      filteredCards = allFlashcards.filter(card => 
-        card.matiere === matiere && 
-        card.niveau === niveau
-      );
+    for (const path of textPaths) {
+      if (!textCache[path]) {
+        try {
+          const response = await fetch(path);
+          if (response.ok) {
+            const text = await response.text();
+            textCache[path] = text;
+            
+            // Update the question with the actual text content
+            questions.forEach(q => {
+              if (q.text === path) {
+                q.text = text;
+              }
+            });
+            
+            console.log(`Préchargement du texte réussi: ${path}`);
+          } else {
+            console.error(`Échec du préchargement du texte: ${path}`);
+          }
+        } catch (error) {
+          console.error(`Erreur lors du préchargement du texte: ${path}`, error);
+        }
+      }
     }
     
-    // Shuffle and limit to requested number
-    const shuffled = shuffleArray([...filteredCards]);
-    const selected = shuffled.slice(0, Math.min(nombreQuestions, shuffled.length));
+    setLoadingText(false);
+  };
+
+  const startTraining = async () => {
+    if (!matiere) {
+      toast({
+        title: "Sélection requise",
+        description: "Veuillez sélectionner une matière avant de commencer",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    console.log(`Démarrage de l'entraînement: niveau=${niveau}, matière=${matiere}, diplôme=${diplome}`);
     
-    setCurrentQuestions(selected);
+    // Nous passons explicitement le niveau à getFlashcards pour un filtrage correct
+    const questions = getFlashcards(matiere, niveau, nombreQuestions, diplome);
+    
+    if (questions.length === 0) {
+      toast({
+        title: "Aucune question disponible",
+        description: "Aucune question n'est disponible pour les critères sélectionnés",
+        variant: "destructive"
+      });
+      console.error(`Aucune question trouvée pour: niveau=${niveau}, matière=${matiere}, diplôme=${diplome}`);
+      return;
+    }
+
+    console.log(`Questions récupérées: ${questions.length}`);
+    console.log('Première question:', questions[0]);
+    
+    // Précharger les textes si nécessaire
+    await preloadTextFiles(questions);
+    
+    setCurrentQuestions(questions);
+    setAnsweredQuestions([]);
     setCurrentIndex(0);
-    setScore(0);
     setIsFlipped(false);
+    setScore(0);
     setTraining(true);
+    setExamMode(false);
     setShowResult(false);
     setCurrentResult(null);
-    
-    console.log(`Started training with ${selected.length} questions for ${matiere} (${niveau})`);
-  }, [matiere, niveau, nombreQuestions]);
+    setPendingAnswer(null);
+  };
 
-  // Flip the current flashcard
-  const flipCard = useCallback(() => {
-    setIsFlipped(prev => !prev);
-  }, []);
-
-  // Mark the current answer as correct
-  const markCorrect = useCallback(() => {
-    setScore(prev => prev + 1);
+  const startExam = () => {
+    const questions = getFlashcards(undefined, undefined, 200, diplome);
     
-    if (currentIndex === currentQuestions.length - 1) {
-      // Last question, show results
-      const newResult: TrainingResult = {
-        id: uuidv4(),
-        date: new Date().toISOString(),
-        matiere: matiere || '',
-        niveau: niveau || '',
-        diplome: currentQuestion?.diplome || '',
-        totalQuestions: currentQuestions.length,
-        correctAnswers: score + 1,
-        pourcentage: ((score + 1) / currentQuestions.length) * 100,
-        nombreQuestions: currentQuestions.length,
-        score: score + 1,
-        note: ((score + 1) / currentQuestions.length) * 20,
-        questions: currentQuestions.map(flashcard => ({
-          flashcard,
+    if (questions.length === 0) {
+      toast({
+        title: "Aucune question disponible",
+        description: "Aucune question n'est disponible pour l'examen",
+        variant: "destructive"
+      });
+      return;
+    }
+
+    setCurrentQuestions(questions);
+    setAnsweredQuestions([]);
+    setCurrentIndex(0);
+    setIsFlipped(false);
+    setScore(0);
+    setExamMode(true);
+    setTraining(false);
+    setShowResult(false);
+    setCurrentResult(null);
+    setPendingAnswer(null);
+  };
+
+  const flipCard = () => {
+    setIsFlipped(!isFlipped);
+  };
+
+  const markCorrect = () => {
+    // Garantir que le score ne dépasse pas le nombre de questions
+    setScore(prev => Math.min(prev + 1, currentQuestions.length));
+    
+    if (currentIndex < currentQuestions.length) {
+      setAnsweredQuestions(prev => [
+        ...prev, 
+        { 
+          flashcard: currentQuestions[currentIndex],
           isCorrect: true
-        }))
-      };
-      
-      setCurrentResult(newResult);
-      setPastResults(prev => [...prev, newResult]);
-      setShowResult(true);
-    } else {
-      // Move to next question
-      setCurrentIndex(prev => prev + 1);
-      setIsFlipped(false);
+        }
+      ]);
     }
-  }, [currentIndex, currentQuestions.length, score, currentQuestion, matiere, niveau, setPastResults, currentQuestions]);
-
-  // Mark the current answer as incorrect
-  const markIncorrect = useCallback(() => {
-    if (currentIndex === currentQuestions.length - 1) {
-      // Last question, show results
-      const newResult: TrainingResult = {
-        id: uuidv4(),
-        date: new Date().toISOString(),
-        matiere: matiere || '',
-        niveau: niveau || '',
-        diplome: currentQuestion?.diplome || '',
-        totalQuestions: currentQuestions.length,
-        correctAnswers: score,
-        pourcentage: (score / currentQuestions.length) * 100,
-        nombreQuestions: currentQuestions.length,
-        score: score,
-        note: (score / currentQuestions.length) * 20,
-        questions: currentQuestions.map(flashcard => ({
-          flashcard,
-          isCorrect: false
-        }))
-      };
-      
-      setCurrentResult(newResult);
-      setPastResults(prev => [...prev, newResult]);
-      setShowResult(true);
-    } else {
-      // Move to next question
-      setCurrentIndex(prev => prev + 1);
-      setIsFlipped(false);
-    }
-  }, [currentIndex, currentQuestions.length, score, currentQuestion, matiere, niveau, setPastResults, currentQuestions]);
-
-  // Move to the next question without marking
-  const nextQuestion = useCallback(() => {
+    
     if (currentIndex < currentQuestions.length - 1) {
-      setCurrentIndex(prev => prev + 1);
+      nextQuestion();
+    } else {
+      if (pendingAnswer) {
+        setPendingAnswer({ isCorrect: true });
+      }
+    }
+  };
+
+  const markIncorrect = () => {
+    // Le score reste inchangé, mais on enregistre la réponse comme incorrecte
+    if (currentIndex < currentQuestions.length) {
+      setAnsweredQuestions(prev => [
+        ...prev, 
+        { 
+          flashcard: currentQuestions[currentIndex],
+          isCorrect: false
+        }
+      ]);
+    }
+    
+    if (currentIndex < currentQuestions.length - 1) {
+      nextQuestion();
+    } else {
+      if (pendingAnswer) {
+        setPendingAnswer({ isCorrect: false });
+      }
+    }
+  };
+
+  const nextQuestion = () => {
+    if (currentIndex < currentQuestions.length - 1) {
+      setCurrentIndex(currentIndex + 1);
       setIsFlipped(false);
     } else {
-      // Last question, show results
-      const newResult: TrainingResult = {
-        id: uuidv4(),
-        date: new Date().toISOString(),
-        matiere: matiere || '',
-        niveau: niveau || '',
-        diplome: currentQuestion?.diplome || '',
-        totalQuestions: currentQuestions.length,
-        correctAnswers: score,
-        pourcentage: (score / currentQuestions.length) * 100,
-        nombreQuestions: currentQuestions.length,
-        score: score,
-        note: (score / currentQuestions.length) * 20,
-        questions: currentQuestions.map(flashcard => ({
-          flashcard,
-          isCorrect: false
-        }))
-      };
-      
-      setCurrentResult(newResult);
-      setPastResults(prev => [...prev, newResult]);
-      setShowResult(true);
+      finishTraining();
     }
-  }, [currentIndex, currentQuestions.length, score, currentQuestion, matiere, niveau, setPastResults, currentQuestions]);
+  };
 
-  // Continue after viewing results
-  const continueAfterResult = useCallback(() => {
+  const calculateImprovementRate = (pourcentage: number, matiere: string) => {
+    const relevantHistory = trainingHistory
+      .filter(item => (item.matiere === matiere || matiere === 'Tous les sujets'))
+      .slice(0, 5);
+
+    if (relevantHistory.length === 0) return null;
+
+    const averagePercentage = relevantHistory.reduce(
+      (acc, item) => acc + item.pourcentage, 0
+    ) / relevantHistory.length;
+
+    return ((pourcentage - averagePercentage) / averagePercentage) * 100;
+  };
+
+  const finishTraining = () => {
+    const correctAnswers = Math.max(0, answeredQuestions.filter(q => q.isCorrect).length);
+    const totalQuestions = currentQuestions.length;
+    
+    // S'assurer que le pourcentage est entre 0 et 100
+    const pourcentage = Math.min(Math.max((correctAnswers / totalQuestions) * 100, 0), 100);
+    // S'assurer que la note est entre 0 et 20
+    const note = Math.min(Math.max((correctAnswers / totalQuestions) * 20, 0), 20);
+    
+    const result: TrainingResult = {
+      id: Date.now().toString(),
+      date: new Date().toISOString(),
+      matiere: examMode ? 'Tous les sujets' : (matiere || 'Inconnue'),
+      niveau: niveau || 'premiere',
+      nombreQuestions: totalQuestions,
+      score: correctAnswers,
+      pourcentage,
+      note,
+      questions: answeredQuestions,
+      diplome: diplome as DiplomeType
+    };
+
+    const newHistory = [result, ...trainingHistory].slice(0, 10);
+    setTrainingHistory(newHistory);
+    
+    const improvementRate = calculateImprovementRate(pourcentage, result.matiere);
+    
+    setCurrentResult(result);
+    setShowResult(true);
+    
+    setPendingAnswer(null);
+  };
+
+  const continueAfterResult = () => {
     setShowResult(false);
     setTraining(false);
-  }, []);
-
-  // Finish training early
-  const finishTraining = useCallback(() => {
-    if (currentQuestions.length > 0) {
-      const newResult: TrainingResult = {
-        id: uuidv4(),
-        date: new Date().toISOString(),
-        matiere: matiere || '',
-        niveau: niveau || '',
-        diplome: currentQuestion?.diplome || '',
-        totalQuestions: currentIndex + 1,
-        correctAnswers: score,
-        pourcentage: (score / (currentIndex + 1)) * 100,
-        nombreQuestions: currentIndex + 1,
-        score: score,
-        note: (score / (currentIndex + 1)) * 20,
-        questions: currentQuestions.slice(0, currentIndex + 1).map(flashcard => ({
-          flashcard,
-          isCorrect: false
-        }))
-      };
-      
-      setCurrentResult(newResult);
-      setPastResults(prev => [...prev, newResult]);
-      setShowResult(true);
-    } else {
-      setTraining(false);
-    }
-  }, [currentQuestions, currentIndex, score, currentQuestion, matiere, niveau, setPastResults]);
-
-  // Calculate improvement rate compared to past results
-  const calculateImprovementRate = useCallback((currentPercentage: number, currentMatiere: string): number | null => {
-    const relevantResults = pastResults
-      .filter(result => 
-        result.matiere === currentMatiere && 
-        new Date(result.date).getTime() < (currentResult?.date ? new Date(currentResult.date).getTime() : Date.now())
-      )
-      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
-    
-    if (relevantResults.length === 0) return null;
-    
-    // Get the average of the last 3 results or fewer if not enough
-    const recentResults = relevantResults.slice(0, 3);
-    const averagePercentage = recentResults.reduce((sum, result) => sum + result.pourcentage, 0) / recentResults.length;
-    
-    return currentPercentage - averagePercentage;
-  }, [pastResults, currentResult]);
-
-  // For backward compatibility with pages that expect trainingHistory
-  const trainingHistory = pastResults;
-
-  // Add exam mode compatibility functions
-  const startExam = startTraining;
-  const examMode = training;
+    setExamMode(false);
+    navigate('/');
+  };
 
   return {
-    // Configuration
     matiere,
     setMatiere,
-    niveau, 
+    niveau,
     setNiveau,
     nombreQuestions,
     setNombreQuestions,
-    
-    // Training state
-    training,
-    currentQuestion,
-    currentIndex,
     currentQuestions,
+    answeredQuestions,
+    currentIndex,
     isFlipped,
     score,
+    training,
+    examMode,
+    trainingHistory,
     showResult,
     currentResult,
-    
-    // Actions
+    pendingAnswer,
     startTraining,
+    startExam,
     flipCard,
     markCorrect,
     markIncorrect,
     nextQuestion,
-    continueAfterResult,
     finishTraining,
-    
-    // Data
-    allFlashcards,
-    pastResults,
-    
-    // Utilities
+    continueAfterResult,
     calculateImprovementRate,
-    
-    // Backward compatibility
-    trainingHistory,
-    startExam,
-    examMode
+    loadingText,
+    currentQuestion: currentQuestions[currentIndex]
   };
-}
+};
