@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase, signInWithEmailOrUsername } from '@/lib/supabase';
 import Header from '@/components/Header';
 import { Card } from '@/components/ui/card';
@@ -16,12 +15,11 @@ import { useAuth } from '@/contexts/AuthContext';
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, isAdmin, isLoading } = useAuth();
+  const { user, isAdmin, isLoading: authIsLoading } = useAuth();
   const [view, setView] = useState<'sign_in' | 'sign_up'>('sign_in');
   const [isLoading, setIsLoading] = useState(false);
   const [adminLoginSuccess, setAdminLoginSuccess] = useState(false);
 
-  // Formulaire de connexion
   const [credentials, setCredentials] = useState({
     emailOrUsername: '',
     email: '',
@@ -32,11 +30,10 @@ const Login = () => {
   
   const [showPassword, setShowPassword] = useState(false);
   
-  // Rediriger vers le panel admin si l'utilisateur est admin
   useEffect(() => {
     console.log("useEffect dans Login - isAdmin:", isAdmin, "user:", user, "adminLoginSuccess:", adminLoginSuccess);
     
-    if (!isLoading) {
+    if (!authIsLoading) {
       if (isAdmin) {
         console.log("Utilisateur admin détecté, redirection vers le panel admin");
         navigate('/admin');
@@ -44,12 +41,11 @@ const Login = () => {
         console.log("Login réussi avec admin, mais isAdmin pas encore défini, redirection vers /admin");
         navigate('/admin');
       } else if (user && !isAdmin) {
-        // Si l'utilisateur est connecté mais n'est pas admin, rediriger vers la page d'accueil
         console.log("Utilisateur non-admin connecté, redirection vers la page d'accueil");
         navigate('/');
       }
     }
-  }, [user, isAdmin, navigate, isLoading, adminLoginSuccess]);
+  }, [user, isAdmin, navigate, authIsLoading, adminLoginSuccess]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -63,7 +59,6 @@ const Login = () => {
     try {
       console.log("Tentative de connexion avec:", credentials.emailOrUsername);
       
-      // Détection de connexion admin
       const isAdminAttempt = credentials.emailOrUsername === 'admin' && credentials.password === 'admin';
       if (isAdminAttempt) {
         console.log("Tentative de connexion admin détectée");
@@ -81,18 +76,15 @@ const Login = () => {
       
       console.log("Connexion réussie, données:", data?.user);
       
-      // Connexion réussie
       toast({
         title: "Connexion réussie",
         description: "Vous êtes maintenant connecté.",
       });
       
-      // Si c'est un admin, forcer la redirection vers /admin
       if (isAdminAttempt) {
         console.log("Redirection immédiate vers /admin après connexion admin");
         navigate('/admin');
       }
-      // La redirection sera gérée par l'useEffect pour les autres cas
     } catch (error: any) {
       console.error("Erreur de connexion:", error);
       toast({
@@ -121,7 +113,6 @@ const Login = () => {
     }
     
     try {
-      // Vérifier si le nom d'utilisateur existe déjà
       const { data: usernameExists } = await supabase
         .from('profiles')
         .select('username')
@@ -132,7 +123,6 @@ const Login = () => {
         throw new Error("Ce nom d'utilisateur est déjà utilisé.");
       }
       
-      // Créer un compte
       const { data, error } = await supabase.auth.signUp({
         email: credentials.email,
         password: credentials.password,
@@ -145,13 +135,11 @@ const Login = () => {
       
       if (error) throw error;
       
-      // Inscription réussie
       toast({
         title: "Inscription réussie",
         description: "Veuillez vérifier votre email pour confirmer votre compte.",
       });
       
-      // Rediriger vers la page de connexion
       setView('sign_in');
     } catch (error: any) {
       toast({
@@ -220,7 +208,6 @@ const Login = () => {
             </div>
             
             {view === 'sign_in' ? (
-              // Formulaire de connexion
               <form onSubmit={handleSignIn} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="emailOrUsername">Email ou nom d'utilisateur</Label>
@@ -293,7 +280,6 @@ const Login = () => {
                 </Button>
               </form>
             ) : (
-              // Formulaire d'inscription
               <form onSubmit={handleSignUp} className="space-y-4">
                 <div className="space-y-2">
                   <Label htmlFor="email">Email</Label>
