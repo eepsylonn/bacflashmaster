@@ -39,6 +39,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
      import.meta.env.VITE_SUPABASE_URL === 'https://your-supabase-url.supabase.co' ||
      import.meta.env.VITE_SUPABASE_ANON_KEY === 'your-anon-key');
   
+  // Pour déboguer
+  console.log("Mode développement local:", isLocalDev);
+  
   useEffect(() => {
     const setData = async () => {
       try {
@@ -54,6 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (sessionData.session?.user) {
               // Si c'est l'admin en mode développement
               if (sessionData.session.user.email === 'admin@example.com') {
+                console.log("Utilisateur admin détecté");
                 const adminProfile = {
                   id: sessionData.session.user.id,
                   username: 'admin',
@@ -98,6 +102,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (!error && data) {
               setUserProfile(data);
               setIsAdmin(data.role === 'admin');
+              console.log("Rôle utilisateur:", data.role);
             }
             
             // Vérifier l'abonnement
@@ -128,6 +133,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             
             // Si c'est l'admin en mode développement
             if (session.user.email === 'admin@example.com') {
+              console.log("Admin connecté en mode dev");
               const adminProfile = {
                 id: session.user.id,
                 username: 'admin',
@@ -158,6 +164,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               .single();
             
             if (!error && data) {
+              console.log("Profil utilisateur récupéré:", data);
               setUserProfile(data);
               setIsAdmin(data.role === 'admin');
             }

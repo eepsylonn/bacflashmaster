@@ -25,6 +25,10 @@ const Header = () => {
   const isMobile = useIsMobile();
   const { user, isAdmin, isSubscribed, signOut } = useAuth();
   
+  // Pour déboguer
+  console.log("État isAdmin:", isAdmin);
+  console.log("État user:", user);
+  
   const tabs = [
     { value: '/', label: 'Accueil', locked: false },
     { value: '/methodologie', label: 'Fiches', locked: !isSubscribed },
@@ -73,9 +77,9 @@ const Header = () => {
       {/* Fond avec gradient */}
       <div className="bg-gradient-to-r from-app-blue-dark to-indigo-800 text-white py-5 shadow-lg">
         <div className="container px-4 mx-auto">
-          {/* Logo et titre */}
-          <div className="flex justify-between items-center mb-5">
-            <Link to="/" className="text-3xl font-bold flex items-center gap-2 group">
+          {/* Logo et titre - modifié pour centrer le titre */}
+          <div className="flex flex-col items-center mb-5">
+            <Link to="/" className="text-3xl font-bold flex items-center gap-2 group mb-2">
               <motion.div
                 initial={{ rotate: 0 }}
                 animate={{ rotate: [0, 10, 0, -10, 0] }}
@@ -168,8 +172,8 @@ const Header = () => {
               </span>
             </Link>
 
-            {/* Boutons utilisateur */}
-            <div className="flex items-center gap-2">
+            {/* Boutons utilisateur - déplacés en haut à droite de manière absolue */}
+            <div className="absolute top-5 right-4 md:right-8 flex items-center gap-2">
               {isAdmin && (
                 <Button 
                   variant="ghost"
