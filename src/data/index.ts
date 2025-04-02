@@ -48,7 +48,7 @@ export { getFlashcards } from './flashcards';
 export const getAllFlashcards = (): Flashcard[] => {
   // Call getFlashcards with undefined parameters to get all flashcards
   // without filtering by matiere, niveau, or diplome
-  const baseFlashcards = getFlashcards(undefined, undefined, 1000, undefined);
+  const baseFlashcards = getFlashcards(undefined, undefined, 200, undefined);
   
   return [
     ...baseFlashcards,
