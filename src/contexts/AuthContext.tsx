@@ -48,16 +48,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         if (isLocalDev) {
           // Vérifier si l'utilisateur est connecté en local (localStorage)
           const storedSession = localStorage.getItem('supabase.auth.session');
+          console.log("Session stockée en local:", storedSession ? "Présente" : "Absente");
           
           if (storedSession) {
             const sessionData = JSON.parse(storedSession);
+            console.log("Données de session récupérées:", sessionData);
             setSession(sessionData.session);
             setUser(sessionData.session?.user ?? null);
             
             if (sessionData.session?.user) {
+              console.log("Email de l'utilisateur:", sessionData.session.user.email);
               // Si c'est l'admin en mode développement
               if (sessionData.session.user.email === 'admin@example.com') {
-                console.log("Utilisateur admin détecté");
+                console.log("Utilisateur admin détecté dans AuthContext");
                 const adminProfile = {
                   id: sessionData.session.user.id,
                   username: 'admin',
@@ -67,6 +70,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 };
                 setUserProfile(adminProfile);
                 setIsAdmin(true);
+                console.log("IsAdmin défini à TRUE");
               } else {
                 const userProfile = {
                   id: sessionData.session.user.id,
@@ -77,6 +81,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 };
                 setUserProfile(userProfile);
                 setIsAdmin(false);
+                console.log("IsAdmin défini à FALSE");
               }
               // Vérifier l'abonnement
               const subscribed = await checkSubscription();
@@ -122,6 +127,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     // Écouter les changements d'authentification
     const { data: authListener } = supabase.auth.onAuthStateChange(
       async (_event, session) => {
+        console.log("Changement d'état d'authentification:", _event, session);
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(true);
@@ -130,10 +136,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
           if (isLocalDev) {
             // Mode développement local
             localStorage.setItem('supabase.auth.session', JSON.stringify({ session }));
+            console.log("Session enregistrée dans localStorage");
             
             // Si c'est l'admin en mode développement
             if (session.user.email === 'admin@example.com') {
-              console.log("Admin connecté en mode dev");
+              console.log("Admin connecté en mode dev dans l'écouteur d'état");
               const adminProfile = {
                 id: session.user.id,
                 username: 'admin',
@@ -143,6 +150,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               };
               setUserProfile(adminProfile);
               setIsAdmin(true);
+              console.log("IsAdmin mis à jour à TRUE dans l'écouteur d'état");
             } else {
               const userProfile = {
                 id: session.user.id,
@@ -153,6 +161,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               };
               setUserProfile(userProfile);
               setIsAdmin(false);
+              console.log("IsAdmin mis à jour à FALSE dans l'écouteur d'état");
             }
           } else {
             // Mode production avec Supabase
@@ -176,6 +185,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         } else {
           if (isLocalDev) {
             localStorage.removeItem('supabase.auth.session');
+            console.log("Session supprimée du localStorage");
           }
           setUserProfile(null);
           setIsAdmin(false);
