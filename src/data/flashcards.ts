@@ -1,3 +1,4 @@
+
 import { Flashcard, NiveauType, NombreQuestions, DiplomeType } from '@/types';
 // Import TOEIC flashcards
 import { listeningFacileToeicFlashcards } from './ListeningFacileToeicFlashcards';
@@ -64,10 +65,7 @@ import { generalFacileIELTSFlashcards } from './GeneralFacileIELTSFlashcards';
 import { generalIntermediaireIELTSFlashcards } from './GeneralIntermediaireIELTSFlashcards';
 import { generalAvanceIELTSFlashcards } from './GeneralAvanceIELTSFlashcards';
 
-// Import extra flashcards
-import { toeicExtraFlashcards, tageMageExtraFlashcards } from './extraFlashcards';
-
-// Ajoutons les nouvelles imports
+// Import Cambridge flashcards
 import { readingUseFacileCambridgeFlashcards } from './ReadingUseFacileCambridgeFlashcards';
 import { readingUseIntermediaireCambridgeFlashcards } from './ReadingUseIntermediaireCambridgeFlashcards';
 import { readingUseAvanceCambridgeFlashcards } from './ReadingUseAvanceCambridgeFlashcards';
@@ -83,6 +81,23 @@ import { grammaireAvanceCambridgeFlashcards } from './GrammaireAvanceCambridgeFl
 import { vocabularyFacileCambridgeFlashcards } from './VocabularyFacileCambridgeFlashcards';
 import { vocabularyIntermediaireCambridgeFlashcards } from './VocabularyIntermediaireCambridgeFlashcards';
 import { vocabularyAvanceCambridgeFlashcards } from './VocabularyAvanceCambridgeFlashcards';
+
+// Import GMAT flashcards
+import { quantitativeFacileGMATFlashcards } from './QuantitativeFacileGMATFlashcards';
+import { quantitativeIntermediaireGMATFlashcards } from './QuantitativeIntermediaireGMATFlashcards';
+import { quantitativeAvanceGMATFlashcards } from './QuantitativeAvanceGMATFlashcards';
+import { verbalFacileGMATFlashcards } from './VerbalFacileGMATFlashcards';
+import { verbalIntermediaireGMATFlashcards } from './VerbalIntermediaireGMATFlashcards';
+import { verbalAvanceGMATFlashcards } from './VerbalAvanceGMATFlashcards';
+import { integratedReasoningFacileGMATFlashcards } from './IntegratedReasoningFacileGMATFlashcards';
+import { integratedReasoningIntermediaireGMATFlashcards } from './IntegratedReasoningIntermediaireGMATFlashcards';
+import { integratedReasoningAvanceGMATFlashcards } from './IntegratedReasoningAvanceGMATFlashcards';
+import { analyticalWritingFacileGMATFlashcards } from './AnalyticalWritingFacileGMATFlashcards';
+import { analyticalWritingIntermediaireGMATFlashcards } from './AnalyticalWritingIntermediaireGMATFlashcards';
+import { analyticalWritingAvanceGMATFlashcards } from './AnalyticalWritingAvanceGMATFlashcards';
+
+// Import extra flashcards
+import { toeicExtraFlashcards, tageMageExtraFlashcards } from './extraFlashcards';
 
 // Map les noms de matières affichés dans l'interface vers les noms utilisés dans les fichiers
 const matiereMapping: Record<string, string> = {
@@ -128,6 +143,12 @@ const matiereMapping: Record<string, string> = {
   'Speaking': 'Speaking',
   'Grammar': 'Grammar',
   'Vocabulary': 'Vocabulary',
+  
+  // GMAT
+  'Quantitative': 'Quantitative',
+  'Verbal': 'Verbal',
+  'Integrated Reasoning': 'Integrated Reasoning',
+  'Analytical Writing': 'Analytical Writing',
   
   // Brevet
   'Français (Grammaire)': 'Français - Grammaire',
@@ -286,6 +307,24 @@ export const getFlashcards = (
       ...vocabularyFacileCambridgeFlashcards,
       ...vocabularyIntermediaireCambridgeFlashcards,
       ...vocabularyAvanceCambridgeFlashcards
+    ];
+  }
+  
+  // GMAT Flashcards
+  if (diplome === 'gmat') {
+    allFlashcards = [
+      ...quantitativeFacileGMATFlashcards,
+      ...quantitativeIntermediaireGMATFlashcards,
+      ...quantitativeAvanceGMATFlashcards,
+      ...verbalFacileGMATFlashcards,
+      ...verbalIntermediaireGMATFlashcards,
+      ...verbalAvanceGMATFlashcards,
+      ...integratedReasoningFacileGMATFlashcards,
+      ...integratedReasoningIntermediaireGMATFlashcards,
+      ...integratedReasoningAvanceGMATFlashcards,
+      ...analyticalWritingFacileGMATFlashcards,
+      ...analyticalWritingIntermediaireGMATFlashcards,
+      ...analyticalWritingAvanceGMATFlashcards
     ];
   }
   
