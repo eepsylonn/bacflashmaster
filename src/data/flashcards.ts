@@ -115,7 +115,7 @@ const matiereMapping: Record<string, string> = {
   'TOEFL Grammaire': 'TOEFL Grammar',
   'TOEFL Vocabulaire': 'TOEFL Vocabulary',
   
-  // Ajoutons des mappages directs pour TOEFL
+  // Direct mappings for TOEFL
   'TOEFL Reading': 'TOEFL Reading',
   'TOEFL Writing': 'TOEFL Writing',
   'TOEFL Speaking': 'TOEFL Speaking',

@@ -16,6 +16,7 @@ export interface Flashcard {
   text?: string;
   options?: string[];
   type?: 'mcq' | 'text' | 'audio';
+  audio?: string;
 }
 
 export interface AnsweredQuestion {
@@ -41,3 +42,16 @@ export interface UserPreferences {
   selectedSpecialities: string[];
   preferredNiveau?: NiveauType;
 }
+
+// Add the BacSpecialite type that's referenced in some components
+export type BacSpecialite = 
+  | 'mathematiques'
+  | 'physique-chimie'
+  | 'svt'
+  | 'ses'
+  | 'hggsp'
+  | 'llce'
+  | 'humanites'
+  | 'arts'
+  | 'nsi'
+  | 'litterature-hda';
