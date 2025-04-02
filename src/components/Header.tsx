@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -25,7 +24,6 @@ const Header = () => {
   const isMobile = useIsMobile();
   const { user, isAdmin, isSubscribed, signOut } = useAuth();
   
-  // Pour déboguer
   console.log("État isAdmin:", isAdmin);
   console.log("État user:", user);
   
@@ -38,29 +36,23 @@ const Header = () => {
     { value: '/statistiques', label: 'Statistiques', locked: !isSubscribed },
   ];
   
-  // Effet pour définir l'onglet actif en fonction de la route
   useEffect(() => {
     const path = location.pathname;
     setActiveTab(path);
     
-    // Faire défiler vers l'onglet actif sans animation
     const activeTabElement = document.querySelector(`[data-path="${path}"]`);
     if (activeTabElement && tabsContainerRef.current) {
       const containerWidth = tabsContainerRef.current.offsetWidth;
       const tabPosition = (activeTabElement as HTMLElement).offsetLeft;
       const tabWidth = (activeTabElement as HTMLElement).offsetWidth;
       
-      // Calculer la position de défilement pour centrer l'onglet
       const scrollPosition = tabPosition - (containerWidth / 2) + (tabWidth / 2);
-      
-      // Utiliser scrollLeft au lieu de scrollTo pour éviter l'animation
       tabsContainerRef.current.scrollLeft = scrollPosition;
     }
   }, [location.pathname]);
 
   const handleTabClick = (tab: typeof tabs[0]) => {
     if (tab.locked) {
-      // Rediriger vers la page d'abonnement si l'onglet est verrouillé
       navigate('/subscription');
     } else {
       navigate(tab.value);
@@ -74,10 +66,8 @@ const Header = () => {
   
   return (
     <header className="relative">
-      {/* Fond avec gradient */}
       <div className="bg-gradient-to-r from-app-blue-dark to-indigo-800 text-white py-5 shadow-lg">
         <div className="container px-4 mx-auto">
-          {/* Logo et titre - modifié pour centrer le titre */}
           <div className="flex flex-col items-center mb-5">
             <Link to="/" className="text-3xl font-bold flex items-center gap-2 group mb-2">
               <motion.div
@@ -169,10 +159,9 @@ const Header = () => {
                 >
                   '
                 </motion.span>
-              </span>
+              </motion.span>
             </Link>
 
-            {/* Boutons utilisateur - déplacés en haut à droite de manière absolue */}
             <div className="absolute top-5 right-4 md:right-8 flex items-center gap-2">
               {isAdmin ? (
                 <Button 
@@ -183,7 +172,18 @@ const Header = () => {
                   <Bell className="h-5 w-5 mr-2" />
                   Panel Admin
                 </Button>
-              ) : user ? null : (
+              ) : user ? (
+                <>
+                  <Button 
+                    variant="ghost"
+                    className="text-white hover:bg-white/20"
+                    onClick={() => navigate('/admin')}
+                  >
+                    <Bell className="h-5 w-5 mr-2" />
+                    Panel
+                  </Button>
+                </>
+              ) : (
                 <Button 
                   variant="ghost"
                   className="text-white hover:bg-white/20"
@@ -226,7 +226,6 @@ const Header = () => {
             </div>
           </div>
           
-          {/* Onglets avec défilement horizontal */}
           <div 
             ref={tabsContainerRef}
             className="overflow-x-auto scrollbar-hide max-w-full pb-1"
@@ -252,7 +251,6 @@ const Header = () => {
                     <span>{tab.label}</span>
                   </div>
                   
-                  {/* Indicateur d'onglet actif pour chaque onglet */}
                   {activeTab === tab.value && (
                     <motion.div
                       layoutId="activeTabIndicator"
@@ -272,7 +270,6 @@ const Header = () => {
         </div>
       </div>
       
-      {/* Bouton Réglages flottant */}
       <motion.div 
         className="fixed bottom-6 right-6 z-50"
         initial={{ scale: 0, rotate: -180 }}
@@ -295,10 +292,8 @@ const Header = () => {
         </Link>
       </motion.div>
       
-      {/* Ajouter des styles pour cacher la scrollbar */}
       <style>
         {`
-          /* For Webkit browsers like Chrome/Safari */
           .scrollbar-hide::-webkit-scrollbar {
             display: none;
           }
