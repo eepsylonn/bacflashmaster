@@ -1,4 +1,3 @@
-
 export type DiplomeType = 'toeic' | 'toefl' | 'tage-mage' | 'ielts' | 'cambridge' | 'gmat' | 'brevet' | 'baccalaureat';
 
 export type NiveauType = 'facile' | 'intermediaire' | 'avance' | 'both' | 'troisieme' | 'quatrieme' | 'premiere' | 'terminale';
@@ -26,16 +25,18 @@ export interface AnsweredQuestion {
 }
 
 export interface TrainingResult {
-  id: string;
-  date: string;
+  id?: string;
+  date: Date;
   matiere: string;
-  niveau: NiveauType;
-  nombreQuestions: number;
-  score: number;
+  niveau: string;
+  diplome: string;
+  totalQuestions: number;
+  correctAnswers: number;
   pourcentage: number;
-  note: number;
-  questions: AnsweredQuestion[];
-  diplome: DiplomeType;
+  nombreQuestions?: number;
+  score?: number;
+  note?: number;
+  questions?: Flashcard[];
 }
 
 export interface UserPreferences {

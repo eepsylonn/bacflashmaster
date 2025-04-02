@@ -1,6 +1,6 @@
 
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Flashcard } from '@/types';
+import { Flashcard, TrainingResult } from '@/types';
 import { useLocalStorage } from './useLocalStorage';
 import { 
   filterFlashcards, 
@@ -10,16 +10,7 @@ import {
 } from '@/utils/flashcardUtils';
 import { shuffleArray } from '@/utils/arrayUtils';
 import { allFlashcards } from '@/data/flashcards';
-
-export interface TrainingResult {
-  date: Date;
-  matiere: string;
-  niveau: string;
-  diplome: string;
-  totalQuestions: number;
-  correctAnswers: number;
-  pourcentage: number;
-}
+import { v4 as uuidv4 } from 'uuid';
 
 export function useFlashcards() {
   // States for configuration
@@ -95,13 +86,18 @@ export function useFlashcards() {
     if (currentIndex === currentQuestions.length - 1) {
       // Last question, show results
       const newResult: TrainingResult = {
+        id: uuidv4(),
         date: new Date(),
         matiere: matiere || '',
         niveau: niveau || '',
         diplome: currentQuestion?.diplome || '',
         totalQuestions: currentQuestions.length,
         correctAnswers: score + 1,
-        pourcentage: ((score + 1) / currentQuestions.length) * 100
+        pourcentage: ((score + 1) / currentQuestions.length) * 100,
+        nombreQuestions: currentQuestions.length,
+        score: score + 1,
+        note: ((score + 1) / currentQuestions.length) * 20,
+        questions: currentQuestions
       };
       
       setCurrentResult(newResult);
@@ -112,20 +108,25 @@ export function useFlashcards() {
       setCurrentIndex(prev => prev + 1);
       setIsFlipped(false);
     }
-  }, [currentIndex, currentQuestions.length, score, currentQuestion, matiere, niveau, setPastResults]);
+  }, [currentIndex, currentQuestions.length, score, currentQuestion, matiere, niveau, setPastResults, currentQuestions]);
 
   // Mark the current answer as incorrect
   const markIncorrect = useCallback(() => {
     if (currentIndex === currentQuestions.length - 1) {
       // Last question, show results
       const newResult: TrainingResult = {
+        id: uuidv4(),
         date: new Date(),
         matiere: matiere || '',
         niveau: niveau || '',
         diplome: currentQuestion?.diplome || '',
         totalQuestions: currentQuestions.length,
         correctAnswers: score,
-        pourcentage: (score / currentQuestions.length) * 100
+        pourcentage: (score / currentQuestions.length) * 100,
+        nombreQuestions: currentQuestions.length,
+        score: score,
+        note: (score / currentQuestions.length) * 20,
+        questions: currentQuestions
       };
       
       setCurrentResult(newResult);
@@ -136,7 +137,7 @@ export function useFlashcards() {
       setCurrentIndex(prev => prev + 1);
       setIsFlipped(false);
     }
-  }, [currentIndex, currentQuestions.length, score, currentQuestion, matiere, niveau, setPastResults]);
+  }, [currentIndex, currentQuestions.length, score, currentQuestion, matiere, niveau, setPastResults, currentQuestions]);
 
   // Move to the next question without marking
   const nextQuestion = useCallback(() => {
@@ -146,20 +147,25 @@ export function useFlashcards() {
     } else {
       // Last question, show results
       const newResult: TrainingResult = {
+        id: uuidv4(),
         date: new Date(),
         matiere: matiere || '',
         niveau: niveau || '',
         diplome: currentQuestion?.diplome || '',
         totalQuestions: currentQuestions.length,
         correctAnswers: score,
-        pourcentage: (score / currentQuestions.length) * 100
+        pourcentage: (score / currentQuestions.length) * 100,
+        nombreQuestions: currentQuestions.length,
+        score: score,
+        note: (score / currentQuestions.length) * 20,
+        questions: currentQuestions
       };
       
       setCurrentResult(newResult);
       setPastResults(prev => [...prev, newResult]);
       setShowResult(true);
     }
-  }, [currentIndex, currentQuestions.length, score, currentQuestion, matiere, niveau, setPastResults]);
+  }, [currentIndex, currentQuestions.length, score, currentQuestion, matiere, niveau, setPastResults, currentQuestions]);
 
   // Continue after viewing results
   const continueAfterResult = useCallback(() => {
@@ -171,13 +177,18 @@ export function useFlashcards() {
   const finishTraining = useCallback(() => {
     if (currentQuestions.length > 0) {
       const newResult: TrainingResult = {
+        id: uuidv4(),
         date: new Date(),
         matiere: matiere || '',
         niveau: niveau || '',
         diplome: currentQuestion?.diplome || '',
         totalQuestions: currentIndex + 1, // Only count questions seen
         correctAnswers: score,
-        pourcentage: (score / (currentIndex + 1)) * 100
+        pourcentage: (score / (currentIndex + 1)) * 100,
+        nombreQuestions: currentIndex + 1,
+        score: score,
+        note: (score / (currentIndex + 1)) * 20,
+        questions: currentQuestions.slice(0, currentIndex + 1)
       };
       
       setCurrentResult(newResult);
@@ -186,7 +197,7 @@ export function useFlashcards() {
     } else {
       setTraining(false);
     }
-  }, [currentQuestions.length, currentIndex, score, currentQuestion, matiere, niveau, setPastResults]);
+  }, [currentQuestions, currentIndex, score, currentQuestion, matiere, niveau, setPastResults]);
 
   // Calculate improvement rate compared to past results
   const calculateImprovementRate = useCallback((currentPercentage: number, currentMatiere: string): number | null => {
@@ -205,6 +216,13 @@ export function useFlashcards() {
     
     return currentPercentage - averagePercentage;
   }, [pastResults, currentResult]);
+
+  // For backward compatibility with pages that expect trainingHistory
+  const trainingHistory = pastResults;
+
+  // Add exam mode compatibility functions
+  const startExam = startTraining;
+  const examMode = training;
 
   return {
     // Configuration
@@ -239,6 +257,11 @@ export function useFlashcards() {
     pastResults,
     
     // Utilities
-    calculateImprovementRate
+    calculateImprovementRate,
+    
+    // Backward compatibility
+    trainingHistory,
+    startExam,
+    examMode
   };
 }
