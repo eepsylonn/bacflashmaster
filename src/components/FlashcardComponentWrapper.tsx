@@ -5,6 +5,7 @@ import ReadingTextDisplay from '@/components/ReadingTextDisplay';
 import { Flashcard } from '@/types';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface FlashcardComponentWrapperProps {
   flashcard: Flashcard;
@@ -22,6 +23,7 @@ const FlashcardComponentWrapper: React.FC<FlashcardComponentWrapperProps> = (pro
   const { flashcard } = props;
   const [text, setText] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const isMobile = useIsMobile();
   
   const isReadingComprehension = flashcard.matiere === 'Compréhension écrite' || 
                                flashcard.matiere === 'TOEIC Reading' || 
@@ -34,7 +36,7 @@ const FlashcardComponentWrapper: React.FC<FlashcardComponentWrapperProps> = (pro
         if (flashcard.text.startsWith('/')) {
           setLoading(true);
           try {
-            // Use encodeURI to properly encode the path
+            // First encode the URI to handle special characters properly
             const encodedPath = encodeURI(flashcard.text);
             const response = await fetch(encodedPath);
             if (response.ok) {
@@ -60,11 +62,11 @@ const FlashcardComponentWrapper: React.FC<FlashcardComponentWrapperProps> = (pro
   }, [flashcard, isReadingComprehension]);
 
   return (
-    <div className="space-y-6">
+    <div className={`space-y-4 ${isMobile ? 'px-2' : 'space-y-6'}`}>
       {isReadingComprehension && (
         loading ? (
-          <Card className="mb-6 p-6">
-            <Skeleton className="h-[300px] w-full" />
+          <Card className={`mb-4 p-4 ${isMobile ? 'max-h-[40vh] overflow-auto' : 'mb-6 p-6'}`}>
+            <Skeleton className={`${isMobile ? 'h-[200px]' : 'h-[300px]'} w-full`} />
           </Card>
         ) : (
           text && <ReadingTextDisplay text={text} />
