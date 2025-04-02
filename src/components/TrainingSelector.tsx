@@ -13,6 +13,20 @@ import { ChevronDown, ChevronUp, Settings, Lock } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { useIsMobile } from '@/hooks/use-mobile';
 
+// Fonction pour vérifier si une matière est une compréhension orale
+const isOralComprehensionSubject = (matiere: string, diplome: string | undefined) => {
+  switch(diplome) {
+    case 'toeic':
+      return matiere === 'Compréhension orale';
+    case 'toefl':
+    case 'ielts':
+    case 'cambridge':
+      return matiere === 'Listening';
+    default:
+      return false;
+  }
+};
+
 const getMatieresByDiplome = (diplome: string | undefined, selectedSpecialities: string[] = []) => {
   switch(diplome) {
     case 'toeic':
@@ -179,11 +193,25 @@ const TrainingSelector = ({
         setNiveau(defaultNiveau as NiveauType);
       }
     }
+    
+    // Désélectionner la compréhension orale si elle est sélectionnée
+    if (matiere && isOralComprehensionSubject(matiere, diplome)) {
+      // Trouver une autre matière qui n'est pas une compréhension orale
+      const firstNonOralMatiere = matieres.find(m => !isOralComprehensionSubject(m, diplome));
+      if (firstNonOralMatiere) {
+        setMatiere(firstNonOralMatiere);
+      }
+    }
   }, [diplome, matiere, matieres, setMatiere, niveau, defaultNiveau, setNiveau]);
 
   const showSpecialitiesMessage = diplome === 'baccalaureat' && selectedSpecialities.length === 0;
   
   const handleMatiereSelection = (selectedMatiere: string) => {
+    // Empêcher la sélection des matières de compréhension orale
+    if (isOralComprehensionSubject(selectedMatiere, diplome)) {
+      return;
+    }
+    
     setMatiere(selectedMatiere);
     
     if (diplome === 'baccalaureat') {
@@ -226,21 +254,34 @@ const TrainingSelector = ({
             Matière
           </label>
           <div className={`grid ${isMobile ? 'grid-cols-2' : 'sm:grid-cols-2 md:grid-cols-3'} gap-2`}>
-            {visibleMatieres.map((m) => (
-              <motion.button
-                key={m}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => handleMatiereSelection(m)}
-                className={`p-3 h-14 rounded-lg text-center text-xs sm:text-sm transition-all flex items-center justify-center ${
-                  matiere === m
-                    ? 'bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white font-medium shadow-md'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                }`}
-              >
-                {m}
-              </motion.button>
-            ))}
+            {visibleMatieres.map((m) => {
+              const isOralComprehension = isOralComprehensionSubject(m, diplome);
+              
+              return (
+                <motion.button
+                  key={m}
+                  whileHover={isOralComprehension ? {} : { scale: 1.05 }}
+                  whileTap={isOralComprehension ? {} : { scale: 0.95 }}
+                  onClick={() => handleMatiereSelection(m)}
+                  className={`p-3 h-14 rounded-lg text-center text-xs sm:text-sm transition-all flex items-center justify-center relative ${
+                    matiere === m
+                      ? 'bg-gradient-to-r from-app-blue-medium to-app-blue-dark text-white font-medium shadow-md'
+                      : isOralComprehension
+                        ? 'bg-gray-200 text-gray-500 cursor-not-allowed'
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                  disabled={isOralComprehension}
+                >
+                  {m}
+                  {isOralComprehension && (
+                    <div className="absolute inset-0 bg-gray-200/80 rounded-lg flex items-center justify-center">
+                      <Lock className="h-4 w-4 text-gray-500 mr-1" />
+                      <span className="text-gray-500 text-xs">Verrouillé</span>
+                    </div>
+                  )}
+                </motion.button>
+              );
+            })}
           </div>
           
           {hasMoreSubjects && (

@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -8,6 +9,13 @@ import TrainingResultPage from '@/pages/TrainingResult';
 import { useFlashcards } from '@/hooks/useFlashcards';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';
+
+// Fonction pour vérifier si une matière est une compréhension orale
+const isOralComprehensionSubject = (matiere: string | undefined): boolean => {
+  if (!matiere) return false;
+  
+  return matiere === 'Compréhension orale' || matiere === 'Listening';
+};
 
 const Training = () => {
   const location = useLocation();
@@ -42,9 +50,19 @@ const Training = () => {
     const searchParams = new URLSearchParams(location.search);
     const matiereParam = searchParams.get('matiere');
     if (matiereParam) {
-      setMatiere(matiereParam);
+      // Vérifier si la matière est une compréhension orale
+      if (!isOralComprehensionSubject(matiereParam)) {
+        setMatiere(matiereParam);
+      } else {
+        // Si c'est une compréhension orale, afficher un toast pour informer l'utilisateur
+        toast({
+          title: "Matière verrouillée",
+          description: "La compréhension orale est actuellement verrouillée et n'est pas disponible.",
+          duration: 5000,
+        });
+      }
     }
-  }, [location.search, setMatiere]);
+  }, [location.search, setMatiere, toast]);
 
   // Afficher les détails de la configuration actuelle pour le débogage
   useEffect(() => {
