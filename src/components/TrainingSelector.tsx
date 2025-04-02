@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -91,9 +92,9 @@ const getNiveauByDiplome = (diplome: string | undefined) => {
     case 'gmat':
     case 'tage-mage':
       return [
+        { value: "facile", label: "Facile" },
         { value: "intermediaire", label: "Intermédiaire" },
-        { value: "avance", label: "Avancé" },
-        { value: "both", label: "Les deux" }
+        { value: "avance", label: "Avancé" }
       ];
     case 'brevet':
       return [

@@ -149,7 +149,7 @@ const flashcardsData: Flashcard[] = [
     question: 'Identifier un synonyme de "content"',
     answer: 'Happy',
     matiere: 'Vocabulaire',
-    niveau: 'intermediaire',
+    niveau: 'facile',
     diplome: 'toeic'
   },
   {
@@ -157,6 +157,15 @@ const flashcardsData: Flashcard[] = [
     question: 'Compléter : The meeting will be held ____ Tuesday.',
     answer: 'on',
     matiere: 'Grammaire',
+    niveau: 'intermediaire',
+    diplome: 'toeic'
+  },
+  // Ajout de questions TOEIC de niveau avancé
+  {
+    id: '35',
+    question: 'What\'s the most appropriate response to: "I\'m considering tendering my resignation."',
+    answer: 'I\'m sorry to hear that. Perhaps we could discuss your concerns first.',
+    matiere: 'Compréhension orale',
     niveau: 'avance',
     diplome: 'toeic'
   },
@@ -166,7 +175,7 @@ const flashcardsData: Flashcard[] = [
     question: 'Calculer : 15 * 3',
     answer: '45',
     matiere: 'Calcul',
-    niveau: 'intermediaire',
+    niveau: 'facile',
     diplome: 'tage-mage'
   },
   {
@@ -174,6 +183,15 @@ const flashcardsData: Flashcard[] = [
     question: 'Résoudre la suite logique : 2, 4, 6, ?',
     answer: '8',
     matiere: 'Logique',
+    niveau: 'intermediaire',
+    diplome: 'tage-mage'
+  },
+  // Ajout de questions TAGE MAGE de niveau avancé
+  {
+    id: '36',
+    question: 'Résoudre : Si n² - 4n + k = 0 a une racine double, quelle est la valeur de k ?',
+    answer: '4',
+    matiere: 'Calcul',
     niveau: 'avance',
     diplome: 'tage-mage'
   },
@@ -232,7 +250,7 @@ const flashcardsData: Flashcard[] = [
     question: 'What is the difference between "affect" and "effect"?',
     answer: '"Affect" is usually a verb meaning to influence; "effect" is usually a noun meaning result or consequence',
     matiere: 'Grammar',
-    niveau: 'avance',
+    niveau: 'intermediaire',
     diplome: 'toefl'
   },
   {
@@ -240,7 +258,16 @@ const flashcardsData: Flashcard[] = [
     question: 'What\'s the meaning of "to procrastinate"?',
     answer: 'To delay or postpone action; put off doing something',
     matiere: 'Vocabulary',
-    niveau: 'intermediaire',
+    niveau: 'facile',
+    diplome: 'toefl'
+  },
+  // Ajout de questions TOEFL de niveau avancé
+  {
+    id: '37',
+    question: 'Critique the following argument: "Censorship is justified because some information is harmful."',
+    answer: 'This argument fails to consider who determines what is harmful, ignores the value of freedom of information, and assumes censorship is an effective solution to harmful content.',
+    matiere: 'Writing',
+    niveau: 'avance',
     diplome: 'toefl'
   },
   // IELTS flashcards
@@ -249,7 +276,7 @@ const flashcardsData: Flashcard[] = [
     question: 'What\'s the recommended structure for IELTS Writing Task 2?',
     answer: 'Introduction, 2-3 body paragraphs, and conclusion. About 250 words minimum.',
     matiere: 'Writing',
-    niveau: 'avance',
+    niveau: 'intermediaire',
     diplome: 'ielts'
   },
   {
@@ -257,7 +284,16 @@ const flashcardsData: Flashcard[] = [
     question: 'What\'s the difference between IELTS Academic and General Training?',
     answer: 'Academic is for higher education studies; General Training is for work experience or migration purposes. Reading and Writing sections differ.',
     matiere: 'Academic',
-    niveau: 'intermediaire',
+    niveau: 'facile',
+    diplome: 'ielts'
+  },
+  // Ajout de questions IELTS de niveau avancé
+  {
+    id: '38',
+    question: 'Describe a time when technology failed you and how you dealt with the situation.',
+    answer: 'This is a speaking prompt that requires a personal anecdote about technology failure and resilience, with advanced vocabulary and complex sentence structures.',
+    matiere: 'Speaking',
+    niveau: 'avance',
     diplome: 'ielts'
   },
   // Cambridge flashcards
@@ -266,7 +302,7 @@ const flashcardsData: Flashcard[] = [
     question: 'Which phrasal verb means "to cancel"?',
     answer: 'To call off',
     matiere: 'Reading & Use of English',
-    niveau: 'intermediaire',
+    niveau: 'facile',
     diplome: 'cambridge'
   },
   {
@@ -274,6 +310,15 @@ const flashcardsData: Flashcard[] = [
     question: 'What\'s a "collocation"?',
     answer: 'A group of words that usually go together, like "make a mistake" or "heavy rain"',
     matiere: 'Reading & Use of English',
+    niveau: 'intermediaire',
+    diplome: 'cambridge'
+  },
+  // Ajout de questions Cambridge de niveau avancé
+  {
+    id: '39',
+    question: 'Explain the rule for inversion after negative or limiting adverbials.',
+    answer: 'After negative or limiting adverbials (e.g., never, rarely, seldom, hardly, only then), the auxiliary verb comes before the subject: "Never have I seen such a performance."',
+    matiere: 'Grammar',
     niveau: 'avance',
     diplome: 'cambridge'
   },
@@ -283,7 +328,7 @@ const flashcardsData: Flashcard[] = [
     question: 'What is the difference between the mean and the median?',
     answer: 'The mean is the average of all values; the median is the middle value when arranged in order',
     matiere: 'Quantitative',
-    niveau: 'intermediaire',
+    niveau: 'facile',
     diplome: 'gmat'
   },
   {
@@ -292,6 +337,15 @@ const flashcardsData: Flashcard[] = [
     answer: 'Equilateral triangle',
     matiere: 'Quantitative',
     niveau: 'intermediaire',
+    diplome: 'gmat'
+  },
+  // Ajout de questions GMAT de niveau avancé
+  {
+    id: '40',
+    question: 'If f(x) = x² - 3x + 2 and g(x) = 2x - 1, find f(g(3)).',
+    answer: '25',
+    matiere: 'Quantitative',
+    niveau: 'avance',
     diplome: 'gmat'
   }
 ];
