@@ -32,30 +32,78 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
+  // Vérification si on est en mode développement local
+  const isLocalDev = 
+    (!import.meta.env.VITE_SUPABASE_URL || 
+     !import.meta.env.VITE_SUPABASE_ANON_KEY ||
+     import.meta.env.VITE_SUPABASE_URL === 'https://your-supabase-url.supabase.co' ||
+     import.meta.env.VITE_SUPABASE_ANON_KEY === 'your-anon-key');
+  
   useEffect(() => {
     const setData = async () => {
       try {
-        const { data: { session }, error } = await supabase.auth.getSession();
-        if (error) throw error;
-        setSession(session);
-        setUser(session?.user ?? null);
-        
-        if (session?.user) {
-          // Vérifier si l'utilisateur est admin et obtenir son profil
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
+        if (isLocalDev) {
+          // Vérifier si l'utilisateur est connecté en local (localStorage)
+          const storedSession = localStorage.getItem('supabase.auth.session');
           
-          if (!error && data) {
-            setUserProfile(data);
-            setIsAdmin(data.role === 'admin');
+          if (storedSession) {
+            const sessionData = JSON.parse(storedSession);
+            setSession(sessionData.session);
+            setUser(sessionData.session?.user ?? null);
+            
+            if (sessionData.session?.user) {
+              // Si c'est l'admin en mode développement
+              if (sessionData.session.user.email === 'admin@example.com') {
+                const adminProfile = {
+                  id: sessionData.session.user.id,
+                  username: 'admin',
+                  email: 'admin@example.com',
+                  role: 'admin',
+                  created_at: new Date().toISOString()
+                };
+                setUserProfile(adminProfile);
+                setIsAdmin(true);
+              } else {
+                const userProfile = {
+                  id: sessionData.session.user.id,
+                  username: sessionData.session.user.user_metadata?.username || sessionData.session.user.email?.split('@')[0],
+                  email: sessionData.session.user.email,
+                  role: 'user',
+                  created_at: new Date().toISOString()
+                };
+                setUserProfile(userProfile);
+                setIsAdmin(false);
+              }
+              // Vérifier l'abonnement
+              const subscribed = await checkSubscription();
+              setIsSubscribed(subscribed);
+            }
           }
+        } else {
+          // Mode production avec Supabase
+          const { data: { session }, error } = await supabase.auth.getSession();
+          if (error) throw error;
           
-          // Vérifier l'abonnement
-          const subscribed = await checkSubscription();
-          setIsSubscribed(subscribed);
+          setSession(session);
+          setUser(session?.user ?? null);
+          
+          if (session?.user) {
+            // Vérifier si l'utilisateur est admin et obtenir son profil
+            const { data, error } = await supabase
+              .from('profiles')
+              .select('*')
+              .eq('id', session.user.id)
+              .single();
+            
+            if (!error && data) {
+              setUserProfile(data);
+              setIsAdmin(data.role === 'admin');
+            }
+            
+            // Vérifier l'abonnement
+            const subscribed = await checkSubscription();
+            setIsSubscribed(subscribed);
+          }
         }
       } catch (error) {
         console.error('Erreur lors de la récupération de la session:', error);
@@ -74,22 +122,54 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsLoading(true);
         
         if (session?.user) {
-          // Vérifier si l'utilisateur est admin et obtenir son profil
-          const { data, error } = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('id', session.user.id)
-            .single();
-          
-          if (!error && data) {
-            setUserProfile(data);
-            setIsAdmin(data.role === 'admin');
+          if (isLocalDev) {
+            // Mode développement local
+            localStorage.setItem('supabase.auth.session', JSON.stringify({ session }));
+            
+            // Si c'est l'admin en mode développement
+            if (session.user.email === 'admin@example.com') {
+              const adminProfile = {
+                id: session.user.id,
+                username: 'admin',
+                email: 'admin@example.com',
+                role: 'admin',
+                created_at: new Date().toISOString()
+              };
+              setUserProfile(adminProfile);
+              setIsAdmin(true);
+            } else {
+              const userProfile = {
+                id: session.user.id,
+                username: session.user.user_metadata?.username || session.user.email?.split('@')[0],
+                email: session.user.email,
+                role: 'user',
+                created_at: new Date().toISOString()
+              };
+              setUserProfile(userProfile);
+              setIsAdmin(false);
+            }
+          } else {
+            // Mode production avec Supabase
+            // Vérifier si l'utilisateur est admin et obtenir son profil
+            const { data, error } = await supabase
+              .from('profiles')
+              .select('*')
+              .eq('id', session.user.id)
+              .single();
+            
+            if (!error && data) {
+              setUserProfile(data);
+              setIsAdmin(data.role === 'admin');
+            }
           }
           
           // Vérifier l'abonnement
           const subscribed = await checkSubscription();
           setIsSubscribed(subscribed);
         } else {
+          if (isLocalDev) {
+            localStorage.removeItem('supabase.auth.session');
+          }
           setUserProfile(null);
           setIsAdmin(false);
           setIsSubscribed(false);
@@ -102,14 +182,34 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, []);
+  }, [isLocalDev]);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    if (isLocalDev) {
+      localStorage.removeItem('supabase.auth.session');
+      setSession(null);
+      setUser(null);
+      setUserProfile(null);
+      setIsAdmin(false);
+      setIsSubscribed(false);
+    } else {
+      await supabase.auth.signOut();
+    }
   };
 
   const checkSubscription = async (): Promise<boolean> => {
     if (!user) return false;
+
+    if (isLocalDev) {
+      // En mode développement, on considère l'admin comme abonné
+      if (user.email === 'admin@example.com') {
+        return true;
+      }
+      
+      // Vérifier si l'utilisateur a un abonnement dans le localStorage
+      const storedSubscription = localStorage.getItem('user.subscription');
+      return storedSubscription === 'active';
+    }
 
     try {
       // Vérifier si l'utilisateur a un abonnement actif
