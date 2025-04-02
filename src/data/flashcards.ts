@@ -1,4 +1,6 @@
+
 import { Flashcard, NiveauType, NombreQuestions, DiplomeType } from '@/types';
+// Import TOEIC flashcards
 import { listeningFacileToeicFlashcards } from './ListeningFacileToeicFlashcards';
 import { listeningIntermediaireToeicFlashcards } from './ListeningIntermediaireToeicFlashcards';
 import { listeningAvanceToeicFlashcards } from './ListeningAvanceToeicFlashcards';
@@ -11,6 +13,8 @@ import { readingAvanceToeicFlashcards } from './ReadingAvanceToeicFlashcards';
 import { vocabulaireFacileToeicFlashcards } from './VocabulaireFacileToeicFlashcards';
 import { vocabulaireIntermediaireToeicFlashcards } from './VocabulaireIntermediaireToeicFlashcards';
 import { vocabulaireAvanceToeicFlashcards } from './VocabulaireAvanceToeicFlashcards';
+
+// Import TAGE MAGE flashcards
 import { calculFacileTageMageFlashcards } from './CalculFacileTageMageFlashcards';
 import { calculIntermediaireTageMageFlashcards } from './CalculIntermediaireTageMageFlashcards';
 import { calculAvanceTageMageFlashcards } from './CalculAvanceTageMageFlashcards';
@@ -23,65 +27,9 @@ import { verbalAvanceTageMageFlashcards } from './VerbalAvanceTageMageFlashcards
 import { problemeFacileTageMageFlashcards } from './ProblemeFacileTageMageFlashcards';
 import { problemeIntermediaireTageMageFlashcards } from './ProblemeIntermediaireTageMageFlashcards';
 import { problemeAvanceTageMageFlashcards } from './ProblemeAvanceTageMageFlashcards';
-import { toeicExtraFlashcards, tageMageExtraFlashcards, bacExtraFlashcards } from './extraFlashcards';
-import { francaisGrammaireQuatriemeFlashcards } from './FrancaisGrammaireQuatriemeFlashcards';
-import { francaisGrammaireTroisiemeFlashcards } from './FrancaisGrammaireTroisiemeFlashcards';
-import { francaisComprehensionQuatriemeFlashcards } from './FrancaisComprehensionQuatriemeFlashcards';
-import { francaisComprehensionTroisiemeFlashcards } from './FrancaisComprehensionTroisiemeFlashcards';
-import { francaisRedactionQuatriemeFlashcards } from './FrancaisRedactionQuatriemeFlashcards';
-import { francaisRedactionTroisiemeFlashcards } from './FrancaisRedactionTroisiemeFlashcards';
-import { mathsCalculsQuatriemeFlashcards } from './MathsCalculsQuatriemeFlashcards';
-import { mathsCalculsTroisiemeFlashcards } from './MathsCalculsTroisiemeFlashcards';
-import { mathsGeometrieQuatriemeFlashcards } from './MathsGeometrieQuatriemeFlashcards';
-import { mathsGeometrieTroisiemeFlashcards } from './MathsGeometrieTroisiemeFlashcards';
-import { mathsProgrammationQuatriemeFlashcards } from './MathsProgrammationQuatriemeFlashcards';
-import { mathsProgrammationTroisiemeFlashcards } from './MathsProgrammationTroisiemeFlashcards';
-import { histoireQuatriemeFlashcards } from './HistoireQuatriemeFlashcards';
-import { histoireTroisiemeFlashcards } from './HistoireTroisiemeFlashcards';
-import { geographieQuatriemeFlashcards } from './GeographieQuatriemeFlashcards';
-import { geographieTroisiemeFlashcards } from './GeographieTroisiemeFlashcards';
-import { emcQuatriemeFlashcards } from './EMCQuatriemeFlashcards';
-import { emcTroisiemeFlashcards } from './EMCTroisiemeFlashcards';
-import { physiqueChimieQuatriemeFlashcards } from './PhysiqueChimieQuatriemeFlashcards';
-import { physiqueChimieTroisiemeFlashcards } from './PhysiqueChimieTroisiemeFlashcards';
-import { svtQuatriemeFlashcards } from './SVTQuatriemeFlashcards';
-import { svtTroisiemeFlashcards } from './SVTTroisiemeFlashcards';
-import { technologieQuatriemeFlashcards } from './TechnologieQuatriemeFlashcards';
-import { technologieTroisiemeFlashcards } from './TechnologieTroisiemeFlashcards';
-import { philosophieTerminaleFlashcards } from './PhilosophieTerminaleFlashcards';
-import { francaisPremiereFlashcards } from './FrancaisPremiereFlashcards';
-import { histoirePremiereFlashcards } from './HistoirePremiereFlashcards';
-import { histoireTerminaleFlashcards } from './HistoireTerminaleFlashcards';
-import { geographiePremiereFlashcards } from './GeographiePremiereFlashcards';
-import { geographieTerminaleFlashcards } from './GeographieTerminaleFlashcards';
-import { emcPremiereFlashcards } from './EMCPremiereFlashcards';
-import { emcTerminaleFlashcards } from './EMCTerminaleFlashcards';
-import { anglaisPremiereFlashcards } from './AnglaisPremiereFlashcards';
-import { anglaisTerminaleFlashcards } from './AnglaisTerminaleFlashcards';
-import { espagnolPremiereFlashcards } from './EspagnolPremiereFlashcards';
-import { espagnolTerminaleFlashcards } from './EspagnolTerminaleFlashcards';
-import { mathematiquesPremiereFlashcards } from './MathematiquesPremiereFlashcards';
-import { mathematiquesTerminaleFlashcards } from './MathematiquesTerminaleFlashcards';
-import { physiqueChimiePremiereFlashcards } from './PhysiqueChimiePremiereFlashcards';
-import { physiqueChimieTerminaleFlashcards } from './PhysiqueChimieTerminaleFlashcards';
-import { svtPremiereFlashcards } from './SVTPremiereFlashcards';
-import { svtTerminaleFlashcards } from './SVTTerminaleFlashcards';
-import { sesPremiereFlashcards } from './SESPremiereFlashcards';
-import { sesTerminaleFlashcards } from './SESTerminaleFlashcards';
-import { hggspPremiereFlashcards } from './HGGSPPremiereFlashcards';
-import { hggspTerminaleFlashcards } from './HGGSPTerminaleFlashcards';
-import { hlpPremiereFlashcards } from './HLPPremiereFlashcards';
-import { hlpTerminaleFlashcards } from './HLPTerminaleFlashcards';
-import { nsiPremiereFlashcards } from './NSIPremiereFlashcards';
-import { nsiTerminaleFlashcards } from './NSITerminaleFlashcards';
-import { artsPremiereFlashcards } from './ArtsPremiereFlashcards';
-import { artsTerminaleFlashcards } from './ArtsTerminaleFlashcards';
-import { mathsExpertesTerminaleFlashcards } from './MathsExpertesTerminaleFlashcards';
-import { mathsComplementairesTerminaleFlashcards } from './MathsComplementairesTerminaleFlashcards';
-import { lvcPremiereFlashcards } from './LVCPremiereFlashcards';
-import { lvcTerminaleFlashcards } from './LVCTerminaleFlashcards';
-import { latinGrecPremiereFlashcards } from './LatinGrecPremiereFlashcards';
-import { latinGrecTerminaleFlashcards } from './LatinGrecTerminaleFlashcards';
+
+// Import extra flashcards
+import { toeicExtraFlashcards, tageMageExtraFlashcards } from './extraFlashcards';
 
 // Map les noms de matières affichés dans l'interface vers les noms utilisés dans les fichiers
 const matiereMapping: Record<string, string> = {
@@ -139,6 +87,9 @@ const niveauMapping: Record<string, string> = {
   'terminale': 'terminale',
 };
 
+// Placeholders pour les collections de flashcards non encore implémentées
+const emptyFlashcards: Flashcard[] = [];
+
 // Fonction qui récupère les flashcards en fonction des critères
 export const getFlashcards = (
   matiere: string | undefined,
@@ -188,75 +139,16 @@ export const getFlashcards = (
     ];
   }
   
-  // Brevet Flashcards
+  // Brevet Flashcards - Temporairement vide jusqu'à ce que les fichiers soient implémentés
   if (diplome === 'brevet') {
-    allFlashcards = [
-      ...francaisGrammaireQuatriemeFlashcards,
-      ...francaisGrammaireTroisiemeFlashcards,
-      ...francaisComprehensionQuatriemeFlashcards,
-      ...francaisComprehensionTroisiemeFlashcards,
-      ...francaisRedactionQuatriemeFlashcards,
-      ...francaisRedactionTroisiemeFlashcards,
-      ...mathsCalculsQuatriemeFlashcards,
-      ...mathsCalculsTroisiemeFlashcards,
-      ...mathsGeometrieQuatriemeFlashcards,
-      ...mathsGeometrieTroisiemeFlashcards,
-      ...mathsProgrammationQuatriemeFlashcards,
-      ...mathsProgrammationTroisiemeFlashcards,
-      ...histoireQuatriemeFlashcards,
-      ...histoireTroisiemeFlashcards,
-      ...geographieQuatriemeFlashcards,
-      ...geographieTroisiemeFlashcards,
-      ...emcQuatriemeFlashcards,
-      ...emcTroisiemeFlashcards,
-      ...physiqueChimieQuatriemeFlashcards,
-      ...physiqueChimieTroisiemeFlashcards,
-      ...svtQuatriemeFlashcards,
-      ...svtTroisiemeFlashcards,
-      ...technologieQuatriemeFlashcards,
-      ...technologieTroisiemeFlashcards
-    ];
+    allFlashcards = [...emptyFlashcards];
+    console.log("Flashcards pour le Brevet pas encore implémentées");
   }
   
-  // Baccalauréat Flashcards
+  // Baccalauréat Flashcards - Temporairement vide jusqu'à ce que les fichiers soient implémentés
   if (diplome === 'baccalaureat') {
-    allFlashcards = [
-      ...philosophieTerminaleFlashcards,
-      ...francaisPremiereFlashcards,
-      ...histoirePremiereFlashcards,
-      ...histoireTerminaleFlashcards,
-      ...geographiePremiereFlashcards,
-      ...geographieTerminaleFlashcards,
-      ...emcPremiereFlashcards,
-      ...emcTerminaleFlashcards,
-      ...anglaisPremiereFlashcards,
-      ...anglaisTerminaleFlashcards,
-      ...espagnolPremiereFlashcards,
-      ...espagnolTerminaleFlashcards,
-      ...mathematiquesPremiereFlashcards,
-      ...mathematiquesTerminaleFlashcards,
-      ...physiqueChimiePremiereFlashcards,
-      ...physiqueChimieTerminaleFlashcards,
-      ...svtPremiereFlashcards,
-      ...svtTerminaleFlashcards,
-      ...sesPremiereFlashcards,
-      ...sesTerminaleFlashcards,
-      ...hggspPremiereFlashcards,
-      ...hggspTerminaleFlashcards,
-      ...hlpPremiereFlashcards,
-      ...hlpTerminaleFlashcards,
-      ...nsiPremiereFlashcards,
-      ...nsiTerminaleFlashcards,
-      ...artsPremiereFlashcards,
-      ...artsTerminaleFlashcards,
-      ...mathsExpertesTerminaleFlashcards,
-      ...mathsComplementairesTerminaleFlashcards,
-      ...lvcPremiereFlashcards,
-      ...lvcTerminaleFlashcards,
-      ...latinGrecPremiereFlashcards,
-      ...latinGrecTerminaleFlashcards,
-      ...bacExtraFlashcards
-    ];
+    allFlashcards = [...emptyFlashcards];
+    console.log("Flashcards pour le Baccalauréat pas encore implémentées");
   }
   
   // Log pour déboguer
