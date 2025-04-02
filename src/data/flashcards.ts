@@ -14,6 +14,23 @@ import { vocabulaireFacileToeicFlashcards } from './VocabulaireFacileToeicFlashc
 import { vocabulaireIntermediaireToeicFlashcards } from './VocabulaireIntermediaireToeicFlashcards';
 import { vocabulaireAvanceToeicFlashcards } from './VocabulaireAvanceToeicFlashcards';
 
+// Import TOEFL flashcards
+import { readingFacileToeflFlashcards } from './ReadingFacileToeflFlashcards';
+import { readingIntermediaireToeflFlashcards } from './ReadingIntermediaireToeflFlashcards';
+import { readingAvanceToeflFlashcards } from './ReadingAvanceToeflFlashcards';
+import { speakingFacileToeflFlashcards } from './SpeakingFacileToeflFlashcards';
+import { speakingIntermediaireToeflFlashcards } from './SpeakingIntermediaireToeflFlashcards';
+import { speakingAvanceToeflFlashcards } from './SpeakingAvanceToeflFlashcards';
+import { writingFacileToeflFlashcards } from './WritingFacileToeflFlashcards';
+import { writingIntermediaireToeflFlashcards } from './WritingIntermediaireToeflFlashcards';
+import { writingAvanceToeflFlashcards } from './WritingAvanceToeflFlashcards';
+import { grammaireFacileToeflFlashcards } from './GrammaireFacileToeflFlashcards';
+import { grammaireIntermediaireToeflFlashcards } from './GrammaireIntermediaireToeflFlashcards';
+import { grammaireAvanceToeflFlashcards } from './GrammaireAvanceToeflFlashcards';
+import { vocabulaireFacileToeflFlashcards } from './VocabulaireFacileToeflFlashcards';
+import { vocabulaireIntermediaireToeflFlashcards } from './VocabulaireIntermediaireToeflFlashcards';
+import { vocabulaireAvanceToeflFlashcards } from './VocabulaireAvanceToeflFlashcards';
+
 // Import TAGE MAGE flashcards
 import { calculFacileTageMageFlashcards } from './CalculFacileTageMageFlashcards';
 import { calculIntermediaireTageMageFlashcards } from './CalculIntermediaireTageMageFlashcards';
@@ -38,6 +55,14 @@ const matiereMapping: Record<string, string> = {
   'Compréhension écrite': 'TOEIC Reading',
   'Grammaire': 'TOEIC Grammar',
   'Vocabulaire': 'TOEIC Business Vocabulary',
+  
+  // TOEFL
+  'TOEFL Compréhension orale': 'TOEFL Listening',
+  'TOEFL Compréhension écrite': 'TOEFL Reading',
+  'TOEFL Expression orale': 'TOEFL Speaking',
+  'TOEFL Expression écrite': 'TOEFL Writing',
+  'TOEFL Grammaire': 'TOEFL Grammar',
+  'TOEFL Vocabulaire': 'TOEFL Vocabulary',
   
   // TAGE MAGE
   'Calcul': 'TAGE MAGE - Calcul',
@@ -117,6 +142,27 @@ export const getFlashcards = (
       ...vocabulaireIntermediaireToeicFlashcards,
       ...vocabulaireAvanceToeicFlashcards,
       ...toeicExtraFlashcards
+    ];
+  }
+  
+  // TOEFL Flashcards
+  if (diplome === 'toefl') {
+    allFlashcards = [
+      ...readingFacileToeflFlashcards,
+      ...readingIntermediaireToeflFlashcards,
+      ...readingAvanceToeflFlashcards,
+      ...speakingFacileToeflFlashcards,
+      ...speakingIntermediaireToeflFlashcards,
+      ...speakingAvanceToeflFlashcards,
+      ...writingFacileToeflFlashcards,
+      ...writingIntermediaireToeflFlashcards,
+      ...writingAvanceToeflFlashcards,
+      ...grammaireFacileToeflFlashcards,
+      ...grammaireIntermediaireToeflFlashcards,
+      ...grammaireAvanceToeflFlashcards,
+      ...vocabulaireFacileToeflFlashcards,
+      ...vocabulaireIntermediaireToeflFlashcards,
+      ...vocabulaireAvanceToeflFlashcards
     ];
   }
   
