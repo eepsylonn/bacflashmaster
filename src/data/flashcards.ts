@@ -100,6 +100,14 @@ const matiereMapping: Record<string, string> = {
   'TOEFL Grammaire': 'TOEFL Grammar',
   'TOEFL Vocabulaire': 'TOEFL Vocabulary',
   
+  // Ajoutons des mappages directs pour TOEFL
+  'TOEFL Reading': 'TOEFL Reading',
+  'TOEFL Writing': 'TOEFL Writing',
+  'TOEFL Speaking': 'TOEFL Speaking',
+  'TOEFL Listening': 'TOEFL Listening',
+  'TOEFL Grammar': 'TOEFL Grammar',
+  'TOEFL Vocabulary': 'TOEFL Vocabulary',
+  
   // TAGE MAGE
   'Calcul': 'TAGE MAGE - Calcul',
   'Logique': 'TAGE MAGE - Logique',
@@ -113,6 +121,13 @@ const matiereMapping: Record<string, string> = {
   'IELTS Vocabulary': 'IELTS Vocabulary',
   'IELTS Academic': 'IELTS Academic',
   'IELTS General Training': 'IELTS General Training',
+  
+  // Cambridge
+  'Reading & Use of English': 'Reading & Use of English',
+  'Writing': 'Writing',
+  'Speaking': 'Speaking',
+  'Grammar': 'Grammar',
+  'Vocabulary': 'Vocabulary',
   
   // Brevet
   'Français (Grammaire)': 'Français - Grammaire',
@@ -143,13 +158,6 @@ const matiereMapping: Record<string, string> = {
   'Mathématiques complémentaires': 'Mathématiques complémentaires',
   'LVC': 'LVC',
   'Latin/Grec': 'Latin/Grec',
-
-  // Cambridge
-  'Reading & Use of English': 'Reading & Use of English',
-  'Writing': 'Writing',
-  'Speaking': 'Speaking',
-  'Grammar': 'Grammar',
-  'Vocabulary': 'Vocabulary',
 };
 
 // Mapping des niveaux affichés vers les niveaux utilisés dans les fichiers
