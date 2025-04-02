@@ -1,3 +1,4 @@
+
 import { Flashcard } from '@/types';
 import { getFlashcards } from './flashcards';
 import { philosophyFlashcards } from './philosophyFlashcards';
@@ -76,6 +77,32 @@ import { grammaireAvanceCambridgeFlashcards } from './GrammaireAvanceCambridgeFl
 import { vocabularyFacileCambridgeFlashcards } from './VocabularyFacileCambridgeFlashcards';
 import { vocabularyIntermediaireCambridgeFlashcards } from './VocabularyIntermediaireCambridgeFlashcards';
 import { vocabularyAvanceCambridgeFlashcards } from './VocabularyAvanceCambridgeFlashcards';
+
+// Import des flashcards Brevet
+import { francaisGrammaireQuatriemeBrevetFlashcards } from './FrancaisGrammaireQuatriemeBrevetFlashcards';
+import { francaisGrammaireTrioisemeBrevetFlashcards } from './FrancaisGrammaireTrioisemeBrevetFlashcards';
+import { francaisComprehensionQuatriemeBrevetFlashcards } from './FrancaisComprehensionQuatriemeBrevetFlashcards';
+import { francaisComprehensionTrioisemeBrevetFlashcards } from './FrancaisComprehensionTrioisemeBrevetFlashcards';
+import { francaisRedactionQuatriemeBrevetFlashcards } from './FrancaisRedactionQuatriemeBrevetFlashcards';
+import { francaisRedactionTrioisemeBrevetFlashcards } from './FrancaisRedactionTrioisemeBrevetFlashcards';
+import { mathematiquesCalculsQuatriemeBrevetFlashcards } from './MathematiquesCalculsQuatriemeBrevetFlashcards';
+import { mathematiquesCalculsTrioisemeBrevetFlashcards } from './MathematiquesCalculsTrioisemeBrevetFlashcards';
+import { mathematiquesGeometrieQuatriemeBrevetFlashcards } from './MathematiquesGeometrieQuatriemeBrevetFlashcards';
+import { mathematiquesGeometrieTrioisemeBrevetFlashcards } from './MathematiquesGeometrieTrioisemeBrevetFlashcards';
+import { mathematiquesProgrammationQuatriemeBrevetFlashcards } from './MathematiquesProgrammationQuatriemeBrevetFlashcards';
+import { mathematiquesProgrammationTrioisemeBrevetFlashcards } from './MathematiquesProgrammationTrioisemeBrevetFlashcards';
+import { histoireQuatriemeBrevetFlashcards } from './HistoireQuatriemeBrevetFlashcards';
+import { histoireTrioisemeBrevetFlashcards } from './HistoireTrioisemeBrevetFlashcards';
+import { geographieQuatriemeBrevetFlashcards } from './GeographieQuatriemeBrevetFlashcards';
+import { geographieTrioisemeBrevetFlashcards } from './GeographieTrioisemeBrevetFlashcards';
+import { emcQuatriemeBrevetFlashcards } from './EMCQuatriemeBrevetFlashcards';
+import { emcTrioisemeBrevetFlashcards } from './EMCTrioisemeBrevetFlashcards';
+import { physiqueChimieQuatriemeBrevetFlashcards } from './PhysiqueChimieQuatriemeBrevetFlashcards';
+import { physiqueChimieTrioisemeBrevetFlashcards } from './PhysiqueChimieTrioisemeBrevetFlashcards';
+import { svtQuatriemeBrevetFlashcards } from './SVTQuatriemeBrevetFlashcards';
+import { svtTrioisemeBrevetFlashcards } from './SVTTrioisemeBrevetFlashcards';
+import { technologieQuatriemeBrevetFlashcards } from './TechnologieQuatriemeBrevetFlashcards';
+import { technologieTrioisemeBrevetFlashcards } from './TechnologieTrioisemeBrevetFlashcards';
 
 // Export all flashcards for use in other files
 export { getFlashcards } from './flashcards';
@@ -157,6 +184,31 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...grammaireAvanceCambridgeFlashcards,
     ...vocabularyFacileCambridgeFlashcards,
     ...vocabularyIntermediaireCambridgeFlashcards,
-    ...vocabularyAvanceCambridgeFlashcards
+    ...vocabularyAvanceCambridgeFlashcards,
+    // Brevet flashcards
+    ...francaisGrammaireQuatriemeBrevetFlashcards,
+    ...francaisGrammaireTrioisemeBrevetFlashcards,
+    ...francaisComprehensionQuatriemeBrevetFlashcards,
+    ...francaisComprehensionTrioisemeBrevetFlashcards,
+    ...francaisRedactionQuatriemeBrevetFlashcards,
+    ...francaisRedactionTrioisemeBrevetFlashcards,
+    ...mathematiquesCalculsQuatriemeBrevetFlashcards,
+    ...mathematiquesCalculsTrioisemeBrevetFlashcards,
+    ...mathematiquesGeometrieQuatriemeBrevetFlashcards,
+    ...mathematiquesGeometrieTrioisemeBrevetFlashcards,
+    ...mathematiquesProgrammationQuatriemeBrevetFlashcards,
+    ...mathematiquesProgrammationTrioisemeBrevetFlashcards,
+    ...histoireQuatriemeBrevetFlashcards,
+    ...histoireTrioisemeBrevetFlashcards,
+    ...geographieQuatriemeBrevetFlashcards,
+    ...geographieTrioisemeBrevetFlashcards,
+    ...emcQuatriemeBrevetFlashcards,
+    ...emcTrioisemeBrevetFlashcards,
+    ...physiqueChimieQuatriemeBrevetFlashcards,
+    ...physiqueChimieTrioisemeBrevetFlashcards,
+    ...svtQuatriemeBrevetFlashcards,
+    ...svtTrioisemeBrevetFlashcards,
+    ...technologieQuatriemeBrevetFlashcards,
+    ...technologieTrioisemeBrevetFlashcards
   ];
 };

@@ -1,3 +1,4 @@
+
 import { Flashcard, NiveauType, NombreQuestions, DiplomeType } from '@/types';
 // Import TOEIC flashcards
 import { listeningFacileToeicFlashcards } from './ListeningFacileToeicFlashcards';
@@ -95,6 +96,32 @@ import { analyticalWritingFacileGMATFlashcards } from './AnalyticalWritingFacile
 import { analyticalWritingIntermediaireGMATFlashcards } from './AnalyticalWritingIntermediaireGMATFlashcards';
 import { analyticalWritingAvanceGMATFlashcards } from './AnalyticalWritingAvanceGMATFlashcards';
 
+// Import Brevet flashcards
+import { francaisGrammaireQuatriemeBrevetFlashcards } from './FrancaisGrammaireQuatriemeBrevetFlashcards';
+import { francaisGrammaireTrioisemeBrevetFlashcards } from './FrancaisGrammaireTrioisemeBrevetFlashcards';
+import { francaisComprehensionQuatriemeBrevetFlashcards } from './FrancaisComprehensionQuatriemeBrevetFlashcards';
+import { francaisComprehensionTrioisemeBrevetFlashcards } from './FrancaisComprehensionTrioisemeBrevetFlashcards';
+import { francaisRedactionQuatriemeBrevetFlashcards } from './FrancaisRedactionQuatriemeBrevetFlashcards';
+import { francaisRedactionTrioisemeBrevetFlashcards } from './FrancaisRedactionTrioisemeBrevetFlashcards';
+import { mathematiquesCalculsQuatriemeBrevetFlashcards } from './MathematiquesCalculsQuatriemeBrevetFlashcards';
+import { mathematiquesCalculsTrioisemeBrevetFlashcards } from './MathematiquesCalculsTrioisemeBrevetFlashcards';
+import { mathematiquesGeometrieQuatriemeBrevetFlashcards } from './MathematiquesGeometrieQuatriemeBrevetFlashcards';
+import { mathematiquesGeometrieTrioisemeBrevetFlashcards } from './MathematiquesGeometrieTrioisemeBrevetFlashcards';
+import { mathematiquesProgrammationQuatriemeBrevetFlashcards } from './MathematiquesProgrammationQuatriemeBrevetFlashcards';
+import { mathematiquesProgrammationTrioisemeBrevetFlashcards } from './MathematiquesProgrammationTrioisemeBrevetFlashcards';
+import { histoireQuatriemeBrevetFlashcards } from './HistoireQuatriemeBrevetFlashcards';
+import { histoireTrioisemeBrevetFlashcards } from './HistoireTrioisemeBrevetFlashcards';
+import { geographieQuatriemeBrevetFlashcards } from './GeographieQuatriemeBrevetFlashcards';
+import { geographieTrioisemeBrevetFlashcards } from './GeographieTrioisemeBrevetFlashcards';
+import { emcQuatriemeBrevetFlashcards } from './EMCQuatriemeBrevetFlashcards';
+import { emcTrioisemeBrevetFlashcards } from './EMCTrioisemeBrevetFlashcards';
+import { physiqueChimieQuatriemeBrevetFlashcards } from './PhysiqueChimieQuatriemeBrevetFlashcards';
+import { physiqueChimieTrioisemeBrevetFlashcards } from './PhysiqueChimieTrioisemeBrevetFlashcards';
+import { svtQuatriemeBrevetFlashcards } from './SVTQuatriemeBrevetFlashcards';
+import { svtTrioisemeBrevetFlashcards } from './SVTTrioisemeBrevetFlashcards';
+import { technologieQuatriemeBrevetFlashcards } from './TechnologieQuatriemeBrevetFlashcards';
+import { technologieTrioisemeBrevetFlashcards } from './TechnologieTrioisemeBrevetFlashcards';
+
 // Import extra flashcards
 import { toeicExtraFlashcards, tageMageExtraFlashcards } from './extraFlashcards';
 
@@ -182,9 +209,6 @@ const niveauMapping: Record<string, string> = {
   'premiere': 'premiere',
   'terminale': 'terminale',
 };
-
-// Placeholders pour les collections de flashcards non encore implémentées
-const emptyFlashcards: Flashcard[] = [];
 
 // Fonction qui récupère les flashcards en fonction des critères
 export const getFlashcards = (
@@ -319,15 +343,39 @@ export const getFlashcards = (
     ];
   }
   
-  // Brevet Flashcards - Temporairement vide jusqu'à ce que les fichiers soient implémentés
+  // Brevet Flashcards
   if (diplome === 'brevet') {
-    allFlashcards = [...emptyFlashcards];
-    console.log("Flashcards pour le Brevet pas encore implémentées");
+    allFlashcards = [
+      ...francaisGrammaireQuatriemeBrevetFlashcards,
+      ...francaisGrammaireTrioisemeBrevetFlashcards,
+      ...francaisComprehensionQuatriemeBrevetFlashcards,
+      ...francaisComprehensionTrioisemeBrevetFlashcards,
+      ...francaisRedactionQuatriemeBrevetFlashcards,
+      ...francaisRedactionTrioisemeBrevetFlashcards,
+      ...mathematiquesCalculsQuatriemeBrevetFlashcards,
+      ...mathematiquesCalculsTrioisemeBrevetFlashcards,
+      ...mathematiquesGeometrieQuatriemeBrevetFlashcards,
+      ...mathematiquesGeometrieTrioisemeBrevetFlashcards,
+      ...mathematiquesProgrammationQuatriemeBrevetFlashcards,
+      ...mathematiquesProgrammationTrioisemeBrevetFlashcards,
+      ...histoireQuatriemeBrevetFlashcards,
+      ...histoireTrioisemeBrevetFlashcards,
+      ...geographieQuatriemeBrevetFlashcards,
+      ...geographieTrioisemeBrevetFlashcards,
+      ...emcQuatriemeBrevetFlashcards,
+      ...emcTrioisemeBrevetFlashcards,
+      ...physiqueChimieQuatriemeBrevetFlashcards,
+      ...physiqueChimieTrioisemeBrevetFlashcards,
+      ...svtQuatriemeBrevetFlashcards,
+      ...svtTrioisemeBrevetFlashcards,
+      ...technologieQuatriemeBrevetFlashcards,
+      ...technologieTrioisemeBrevetFlashcards
+    ];
   }
   
   // Baccalauréat Flashcards - Temporairement vide jusqu'à ce que les fichiers soient implémentés
   if (diplome === 'baccalaureat') {
-    allFlashcards = [...emptyFlashcards];
+    allFlashcards = [];
     console.log("Flashcards pour le Baccalauréat pas encore implémentées");
   }
   
