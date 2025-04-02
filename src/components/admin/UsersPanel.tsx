@@ -34,28 +34,69 @@ const UsersPanel = ({ searchQuery }: UsersPanelProps) => {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const { toast } = useToast();
 
+  // Vérifier si on est en mode développement local
+  const isLocalDev = 
+    (!import.meta.env.VITE_SUPABASE_URL || 
+     !import.meta.env.VITE_SUPABASE_ANON_KEY ||
+     import.meta.env.VITE_SUPABASE_URL === 'https://your-supabase-url.supabase.co' ||
+     import.meta.env.VITE_SUPABASE_ANON_KEY === 'your-anon-key');
+
   const fetchUsers = async () => {
     setLoading(true);
     try {
-      // Récupérer les utilisateurs avec leurs profils
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*, subscriptions(status)')
-        .order('created_at', { ascending: false });
+      if (isLocalDev) {
+        console.log('Mode développement local activé, simulation des données utilisateurs');
+        
+        // Simuler des données utilisateurs en mode développement
+        const mockUsers: User[] = [
+          {
+            id: '00000000-0000-0000-0000-000000000000',
+            email: 'admin@example.com',
+            created_at: new Date().toLocaleDateString(),
+            role: 'admin',
+            is_subscribed: true,
+            last_login: new Date().toLocaleDateString()
+          },
+          {
+            id: '12345678-1234-1234-1234-123456789012',
+            email: 'user1@example.com',
+            created_at: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+            role: 'user',
+            is_subscribed: false,
+            last_login: new Date(Date.now() - 2 * 24 * 60 * 60 * 1000).toLocaleDateString()
+          },
+          {
+            id: '87654321-4321-4321-4321-210987654321',
+            email: 'user2@example.com',
+            created_at: new Date(Date.now() - 14 * 24 * 60 * 60 * 1000).toLocaleDateString(),
+            role: 'user',
+            is_subscribed: true,
+            last_login: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000).toLocaleDateString()
+          }
+        ];
+        
+        setUsers(mockUsers);
+      } else {
+        // Mode production avec Supabase réel
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*, subscriptions(status)')
+          .order('created_at', { ascending: false });
 
-      if (error) throw error;
+        if (error) throw error;
 
-      // Formater les données
-      const formattedUsers = data.map((item: any) => ({
-        id: item.id,
-        email: item.email || 'N/A',
-        created_at: new Date(item.created_at).toLocaleDateString(),
-        role: item.role || 'user',
-        is_subscribed: item.subscriptions?.some((sub: any) => sub.status === 'active') || false,
-        last_login: item.last_login ? new Date(item.last_login).toLocaleDateString() : 'Jamais'
-      }));
+        // Formater les données
+        const formattedUsers = data.map((item: any) => ({
+          id: item.id,
+          email: item.email || 'N/A',
+          created_at: new Date(item.created_at).toLocaleDateString(),
+          role: item.role || 'user',
+          is_subscribed: item.subscriptions?.some((sub: any) => sub.status === 'active') || false,
+          last_login: item.last_login ? new Date(item.last_login).toLocaleDateString() : 'Jamais'
+        }));
 
-      setUsers(formattedUsers);
+        setUsers(formattedUsers);
+      }
     } catch (error) {
       console.error('Erreur lors de la récupération des utilisateurs:', error);
       toast({
@@ -79,18 +120,27 @@ const UsersPanel = ({ searchQuery }: UsersPanelProps) => {
   );
 
   const handleRoleToggle = async (userId: string, currentRole: string) => {
-    const newRole = currentRole === 'admin' ? 'user' : 'admin';
     try {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ role: newRole })
-        .eq('id', userId);
+      const newRole = currentRole === 'admin' ? 'user' : 'admin';
+      
+      if (isLocalDev) {
+        // Simuler la mise à jour en mode développement
+        setUsers(users.map(user => 
+          user.id === userId ? { ...user, role: newRole } : user
+        ));
+      } else {
+        // Mode production avec Supabase réel
+        const { error } = await supabase
+          .from('profiles')
+          .update({ role: newRole })
+          .eq('id', userId);
 
-      if (error) throw error;
-
-      setUsers(users.map(user => 
-        user.id === userId ? { ...user, role: newRole } : user
-      ));
+        if (error) throw error;
+        
+        setUsers(users.map(user => 
+          user.id === userId ? { ...user, role: newRole } : user
+        ));
+      }
 
       toast({
         title: "Rôle mis à jour",
@@ -108,35 +158,42 @@ const UsersPanel = ({ searchQuery }: UsersPanelProps) => {
 
   const handleSubscriptionToggle = async (userId: string, isCurrentlySubscribed: boolean) => {
     try {
-      if (isCurrentlySubscribed) {
-        // Désactiver l'abonnement existant
-        const { error } = await supabase
-          .from('subscriptions')
-          .update({ status: 'inactive' })
-          .eq('user_id', userId)
-          .eq('status', 'active');
-
-        if (error) throw error;
+      if (isLocalDev) {
+        // Simuler la mise à jour en mode développement
+        setUsers(users.map(user => 
+          user.id === userId ? { ...user, is_subscribed: !isCurrentlySubscribed } : user
+        ));
       } else {
-        // Créer un nouvel abonnement
-        const { error } = await supabase
-          .from('subscriptions')
-          .insert({
-            user_id: userId,
-            status: 'active',
-            price: 799,
-            currency: 'EUR',
-            interval: 'month',
-            start_date: new Date().toISOString(),
-            next_billing_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
-          });
+        if (isCurrentlySubscribed) {
+          // Désactiver l'abonnement existant
+          const { error } = await supabase
+            .from('subscriptions')
+            .update({ status: 'inactive' })
+            .eq('user_id', userId)
+            .eq('status', 'active');
 
-        if (error) throw error;
+          if (error) throw error;
+        } else {
+          // Créer un nouvel abonnement
+          const { error } = await supabase
+            .from('subscriptions')
+            .insert({
+              user_id: userId,
+              status: 'active',
+              price: 799,
+              currency: 'EUR',
+              interval: 'month',
+              start_date: new Date().toISOString(),
+              next_billing_date: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString()
+            });
+
+          if (error) throw error;
+        }
+        
+        setUsers(users.map(user => 
+          user.id === userId ? { ...user, is_subscribed: !isCurrentlySubscribed } : user
+        ));
       }
-
-      setUsers(users.map(user => 
-        user.id === userId ? { ...user, is_subscribed: !isCurrentlySubscribed } : user
-      ));
 
       toast({
         title: isCurrentlySubscribed ? "Abonnement désactivé" : "Abonnement activé",
@@ -156,15 +213,21 @@ const UsersPanel = ({ searchQuery }: UsersPanelProps) => {
 
   const handleDeleteUser = async (userId: string) => {
     try {
-      // Supprimer l'utilisateur de la base de données
-      const { error } = await supabase
-        .from('profiles')
-        .delete()
-        .eq('id', userId);
+      if (isLocalDev) {
+        // Simuler la suppression en mode développement
+        setUsers(users.filter(user => user.id !== userId));
+      } else {
+        // Supprimer l'utilisateur de la base de données
+        const { error } = await supabase
+          .from('profiles')
+          .delete()
+          .eq('id', userId);
 
-      if (error) throw error;
-
-      setUsers(users.filter(user => user.id !== userId));
+        if (error) throw error;
+        
+        setUsers(users.filter(user => user.id !== userId));
+      }
+      
       setIsDialogOpen(false);
       
       toast({
