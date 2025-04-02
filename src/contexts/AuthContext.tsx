@@ -6,6 +6,7 @@ import { Session, User } from '@supabase/supabase-js';
 interface AuthContextType {
   session: Session | null;
   user: User | null;
+  userProfile: UserProfile | null;
   isLoading: boolean;
   isAdmin: boolean;
   isSubscribed: boolean;
@@ -13,11 +14,20 @@ interface AuthContextType {
   checkSubscription: () => Promise<boolean>;
 }
 
+interface UserProfile {
+  id: string;
+  username: string | null;
+  email: string | null;
+  role: string;
+  created_at: string;
+}
+
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [user, setUser] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
@@ -31,14 +41,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(session?.user ?? null);
         
         if (session?.user) {
-          // Vérifier si l'utilisateur est admin
+          // Vérifier si l'utilisateur est admin et obtenir son profil
           const { data, error } = await supabase
             .from('profiles')
-            .select('role')
+            .select('*')
             .eq('id', session.user.id)
             .single();
           
           if (!error && data) {
+            setUserProfile(data);
             setIsAdmin(data.role === 'admin');
           }
           
@@ -63,20 +74,25 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setIsLoading(true);
         
         if (session?.user) {
-          // Vérifier si l'utilisateur est admin
+          // Vérifier si l'utilisateur est admin et obtenir son profil
           const { data, error } = await supabase
             .from('profiles')
-            .select('role')
+            .select('*')
             .eq('id', session.user.id)
             .single();
           
           if (!error && data) {
+            setUserProfile(data);
             setIsAdmin(data.role === 'admin');
           }
           
           // Vérifier l'abonnement
           const subscribed = await checkSubscription();
           setIsSubscribed(subscribed);
+        } else {
+          setUserProfile(null);
+          setIsAdmin(false);
+          setIsSubscribed(false);
         }
         
         setIsLoading(false);
@@ -121,6 +137,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       value={{
         session,
         user,
+        userProfile,
         isLoading,
         isAdmin,
         isSubscribed,

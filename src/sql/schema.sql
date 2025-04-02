@@ -4,6 +4,7 @@
 -- Table des profils utilisateurs
 CREATE TABLE IF NOT EXISTS profiles (
   id UUID PRIMARY KEY REFERENCES auth.users(id),
+  username TEXT UNIQUE,
   email TEXT,
   role TEXT DEFAULT 'user',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
@@ -110,8 +111,8 @@ CREATE POLICY "Les administrateurs peuvent gérer toutes les notifications" ON u
 CREATE OR REPLACE FUNCTION public.create_profile_for_user()
 RETURNS TRIGGER AS $$
 BEGIN
-  INSERT INTO public.profiles (id, email)
-  VALUES (NEW.id, NEW.email);
+  INSERT INTO public.profiles (id, email, username)
+  VALUES (NEW.id, NEW.email, NEW.raw_user_meta_data->>'username');
   RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
@@ -123,7 +124,11 @@ EXECUTE PROCEDURE public.create_profile_for_user();
 
 -- Créer un compte admin par défaut
 -- Note: Ceci est juste pour la démonstration, en production utiliser un compte sécurisé
-INSERT INTO profiles (id, email, role)
+INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at, role)
+VALUES ('00000000-0000-0000-0000-000000000000', 'admin@example.com', crypt('admin', gen_salt('bf')), now(), 'authenticated')
+ON CONFLICT (id) DO NOTHING;
+
+INSERT INTO profiles (id, email, username, role)
 VALUES 
-('00000000-0000-0000-0000-000000000000', 'admin@example.com', 'admin')
-ON CONFLICT (id) DO UPDATE SET role = 'admin';
+('00000000-0000-0000-0000-000000000000', 'admin@example.com', 'admin', 'admin')
+ON CONFLICT (id) DO UPDATE SET role = 'admin', username = 'admin';
