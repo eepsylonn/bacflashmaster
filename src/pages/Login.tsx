@@ -1,7 +1,6 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ThemeSupa } from '@supabase/auth-ui-shared';
 import { supabase, signInWithEmailOrUsername } from '@/lib/supabase';
 import Header from '@/components/Header';
 import { Card } from '@/components/ui/card';
@@ -48,6 +47,7 @@ const Login = () => {
     setIsLoading(true);
     
     try {
+      console.log("Tentative de connexion avec:", credentials.emailOrUsername, credentials.password);
       const { data, error } = await signInWithEmailOrUsername(
         credentials.emailOrUsername,
         credentials.password
@@ -57,6 +57,8 @@ const Login = () => {
         throw error;
       }
       
+      console.log("Réponse de connexion:", data);
+      
       // Connexion réussie
       toast({
         title: "Connexion réussie",
@@ -65,6 +67,7 @@ const Login = () => {
       
       navigate('/');
     } catch (error: any) {
+      console.error("Erreur de connexion:", error);
       toast({
         title: "Échec de la connexion",
         description: error.message || "Identifiants incorrects. Veuillez réessayer.",
