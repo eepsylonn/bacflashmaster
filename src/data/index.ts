@@ -21,11 +21,11 @@ import { listeningFacileToeicFlashcards } from './ListeningFacileToeicFlashcards
 import { listeningIntermediaireToeicFlashcards } from './ListeningIntermediaireToeicFlashcards';
 import { listeningAvanceToeicFlashcards } from './ListeningAvanceToeicFlashcards';
 import { grammaireFacileToeicFlashcards } from './GrammaireFacileToeicFlashcards';
-import { grammaireIntermediaireTageMageFlashcards } from './GrammaireIntermediaireToeicFlashcards';
-import { grammaireAvanceTageMageFlashcards } from './GrammaireAvanceToeicFlashcards';
+import { grammaireIntermediaireToeicFlashcards } from './GrammaireIntermediaireToeicFlashcards';
+import { grammaireAvanceToeicFlashcards } from './GrammaireAvanceToeicFlashcards';
 import { vocabulaireFacileToeicFlashcards } from './VocabulaireFacileToeicFlashcards';
-import { vocabulaireIntermediaireTageMageFlashcards } from './VocabulaireIntermediaireToeicFlashcards';
-import { vocabulaireAvanceTageMageFlashcards } from './VocabulaireAvanceToeicFlashcards';
+import { vocabulaireIntermediaireToeicFlashcards } from './VocabulaireIntermediaireToeicFlashcards';
+import { vocabulaireAvanceToeicFlashcards } from './VocabulaireAvanceToeicFlashcards';
 
 // Importations des flashcards TAGE MAGE par matière et niveau
 import { calculFacileTageMageFlashcards } from './CalculFacileTageMageFlashcards';
@@ -67,11 +67,11 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...listeningIntermediaireToeicFlashcards,
     ...listeningAvanceToeicFlashcards,
     ...grammaireFacileToeicFlashcards,
-    ...grammaireIntermediaireTageMageFlashcards,
-    ...grammaireAvanceTageMageFlashcards,
+    ...grammaireIntermediaireToeicFlashcards,
+    ...grammaireAvanceToeicFlashcards,
     ...vocabulaireFacileToeicFlashcards,
-    ...vocabulaireIntermediaireTageMageFlashcards,
-    ...vocabulaireAvanceTageMageFlashcards,
+    ...vocabulaireIntermediaireToeicFlashcards,
+    ...vocabulaireAvanceToeicFlashcards,
     ...calculFacileTageMageFlashcards,
     ...calculIntermediaireTageMageFlashcards,
     ...calculAvanceTageMageFlashcards,
