@@ -46,7 +46,10 @@ export { getFlashcards } from './flashcards';
 
 // Combine all flashcards from different subjects
 export const getAllFlashcards = (): Flashcard[] => {
-  const baseFlashcards = getFlashcards();
+  // Call getFlashcards with undefined parameters to get all flashcards
+  // without filtering by matiere, niveau, or diplome
+  const baseFlashcards = getFlashcards(undefined, undefined, 1000, undefined);
+  
   return [
     ...baseFlashcards,
     ...philosophyFlashcards,
