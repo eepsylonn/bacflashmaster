@@ -1,4 +1,3 @@
-
 import { Flashcard, NiveauType, NombreQuestions, DiplomeType } from '@/types';
 // Import TOEIC flashcards
 import { listeningFacileToeicFlashcards } from './ListeningFacileToeicFlashcards';
@@ -68,6 +67,23 @@ import { generalAvanceIELTSFlashcards } from './GeneralAvanceIELTSFlashcards';
 // Import extra flashcards
 import { toeicExtraFlashcards, tageMageExtraFlashcards } from './extraFlashcards';
 
+// Ajoutons les nouvelles imports
+import { readingUseFacileCambridgeFlashcards } from './ReadingUseFacileCambridgeFlashcards';
+import { readingUseIntermediaireCambridgeFlashcards } from './ReadingUseIntermediaireCambridgeFlashcards';
+import { readingUseAvanceCambridgeFlashcards } from './ReadingUseAvanceCambridgeFlashcards';
+import { writingFacileCambridgeFlashcards } from './WritingFacileCambridgeFlashcards';
+import { writingIntermediaireCambridgeFlashcards } from './WritingIntermediaireCambridgeFlashcards';
+import { writingAvanceCambridgeFlashcards } from './WritingAvanceCambridgeFlashcards';
+import { speakingFacileCambridgeFlashcards } from './SpeakingFacileCambridgeFlashcards';
+import { speakingIntermediaireCambridgeFlashcards } from './SpeakingIntermediaireCambridgeFlashcards';
+import { speakingAvanceCambridgeFlashcards } from './SpeakingAvanceCambridgeFlashcards';
+import { grammaireFacileCambridgeFlashcards } from './GrammaireFacileCambridgeFlashcards';
+import { grammaireIntermediaireCambridgeFlashcards } from './GrammaireIntermediaireCambridgeFlashcards';
+import { grammaireAvanceCambridgeFlashcards } from './GrammaireAvanceCambridgeFlashcards';
+import { vocabularyFacileCambridgeFlashcards } from './VocabularyFacileCambridgeFlashcards';
+import { vocabularyIntermediaireCambridgeFlashcards } from './VocabularyIntermediaireCambridgeFlashcards';
+import { vocabularyAvanceCambridgeFlashcards } from './VocabularyAvanceCambridgeFlashcards';
+
 // Map les noms de matières affichés dans l'interface vers les noms utilisés dans les fichiers
 const matiereMapping: Record<string, string> = {
   // TOEIC
@@ -127,6 +143,13 @@ const matiereMapping: Record<string, string> = {
   'Mathématiques complémentaires': 'Mathématiques complémentaires',
   'LVC': 'LVC',
   'Latin/Grec': 'Latin/Grec',
+
+  // Cambridge
+  'Reading & Use of English': 'Reading & Use of English',
+  'Writing': 'Writing',
+  'Speaking': 'Speaking',
+  'Grammar': 'Grammar',
+  'Vocabulary': 'Vocabulary',
 };
 
 // Mapping des niveaux affichés vers les niveaux utilisés dans les fichiers
@@ -234,6 +257,27 @@ export const getFlashcards = (
       ...generalFacileIELTSFlashcards,
       ...generalIntermediaireIELTSFlashcards,
       ...generalAvanceIELTSFlashcards
+    ];
+  }
+  
+  // Cambridge Flashcards
+  if (diplome === 'cambridge') {
+    allFlashcards = [
+      ...readingUseFacileCambridgeFlashcards,
+      ...readingUseIntermediaireCambridgeFlashcards,
+      ...readingUseAvanceCambridgeFlashcards,
+      ...writingFacileCambridgeFlashcards,
+      ...writingIntermediaireCambridgeFlashcards,
+      ...writingAvanceCambridgeFlashcards,
+      ...speakingFacileCambridgeFlashcards,
+      ...speakingIntermediaireCambridgeFlashcards,
+      ...speakingAvanceCambridgeFlashcards,
+      ...grammaireFacileCambridgeFlashcards,
+      ...grammaireIntermediaireCambridgeFlashcards,
+      ...grammaireAvanceCambridgeFlashcards,
+      ...vocabularyFacileCambridgeFlashcards,
+      ...vocabularyIntermediaireCambridgeFlashcards,
+      ...vocabularyAvanceCambridgeFlashcards
     ];
   }
   

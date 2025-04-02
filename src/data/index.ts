@@ -1,4 +1,3 @@
-
 import { Flashcard } from '@/types';
 import { getFlashcards } from './flashcards';
 import { philosophyFlashcards } from './philosophyFlashcards';
@@ -60,6 +59,23 @@ import { academicAvanceIELTSFlashcards } from './AcademicAvanceIELTSFlashcards';
 import { generalFacileIELTSFlashcards } from './GeneralFacileIELTSFlashcards';
 import { generalIntermediaireIELTSFlashcards } from './GeneralIntermediaireIELTSFlashcards';
 import { generalAvanceIELTSFlashcards } from './GeneralAvanceIELTSFlashcards';
+
+// Import des nouvelles flashcards Cambridge
+import { readingUseFacileCambridgeFlashcards } from './ReadingUseFacileCambridgeFlashcards';
+import { readingUseIntermediaireCambridgeFlashcards } from './ReadingUseIntermediaireCambridgeFlashcards';
+import { readingUseAvanceCambridgeFlashcards } from './ReadingUseAvanceCambridgeFlashcards';
+import { writingFacileCambridgeFlashcards } from './WritingFacileCambridgeFlashcards';
+import { writingIntermediaireCambridgeFlashcards } from './WritingIntermediaireCambridgeFlashcards';
+import { writingAvanceCambridgeFlashcards } from './WritingAvanceCambridgeFlashcards';
+import { speakingFacileCambridgeFlashcards } from './SpeakingFacileCambridgeFlashcards';
+import { speakingIntermediaireCambridgeFlashcards } from './SpeakingIntermediaireCambridgeFlashcards';
+import { speakingAvanceCambridgeFlashcards } from './SpeakingAvanceCambridgeFlashcards';
+import { grammaireFacileCambridgeFlashcards } from './GrammaireFacileCambridgeFlashcards';
+import { grammaireIntermediaireCambridgeFlashcards } from './GrammaireIntermediaireCambridgeFlashcards';
+import { grammaireAvanceCambridgeFlashcards } from './GrammaireAvanceCambridgeFlashcards';
+import { vocabularyFacileCambridgeFlashcards } from './VocabularyFacileCambridgeFlashcards';
+import { vocabularyIntermediaireCambridgeFlashcards } from './VocabularyIntermediaireCambridgeFlashcards';
+import { vocabularyAvanceCambridgeFlashcards } from './VocabularyAvanceCambridgeFlashcards';
 
 // Export all flashcards for use in other files
 export { getFlashcards } from './flashcards';
@@ -125,6 +141,22 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...academicAvanceIELTSFlashcards,
     ...generalFacileIELTSFlashcards,
     ...generalIntermediaireIELTSFlashcards,
-    ...generalAvanceIELTSFlashcards
+    ...generalAvanceIELTSFlashcards,
+    // Cambridge flashcards
+    ...readingUseFacileCambridgeFlashcards,
+    ...readingUseIntermediaireCambridgeFlashcards,
+    ...readingUseAvanceCambridgeFlashcards,
+    ...writingFacileCambridgeFlashcards,
+    ...writingIntermediaireCambridgeFlashcards,
+    ...writingAvanceCambridgeFlashcards,
+    ...speakingFacileCambridgeFlashcards,
+    ...speakingIntermediaireCambridgeFlashcards,
+    ...speakingAvanceCambridgeFlashcards,
+    ...grammaireFacileCambridgeFlashcards,
+    ...grammaireIntermediaireCambridgeFlashcards,
+    ...grammaireAvanceCambridgeFlashcards,
+    ...vocabularyFacileCambridgeFlashcards,
+    ...vocabularyIntermediaireCambridgeFlashcards,
+    ...vocabularyAvanceCambridgeFlashcards
   ];
 };
