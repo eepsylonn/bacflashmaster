@@ -9,82 +9,92 @@ const generateId = () => {
 export const listeningIntermediaireToeicFlashcards: Flashcard[] = [
   {
     id: generateId(),
-    question: "You hear: 'The quarterly sales report indicates a 15% increase in the eastern region, while the western and northern regions experienced modest declines of 3% and 5% respectively.' Which region performed the best?",
-    answer: "The eastern region",
+    question: "Écoutez le rapport et répondez : Quelle région a obtenu les meilleurs résultats?",
+    answer: "La région est",
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-notification-003-633.mp3"
   },
   {
     id: generateId(),
-    question: "In a phone conversation, you hear: 'I'm afraid Mr. Thompson isn't available at the moment. Would you like to leave a message or should I have him call you back when he returns from his conference this Thursday?' When will Mr. Thompson return?",
-    answer: "Thursday",
+    question: "Écoutez la conversation téléphonique et répondez : Quand M. Thompson reviendra-t-il?",
+    answer: "Jeudi",
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-office-telephone-ring-1350.mp3"
   },
   {
     id: generateId(),
-    question: "You hear an announcement: 'Due to unexpected maintenance issues, the southbound train service will be operating with delays of approximately 25 to 30 minutes. We apologize for any inconvenience and recommend passengers adjust their travel plans accordingly.' What problem is mentioned?",
-    answer: "Delays due to maintenance issues",
+    question: "Écoutez l'annonce et répondez : Quel problème est mentionné?",
+    answer: "Des retards dus à des problèmes de maintenance",
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-train-announcement-in-a-station-2642.mp3"
   },
   {
     id: generateId(),
-    question: "In a meeting, you hear: 'Before we proceed with the marketing campaign, we need to finalize the budget allocation and obtain approval from the finance department. Sarah, could you schedule a meeting with the CFO by the end of this week?' Who needs to be contacted?",
-    answer: "The CFO (Chief Financial Officer)",
+    question: "Écoutez la réunion et répondez : Qui doit être contacté?",
+    answer: "Le directeur financier (CFO)",
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-neutral-mechanical-notification-bell-2982.mp3"
   },
   {
     id: generateId(),
-    question: "You hear: 'The conference will feature keynote speeches on the first day, followed by breakout sessions on day two, and hands-on workshops on the final day. Participants should register for specific workshops in advance as space is limited.' What should participants do before the conference?",
-    answer: "Register for specific workshops",
+    question: "Écoutez l'information et répondez : Que doivent faire les participants avant la conférence?",
+    answer: "S'inscrire à des ateliers spécifiques",
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-interface-hint-notification-911.mp3"
   },
   {
     id: generateId(),
-    question: "In a conversation about scheduling, you hear: 'I can meet either Tuesday morning before 11 or Wednesday afternoon after 2, but I'm completely booked on Thursday with client presentations.' When is the speaker NOT available?",
-    answer: "All day Thursday",
+    question: "Écoutez la conversation sur la planification et répondez : Quand l'orateur N'EST PAS disponible?",
+    answer: "Toute la journée de jeudi",
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3"
   },
   {
     id: generateId(),
-    question: "You hear a voicemail: 'Hello, this is Rebecca from HR. I'm calling regarding your application for the marketing position. We'd like to invite you for an interview next week. Please call me back at extension 4578 to schedule a time.' What number should you call?",
-    answer: "Extension 4578",
+    question: "Écoutez le message vocal et répondez : Quel numéro devez-vous appeler?",
+    answer: "Poste 4578",
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-classic-short-phone-ring-1356.mp3"
   },
   {
     id: generateId(),
-    question: "In a meeting, you hear: 'The data suggests that our primary demographic is shifting from the 18-24 age range to 25-34, which means we should reconsider our social media strategy accordingly.' What change is happening to the company's audience?",
-    answer: "They are getting older",
+    question: "Écoutez la réunion et répondez : Quel changement affecte l'audience de l'entreprise?",
+    answer: "Ils vieillissent",
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-clear-announce-tones-2861.mp3"
   },
   {
     id: generateId(),
-    question: "You hear: 'While the renovations to the main lobby will be completed by Friday, the parking garage will remain under construction until the end of the month. Visitors should use the temporary entrance on the west side of the building during this period.' Where should visitors enter the building?",
-    answer: "The temporary entrance on the west side",
+    question: "Écoutez l'annonce et répondez : Par où les visiteurs doivent-ils entrer dans le bâtiment?",
+    answer: "L'entrée temporaire du côté ouest",
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"
   },
   {
     id: generateId(),
-    question: "In a customer service call, you hear: 'I understand you're frustrated about the delay in your order. According to our tracking system, your package was shipped on Monday but there appears to be a weather-related delay affecting deliveries in your region. It should arrive by Thursday at the latest.' What caused the delay?",
-    answer: "Weather conditions",
+    question: "Écoutez l'appel du service client et répondez : Qu'est-ce qui a causé le retard?",
+    answer: "Les conditions météorologiques",
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-interface-hint-notification-911.mp3"
   },
 ];

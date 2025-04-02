@@ -23,6 +23,7 @@ export interface Flashcard {
   matiere: string;
   niveau: NiveauType;
   image?: string;
+  audio?: string; // URL ou chemin vers le fichier audio
   userCorrectCount?: number;
   userWrongCount?: number;
   diplome?: DiplomeType;

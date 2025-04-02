@@ -9,82 +9,92 @@ const generateId = () => {
 export const listeningFacileToeicFlashcards: Flashcard[] = [
   {
     id: generateId(),
-    question: "In the TOEIC Listening Part 1 (Photos), you hear: 'The man is typing on a computer.' What should you look for in the photos?",
-    answer: "A man using a computer keyboard",
+    question: "Écoutez l'audio et répondez : Que fait l'homme sur la photo?",
+    answer: "Il utilise un clavier d'ordinateur",
     matiere: "TOEIC Listening",
     niveau: "facile",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://ielts-up.com/demo/cambridge-ielts-9-test-1-listening-part-1.mp3"
   },
   {
     id: generateId(),
-    question: "In a conversation, you hear: 'Would you like coffee or tea?' What is the speaker doing?",
-    answer: "Offering beverage options",
+    question: "Écoutez la conversation et répondez : Que propose la personne?",
+    answer: "Des options de boissons",
     matiere: "TOEIC Listening",
     niveau: "facile",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://ielts-up.com/demo/cambridge-ielts-9-test-1-listening-part-2.mp3"
   },
   {
     id: generateId(),
-    question: "You hear: 'The train will depart from platform 3 at 9:15.' What time will the train leave?",
+    question: "Écoutez l'annonce et répondez : À quelle heure part le train?",
     answer: "9:15",
     matiere: "TOEIC Listening",
     niveau: "facile",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://ielts-up.com/demo/cambridge-ielts-9-test-1-listening-part-3.mp3"
   },
   {
     id: generateId(),
-    question: "You hear: 'I think we should meet tomorrow at 2 PM.' What is being planned?",
-    answer: "A meeting for tomorrow afternoon",
+    question: "Écoutez la conversation et répondez : Qu'est-ce qui est planifié?",
+    answer: "Une réunion pour demain après-midi",
     matiere: "TOEIC Listening",
     niveau: "facile",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://ielts-up.com/demo/cambridge-ielts-9-test-1-listening-part-4.mp3"
   },
   {
     id: generateId(),
-    question: "In a conversation, you hear: 'I'm sorry, but we're closed on Sundays.' What information is being given?",
-    answer: "The business's operating hours",
+    question: "Écoutez la conversation et répondez : Quelle information est donnée?",
+    answer: "Les heures d'ouverture de l'entreprise",
     matiere: "TOEIC Listening",
     niveau: "facile",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-interface-hint-notification-911.mp3"
   },
   {
     id: generateId(),
-    question: "You hear an announcement: 'The office will close early today at 4 PM due to the holiday.' What time will the office close?",
+    question: "Écoutez l'annonce et répondez : À quelle heure le bureau fermera-t-il?",
     answer: "4 PM",
     matiere: "TOEIC Listening",
     niveau: "facile",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-clear-announce-tones-2861.mp3"
   },
   {
     id: generateId(),
-    question: "In a conversation, you hear: 'Can I help you find something?' Where is this conversation likely taking place?",
-    answer: "In a store or shop",
+    question: "Écoutez la conversation et répondez : Où cette conversation a-t-elle probablement lieu?",
+    answer: "Dans un magasin",
     matiere: "TOEIC Listening",
     niveau: "facile",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-doorbell-tone-2864.mp3"
   },
   {
     id: generateId(),
-    question: "You hear: 'Please turn off all electronic devices before takeoff.' Where would you hear this?",
-    answer: "On an airplane",
+    question: "Écoutez l'annonce et répondez : Où pourriez-vous entendre ceci?",
+    answer: "Dans un avion",
     matiere: "TOEIC Listening",
     niveau: "facile",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"
   },
   {
     id: generateId(),
-    question: "In a conversation, you hear: 'Do you want me to email you the report?' What is being offered?",
-    answer: "To send a report by email",
+    question: "Écoutez la conversation et répondez : Qu'est-ce qui est proposé?",
+    answer: "Envoyer un rapport par email",
     matiere: "TOEIC Listening",
     niveau: "facile",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.mp3"
   },
   {
     id: generateId(),
-    question: "You hear: 'The meeting has been moved from Room A to Room B.' What has changed?",
-    answer: "The location of the meeting",
+    question: "Écoutez l'annonce et répondez : Qu'est-ce qui a changé?",
+    answer: "L'emplacement de la réunion",
     matiere: "TOEIC Listening",
     niveau: "facile",
-    diplome: "toeic"
+    diplome: "toeic",
+    audio: "https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3"
   },
 ];

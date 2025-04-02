@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { ThumbsUp, ThumbsDown, ArrowRight, CheckCircle, XCircle, Sparkles, Eye, Flag, CheckSquare2 } from 'lucide-react';
+import { ThumbsUp, ThumbsDown, ArrowRight, CheckCircle, XCircle, Sparkles, Eye, Flag, CheckSquare2, Volume2, VolumeX, Play, Pause } from 'lucide-react';
 import { Flashcard } from '@/types';
 import Mascot from '@/components/Mascot';
 import WriteAnswer from '@/components/WriteAnswer';
@@ -39,6 +39,9 @@ const FlashcardComponent = ({
   const [answeredLastQuestion, setAnsweredLastQuestion] = useState<boolean>(false);
   const [showNextButtonAtLastQuestion, setShowNextButtonAtLastQuestion] = useState<boolean>(false);
   const [lastQuestionAnswered, setLastQuestionAnswered] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
+  const [audioLoaded, setAudioLoaded] = useState<boolean>(false);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
   
   useEffect(() => {
     const writeAnswersEnabled = localStorage.getItem('writeAnswers') === 'true';
@@ -61,7 +64,24 @@ const FlashcardComponent = ({
     setAnsweredLastQuestion(false);
     setShowNextButtonAtLastQuestion(false);
     setLastQuestionAnswered(false);
+    setIsPlaying(false);
+    setAudioLoaded(false);
+    
+    if (audioRef.current) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+    }
   }, [flashcard]);
+
+  useEffect(() => {
+    if (flashcard.audio && audioRef.current) {
+      audioRef.current.src = flashcard.audio;
+      audioRef.current.load();
+      audioRef.current.oncanplaythrough = () => {
+        setAudioLoaded(true);
+      };
+    }
+  }, [flashcard.audio]);
   
   const formatAnswer = (text: string) => {
     return text
@@ -141,6 +161,19 @@ const FlashcardComponent = ({
     setShowAnswer(true);
   };
 
+  const toggleAudio = () => {
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play().catch(error => {
+          console.error("Erreur lors de la lecture audio:", error);
+        });
+      }
+      setIsPlaying(!isPlaying);
+    }
+  };
+
   const cardVariants = {
     hidden: (isBack: boolean) => ({
       rotateY: isBack ? -90 : 90,
@@ -205,6 +238,10 @@ const FlashcardComponent = ({
 
   return (
     <div className="p-4">
+      {flashcard.audio && (
+        <audio ref={audioRef} preload="auto" onEnded={() => setIsPlaying(false)} />
+      )}
+      
       {showConfetti && (
         <div className="absolute inset-0 z-30 pointer-events-none overflow-hidden">
           <div className="confetti-container">
@@ -456,6 +493,55 @@ const FlashcardComponent = ({
                       <p className="text-app-blue-dark dark:text-blue-200 text-lg">
                         {flashcard.question}
                       </p>
+                      
+                      {flashcard.audio && (
+                        <div className="mt-4 flex items-center justify-center">
+                          <motion.div
+                            className="bg-blue-100 dark:bg-blue-900/30 p-4 rounded-xl flex items-center space-x-4 w-full"
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                          >
+                            <Button
+                              onClick={toggleAudio}
+                              disabled={!audioLoaded}
+                              className={`rounded-full w-12 h-12 flex items-center justify-center ${
+                                isPlaying ? 'bg-red-500 hover:bg-red-600' : 'bg-green-500 hover:bg-green-600'
+                              }`}
+                            >
+                              {isPlaying ? (
+                                <Pause className="h-6 w-6 text-white" />
+                              ) : (
+                                <Play className="h-6 w-6 text-white" />
+                              )}
+                            </Button>
+                            <div className="flex-1">
+                              <div className="text-sm text-gray-600 dark:text-gray-300 mb-1">
+                                {!audioLoaded ? 'Chargement de l\'audio...' : isPlaying ? 'En lecture...' : 'Prêt à jouer'}
+                              </div>
+                              <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                                <motion.div
+                                  className="h-full bg-green-500"
+                                  initial={{ width: "0%" }}
+                                  animate={isPlaying ? { width: "100%" } : { width: "0%" }}
+                                  transition={isPlaying ? { 
+                                    duration: audioRef.current?.duration || 30,
+                                    ease: "linear"
+                                  } : { duration: 0.3 }}
+                                />
+                              </div>
+                            </div>
+                            {isPlaying && (
+                              <Button
+                                onClick={toggleAudio}
+                                className="rounded-full w-10 h-10 bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600"
+                              >
+                                <VolumeX className="h-5 w-5 text-gray-700 dark:text-gray-300" />
+                              </Button>
+                            )}
+                          </motion.div>
+                        </div>
+                      )}
                     </motion.div>
                     
                     {hasWriteAnswerEnabled && !hasSubmittedAnswer && !showAnswer ? (
