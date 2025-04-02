@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -8,9 +7,11 @@ import TrainingProgress from '@/components/TrainingProgress';
 import TrainingResultPage from '@/pages/TrainingResult';
 import { useFlashcards } from '@/hooks/useFlashcards';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useToast } from '@/components/ui/use-toast';
 
 const Training = () => {
   const location = useLocation();
+  const { toast } = useToast();
   const {
     matiere,
     setMatiere,
@@ -49,6 +50,41 @@ const Training = () => {
   useEffect(() => {
     console.log(`Configuration d'entraînement: matière=${matiere}, niveau=${niveau}, nombreQuestions=${nombreQuestions}`);
   }, [matiere, niveau, nombreQuestions]);
+
+  // Préchargement des fichiers audio pour les exercices TOEIC
+  useEffect(() => {
+    if (training && currentQuestions.length > 0 && matiere === 'TOEIC Listening') {
+      // Précharger les audios des 3 questions suivantes (si elles existent)
+      const preloadCount = 3;
+      
+      for (let i = currentIndex; i < Math.min(currentIndex + preloadCount, currentQuestions.length); i++) {
+        if (currentQuestions[i] && currentQuestions[i].audio) {
+          const audio = new Audio();
+          audio.src = currentQuestions[i].audio;
+          
+          // Précharger sans jouer
+          audio.load();
+          
+          console.log(`Préchargement de l'audio pour la question ${i + 1}: ${currentQuestions[i].audio}`);
+        }
+      }
+      
+      // Vérifier la disponibilité du mode hors ligne
+      if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        // Le service worker est actif
+        if (navigator.onLine) {
+          // Nous sommes en ligne, donc nous pouvons mettre à jour le cache
+        } else {
+          // Nous sommes hors ligne, vérifier si les audios sont en cache
+          toast({
+            title: "Mode hors ligne détecté",
+            description: "L'application fonctionne en mode hors ligne. Les fichiers audio préchargés sont disponibles.",
+            duration: 5000,
+          });
+        }
+      }
+    }
+  }, [training, currentIndex, currentQuestions, matiere, toast]);
 
   // Calculer le taux d'amélioration pour afficher dans la page de résultat
   const improvementRate = currentResult 

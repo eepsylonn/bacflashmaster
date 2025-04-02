@@ -47,6 +47,34 @@ registerRoute(
   })
 );
 
+// Cache des fichiers audio avec une stratégie Cache First
+registerRoute(
+  ({ request }) => request.destination === 'audio',
+  new CacheFirst({
+    cacheName: 'audio-files',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 60 * 24 * 60 * 60, // 60 jours
+      }),
+    ],
+  })
+);
+
+// Cache des fichiers spécifiques du TOEIC
+registerRoute(
+  ({ url }) => url.pathname.startsWith('/audio/toeic/'),
+  new CacheFirst({
+    cacheName: 'toeic-audio',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 100,
+        maxAgeSeconds: 90 * 24 * 60 * 60, // 90 jours
+      }),
+    ],
+  })
+);
+
 // Cache des polices et des styles avec une stratégie StaleWhileRevalidate
 registerRoute(
   ({ request }) =>
@@ -65,7 +93,7 @@ self.addEventListener('message', (event) => {
 });
 
 // Service worker personnalisé pour la fonctionnalité hors ligne
-const CACHE_NAME = 'flashbac-v1';
+const CACHE_NAME = 'flashbac-v2';
 const URLS_TO_CACHE = [
   '/',
   '/index.html',
@@ -73,7 +101,37 @@ const URLS_TO_CACHE = [
   '/examen',
   '/statistiques',
   '/historique',
-  '/reglages'
+  '/reglages',
+  '/audio/toeic/facile/conversation-email.mp3',
+  '/audio/toeic/facile/commande-cafe.mp3',
+  '/audio/toeic/facile/annonce-train.mp3',
+  '/audio/toeic/facile/reunion-objectifs.mp3',
+  '/audio/toeic/facile/heures-ouverture.mp3',
+  '/audio/toeic/facile/fermeture-bureau.mp3',
+  '/audio/toeic/facile/recherche-imprimante.mp3',
+  '/audio/toeic/facile/annonce-avion.mp3',
+  '/audio/toeic/facile/format-rapport.mp3',
+  '/audio/toeic/facile/changement-salle.mp3',
+  '/audio/toeic/intermediaire/rapport-region.mp3',
+  '/audio/toeic/intermediaire/message-thompson.mp3',
+  '/audio/toeic/intermediaire/retard-train.mp3',
+  '/audio/toeic/intermediaire/approbation-budget.mp3',
+  '/audio/toeic/intermediaire/choix-ateliers.mp3',
+  '/audio/toeic/intermediaire/planification-reunion.mp3',
+  '/audio/toeic/intermediaire/heure-rappel.mp3',
+  '/audio/toeic/intermediaire/strategie-marketing.mp3',
+  '/audio/toeic/intermediaire/fermeture-entree.mp3',
+  '/audio/toeic/intermediaire/compensation-client.mp3',
+  '/audio/toeic/avance/marches-asiatiques.mp3',
+  '/audio/toeic/avance/migration-donnees.mp3',
+  '/audio/toeic/avance/rapport-financier.mp3',
+  '/audio/toeic/avance/preoccupations-juridiques.mp3',
+  '/audio/toeic/avance/problemes-ux.mp3',
+  '/audio/toeic/avance/delais-livraison.mp3',
+  '/audio/toeic/avance/segments-marche.mp3',
+  '/audio/toeic/avance/consommation-energie.mp3',
+  '/audio/toeic/avance/mesures-securite.mp3',
+  '/audio/toeic/avance/reglementations-futures.mp3'
 ];
 
 self.addEventListener('install', (event) => {
@@ -106,5 +164,22 @@ self.addEventListener('fetch', (event) => {
             return response;
           });
       })
+  );
+});
+
+// Nettoyage des anciens caches
+self.addEventListener('activate', (event) => {
+  const cacheAllowlist = [CACHE_NAME];
+  event.waitUntil(
+    caches.keys().then((cacheNames) => {
+      return Promise.all(
+        cacheNames.map((cacheName) => {
+          if (cacheAllowlist.indexOf(cacheName) === -1) {
+            console.log('Suppression de l\'ancien cache:', cacheName);
+            return caches.delete(cacheName);
+          }
+        })
+      );
+    })
   );
 });

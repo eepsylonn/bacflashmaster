@@ -14,7 +14,7 @@ export const listeningFacileToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "facile",
     diplome: "toeic",
-    audio: "https://ielts-up.com/demo/cambridge-ielts-9-test-1-listening-part-1.mp3"
+    audio: "/audio/toeic/facile/conversation-email.mp3"
   },
   {
     id: generateId(),
@@ -23,7 +23,7 @@ export const listeningFacileToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "facile",
     diplome: "toeic",
-    audio: "https://ielts-up.com/demo/cambridge-ielts-9-test-1-listening-part-2.mp3"
+    audio: "/audio/toeic/facile/commande-cafe.mp3"
   },
   {
     id: generateId(),
@@ -32,7 +32,7 @@ export const listeningFacileToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "facile",
     diplome: "toeic",
-    audio: "https://ielts-up.com/demo/cambridge-ielts-9-test-1-listening-part-3.mp3"
+    audio: "/audio/toeic/facile/annonce-train.mp3"
   },
   {
     id: generateId(),
@@ -41,7 +41,7 @@ export const listeningFacileToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "facile",
     diplome: "toeic",
-    audio: "https://ielts-up.com/demo/cambridge-ielts-9-test-1-listening-part-4.mp3"
+    audio: "/audio/toeic/facile/reunion-objectifs.mp3"
   },
   {
     id: generateId(),
@@ -50,7 +50,7 @@ export const listeningFacileToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "facile",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-interface-hint-notification-911.mp3"
+    audio: "/audio/toeic/facile/heures-ouverture.mp3"
   },
   {
     id: generateId(),
@@ -59,7 +59,7 @@ export const listeningFacileToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "facile",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-clear-announce-tones-2861.mp3"
+    audio: "/audio/toeic/facile/fermeture-bureau.mp3"
   },
   {
     id: generateId(),
@@ -68,7 +68,7 @@ export const listeningFacileToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "facile",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-doorbell-tone-2864.mp3"
+    audio: "/audio/toeic/facile/recherche-imprimante.mp3"
   },
   {
     id: generateId(),
@@ -77,7 +77,7 @@ export const listeningFacileToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "facile",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"
+    audio: "/audio/toeic/facile/annonce-avion.mp3"
   },
   {
     id: generateId(),
@@ -86,7 +86,7 @@ export const listeningFacileToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "facile",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-positive-interface-beep-221.mp3"
+    audio: "/audio/toeic/facile/format-rapport.mp3"
   },
   {
     id: generateId(),
@@ -95,6 +95,6 @@ export const listeningFacileToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "facile",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3"
+    audio: "/audio/toeic/facile/changement-salle.mp3"
   },
 ];

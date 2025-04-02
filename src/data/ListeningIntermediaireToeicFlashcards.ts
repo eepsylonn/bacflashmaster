@@ -14,7 +14,7 @@ export const listeningIntermediaireToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-notification-003-633.mp3"
+    audio: "/audio/toeic/intermediaire/rapport-region.mp3"
   },
   {
     id: generateId(),
@@ -23,7 +23,7 @@ export const listeningIntermediaireToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-office-telephone-ring-1350.mp3"
+    audio: "/audio/toeic/intermediaire/message-thompson.mp3"
   },
   {
     id: generateId(),
@@ -32,7 +32,7 @@ export const listeningIntermediaireToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-train-announcement-in-a-station-2642.mp3"
+    audio: "/audio/toeic/intermediaire/retard-train.mp3"
   },
   {
     id: generateId(),
@@ -41,7 +41,7 @@ export const listeningIntermediaireToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-neutral-mechanical-notification-bell-2982.mp3"
+    audio: "/audio/toeic/intermediaire/approbation-budget.mp3"
   },
   {
     id: generateId(),
@@ -50,7 +50,7 @@ export const listeningIntermediaireToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-interface-hint-notification-911.mp3"
+    audio: "/audio/toeic/intermediaire/choix-ateliers.mp3"
   },
   {
     id: generateId(),
@@ -59,7 +59,7 @@ export const listeningIntermediaireToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3"
+    audio: "/audio/toeic/intermediaire/planification-reunion.mp3"
   },
   {
     id: generateId(),
@@ -68,7 +68,7 @@ export const listeningIntermediaireToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-classic-short-phone-ring-1356.mp3"
+    audio: "/audio/toeic/intermediaire/heure-rappel.mp3"
   },
   {
     id: generateId(),
@@ -77,7 +77,7 @@ export const listeningIntermediaireToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-clear-announce-tones-2861.mp3"
+    audio: "/audio/toeic/intermediaire/strategie-marketing.mp3"
   },
   {
     id: generateId(),
@@ -86,7 +86,7 @@ export const listeningIntermediaireToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"
+    audio: "/audio/toeic/intermediaire/fermeture-entree.mp3"
   },
   {
     id: generateId(),
@@ -95,6 +95,6 @@ export const listeningIntermediaireToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "intermediaire",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-interface-hint-notification-911.mp3"
+    audio: "/audio/toeic/intermediaire/compensation-client.mp3"
   },
 ];

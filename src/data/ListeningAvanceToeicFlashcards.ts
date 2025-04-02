@@ -14,7 +14,7 @@ export const listeningAvanceToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "avance",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-office-phone-ringing-1350.mp3"
+    audio: "/audio/toeic/avance/marches-asiatiques.mp3"
   },
   {
     id: generateId(),
@@ -23,7 +23,7 @@ export const listeningAvanceToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "avance",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3"
+    audio: "/audio/toeic/avance/migration-donnees.mp3"
   },
   {
     id: generateId(),
@@ -32,7 +32,7 @@ export const listeningAvanceToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "avance",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-classic-short-phone-ring-1356.mp3"
+    audio: "/audio/toeic/avance/rapport-financier.mp3"
   },
   {
     id: generateId(),
@@ -41,7 +41,7 @@ export const listeningAvanceToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "avance",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-software-interface-start-2574.mp3"
+    audio: "/audio/toeic/avance/preoccupations-juridiques.mp3"
   },
   {
     id: generateId(),
@@ -50,7 +50,7 @@ export const listeningAvanceToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "avance",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-message-pop-alert-2354.mp3"
+    audio: "/audio/toeic/avance/problemes-ux.mp3"
   },
   {
     id: generateId(),
@@ -59,7 +59,7 @@ export const listeningAvanceToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "avance",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-interface-hint-notification-911.mp3"
+    audio: "/audio/toeic/avance/delais-livraison.mp3"
   },
   {
     id: generateId(),
@@ -68,7 +68,7 @@ export const listeningAvanceToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "avance",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-interface-hint-notification-911.mp3"
+    audio: "/audio/toeic/avance/segments-marche.mp3"
   },
   {
     id: generateId(),
@@ -77,7 +77,7 @@ export const listeningAvanceToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "avance",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-clear-announce-tones-2861.mp3"
+    audio: "/audio/toeic/avance/consommation-energie.mp3"
   },
   {
     id: generateId(),
@@ -86,7 +86,7 @@ export const listeningAvanceToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "avance",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-clear-announce-tones-2861.mp3"
+    audio: "/audio/toeic/avance/mesures-securite.mp3"
   },
   {
     id: generateId(),
@@ -95,6 +95,6 @@ export const listeningAvanceToeicFlashcards: Flashcard[] = [
     matiere: "TOEIC Listening",
     niveau: "avance",
     diplome: "toeic",
-    audio: "https://assets.mixkit.co/sfx/preview/mixkit-modern-technology-select-notification-003-633.mp3"
+    audio: "/audio/toeic/avance/reglementations-futures.mp3"
   },
 ];
