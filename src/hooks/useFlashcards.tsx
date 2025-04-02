@@ -1,6 +1,5 @@
-
 import { useState, useEffect, useCallback, useMemo } from 'react';
-import { Flashcard, TrainingResult } from '@/types';
+import { Flashcard, TrainingResult, AnsweredQuestion } from '@/types';
 import { useLocalStorage } from './useLocalStorage';
 import { 
   filterFlashcards, 
@@ -87,7 +86,7 @@ export function useFlashcards() {
       // Last question, show results
       const newResult: TrainingResult = {
         id: uuidv4(),
-        date: new Date(),
+        date: new Date().toISOString(),
         matiere: matiere || '',
         niveau: niveau || '',
         diplome: currentQuestion?.diplome || '',
@@ -97,7 +96,10 @@ export function useFlashcards() {
         nombreQuestions: currentQuestions.length,
         score: score + 1,
         note: ((score + 1) / currentQuestions.length) * 20,
-        questions: currentQuestions
+        questions: currentQuestions.map(flashcard => ({
+          flashcard,
+          isCorrect: true
+        }))
       };
       
       setCurrentResult(newResult);
@@ -116,7 +118,7 @@ export function useFlashcards() {
       // Last question, show results
       const newResult: TrainingResult = {
         id: uuidv4(),
-        date: new Date(),
+        date: new Date().toISOString(),
         matiere: matiere || '',
         niveau: niveau || '',
         diplome: currentQuestion?.diplome || '',
@@ -126,7 +128,10 @@ export function useFlashcards() {
         nombreQuestions: currentQuestions.length,
         score: score,
         note: (score / currentQuestions.length) * 20,
-        questions: currentQuestions
+        questions: currentQuestions.map(flashcard => ({
+          flashcard,
+          isCorrect: false
+        }))
       };
       
       setCurrentResult(newResult);
@@ -148,7 +153,7 @@ export function useFlashcards() {
       // Last question, show results
       const newResult: TrainingResult = {
         id: uuidv4(),
-        date: new Date(),
+        date: new Date().toISOString(),
         matiere: matiere || '',
         niveau: niveau || '',
         diplome: currentQuestion?.diplome || '',
@@ -158,7 +163,10 @@ export function useFlashcards() {
         nombreQuestions: currentQuestions.length,
         score: score,
         note: (score / currentQuestions.length) * 20,
-        questions: currentQuestions
+        questions: currentQuestions.map(flashcard => ({
+          flashcard,
+          isCorrect: false
+        }))
       };
       
       setCurrentResult(newResult);
@@ -178,17 +186,20 @@ export function useFlashcards() {
     if (currentQuestions.length > 0) {
       const newResult: TrainingResult = {
         id: uuidv4(),
-        date: new Date(),
+        date: new Date().toISOString(),
         matiere: matiere || '',
         niveau: niveau || '',
         diplome: currentQuestion?.diplome || '',
-        totalQuestions: currentIndex + 1, // Only count questions seen
+        totalQuestions: currentIndex + 1,
         correctAnswers: score,
         pourcentage: (score / (currentIndex + 1)) * 100,
         nombreQuestions: currentIndex + 1,
         score: score,
         note: (score / (currentIndex + 1)) * 20,
-        questions: currentQuestions.slice(0, currentIndex + 1)
+        questions: currentQuestions.slice(0, currentIndex + 1).map(flashcard => ({
+          flashcard,
+          isCorrect: false
+        }))
       };
       
       setCurrentResult(newResult);
@@ -204,9 +215,9 @@ export function useFlashcards() {
     const relevantResults = pastResults
       .filter(result => 
         result.matiere === currentMatiere && 
-        result.date.getTime() < (currentResult?.date.getTime() || Date.now())
+        new Date(result.date).getTime() < (currentResult?.date ? new Date(currentResult.date).getTime() : Date.now())
       )
-      .sort((a, b) => b.date.getTime() - a.date.getTime());
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
     
     if (relevantResults.length === 0) return null;
     

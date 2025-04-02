@@ -1,3 +1,4 @@
+
 export type DiplomeType = 'toeic' | 'toefl' | 'tage-mage' | 'ielts' | 'cambridge' | 'gmat' | 'brevet' | 'baccalaureat';
 
 export type NiveauType = 'facile' | 'intermediaire' | 'avance' | 'both' | 'troisieme' | 'quatrieme' | 'premiere' | 'terminale';
@@ -26,7 +27,7 @@ export interface AnsweredQuestion {
 
 export interface TrainingResult {
   id?: string;
-  date: Date;
+  date: string; // Changed from Date to string to fix TS error
   matiere: string;
   niveau: string;
   diplome: string;
@@ -36,7 +37,7 @@ export interface TrainingResult {
   nombreQuestions?: number;
   score?: number;
   note?: number;
-  questions?: Flashcard[];
+  questions?: AnsweredQuestion[]; // Changed from Flashcard[] to AnsweredQuestion[]
 }
 
 export interface UserPreferences {
