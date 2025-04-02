@@ -41,6 +41,26 @@ import { problemeFacileTageMageFlashcards } from './ProblemeFacileTageMageFlashc
 import { problemeIntermediaireTageMageFlashcards } from './ProblemeIntermediaireTageMageFlashcards';
 import { problemeAvanceTageMageFlashcards } from './ProblemeAvanceTageMageFlashcards';
 
+// Importations des flashcards IELTS par matière et niveau
+import { readingFacileIELTSFlashcards } from './ReadingFacileIELTSFlashcards';
+import { readingIntermediaireIELTSFlashcards } from './ReadingIntermediaireIELTSFlashcards';
+import { readingAvanceIELTSFlashcards } from './ReadingAvanceIELTSFlashcards';
+import { speakingFacileIELTSFlashcards } from './SpeakingFacileIELTSFlashcards';
+import { speakingIntermediaireIELTSFlashcards } from './SpeakingIntermediaireIELTSFlashcards';
+import { speakingAvanceIELTSFlashcards } from './SpeakingAvanceIELTSFlashcards';
+import { writingFacileIELTSFlashcards } from './WritingFacileIELTSFlashcards';
+import { writingIntermediaireIELTSFlashcards } from './WritingIntermediaireIELTSFlashcards';
+import { writingAvanceIELTSFlashcards } from './WritingAvanceIELTSFlashcards';
+import { vocabularyFacileIELTSFlashcards } from './VocabularyFacileIELTSFlashcards';
+import { vocabularyIntermediaireIELTSFlashcards } from './VocabularyIntermediaireIELTSFlashcards';
+import { vocabularyAvanceIELTSFlashcards } from './VocabularyAvanceIELTSFlashcards';
+import { academicFacileIELTSFlashcards } from './AcademicFacileIELTSFlashcards';
+import { academicIntermediaireIELTSFlashcards } from './AcademicIntermediaireIELTSFlashcards';
+import { academicAvanceIELTSFlashcards } from './AcademicAvanceIELTSFlashcards';
+import { generalFacileIELTSFlashcards } from './GeneralFacileIELTSFlashcards';
+import { generalIntermediaireIELTSFlashcards } from './GeneralIntermediaireIELTSFlashcards';
+import { generalAvanceIELTSFlashcards } from './GeneralAvanceIELTSFlashcards';
+
 // Export all flashcards for use in other files
 export { getFlashcards } from './flashcards';
 
@@ -86,6 +106,25 @@ export const getAllFlashcards = (): Flashcard[] => {
     ...verbalAvanceTageMageFlashcards,
     ...problemeFacileTageMageFlashcards,
     ...problemeIntermediaireTageMageFlashcards,
-    ...problemeAvanceTageMageFlashcards
+    ...problemeAvanceTageMageFlashcards,
+    // IELTS flashcards
+    ...readingFacileIELTSFlashcards,
+    ...readingIntermediaireIELTSFlashcards,
+    ...readingAvanceIELTSFlashcards,
+    ...speakingFacileIELTSFlashcards,
+    ...speakingIntermediaireIELTSFlashcards,
+    ...speakingAvanceIELTSFlashcards,
+    ...writingFacileIELTSFlashcards,
+    ...writingIntermediaireIELTSFlashcards,
+    ...writingAvanceIELTSFlashcards,
+    ...vocabularyFacileIELTSFlashcards,
+    ...vocabularyIntermediaireIELTSFlashcards,
+    ...vocabularyAvanceIELTSFlashcards,
+    ...academicFacileIELTSFlashcards,
+    ...academicIntermediaireIELTSFlashcards,
+    ...academicAvanceIELTSFlashcards,
+    ...generalFacileIELTSFlashcards,
+    ...generalIntermediaireIELTSFlashcards,
+    ...generalAvanceIELTSFlashcards
   ];
 };

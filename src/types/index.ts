@@ -1,3 +1,4 @@
+
 export type DiplomeType = 'baccalaureat' | 'toeic' | 'tage-mage' | 'toefl' | 'ielts' | 'cambridge' | 'gmat' | 'brevet';
 export type NiveauType = 'premiere' | 'terminale' | 'facile' | 'intermediaire' | 'avance' | 'sixieme' | 'cinquieme' | 'quatrieme' | 'troisieme' | 'both';
 

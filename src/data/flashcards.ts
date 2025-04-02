@@ -45,6 +45,26 @@ import { problemeFacileTageMageFlashcards } from './ProblemeFacileTageMageFlashc
 import { problemeIntermediaireTageMageFlashcards } from './ProblemeIntermediaireTageMageFlashcards';
 import { problemeAvanceTageMageFlashcards } from './ProblemeAvanceTageMageFlashcards';
 
+// Import IELTS flashcards
+import { readingFacileIELTSFlashcards } from './ReadingFacileIELTSFlashcards';
+import { readingIntermediaireIELTSFlashcards } from './ReadingIntermediaireIELTSFlashcards';
+import { readingAvanceIELTSFlashcards } from './ReadingAvanceIELTSFlashcards';
+import { speakingFacileIELTSFlashcards } from './SpeakingFacileIELTSFlashcards';
+import { speakingIntermediaireIELTSFlashcards } from './SpeakingIntermediaireIELTSFlashcards';
+import { speakingAvanceIELTSFlashcards } from './SpeakingAvanceIELTSFlashcards';
+import { writingFacileIELTSFlashcards } from './WritingFacileIELTSFlashcards';
+import { writingIntermediaireIELTSFlashcards } from './WritingIntermediaireIELTSFlashcards';
+import { writingAvanceIELTSFlashcards } from './WritingAvanceIELTSFlashcards';
+import { vocabularyFacileIELTSFlashcards } from './VocabularyFacileIELTSFlashcards';
+import { vocabularyIntermediaireIELTSFlashcards } from './VocabularyIntermediaireIELTSFlashcards';
+import { vocabularyAvanceIELTSFlashcards } from './VocabularyAvanceIELTSFlashcards';
+import { academicFacileIELTSFlashcards } from './AcademicFacileIELTSFlashcards';
+import { academicIntermediaireIELTSFlashcards } from './AcademicIntermediaireIELTSFlashcards';
+import { academicAvanceIELTSFlashcards } from './AcademicAvanceIELTSFlashcards';
+import { generalFacileIELTSFlashcards } from './GeneralFacileIELTSFlashcards';
+import { generalIntermediaireIELTSFlashcards } from './GeneralIntermediaireIELTSFlashcards';
+import { generalAvanceIELTSFlashcards } from './GeneralAvanceIELTSFlashcards';
+
 // Import extra flashcards
 import { toeicExtraFlashcards, tageMageExtraFlashcards } from './extraFlashcards';
 
@@ -69,6 +89,14 @@ const matiereMapping: Record<string, string> = {
   'Logique': 'TAGE MAGE - Logique',
   'Verbal': 'TAGE MAGE - Verbal',
   'Problèmes': 'TAGE MAGE - Problèmes',
+  
+  // IELTS
+  'IELTS Reading': 'IELTS Reading',
+  'IELTS Speaking': 'IELTS Speaking',
+  'IELTS Writing': 'IELTS Writing',
+  'IELTS Vocabulary': 'IELTS Vocabulary',
+  'IELTS Academic': 'IELTS Academic',
+  'IELTS General Training': 'IELTS General Training',
   
   // Brevet
   'Français (Grammaire)': 'Français - Grammaire',
@@ -182,6 +210,30 @@ export const getFlashcards = (
       ...problemeIntermediaireTageMageFlashcards,
       ...problemeAvanceTageMageFlashcards,
       ...tageMageExtraFlashcards
+    ];
+  }
+  
+  // IELTS Flashcards
+  if (diplome === 'ielts') {
+    allFlashcards = [
+      ...readingFacileIELTSFlashcards,
+      ...readingIntermediaireIELTSFlashcards,
+      ...readingAvanceIELTSFlashcards,
+      ...speakingFacileIELTSFlashcards,
+      ...speakingIntermediaireIELTSFlashcards,
+      ...speakingAvanceIELTSFlashcards,
+      ...writingFacileIELTSFlashcards,
+      ...writingIntermediaireIELTSFlashcards,
+      ...writingAvanceIELTSFlashcards,
+      ...vocabularyFacileIELTSFlashcards,
+      ...vocabularyIntermediaireIELTSFlashcards,
+      ...vocabularyAvanceIELTSFlashcards,
+      ...academicFacileIELTSFlashcards,
+      ...academicIntermediaireIELTSFlashcards,
+      ...academicAvanceIELTSFlashcards,
+      ...generalFacileIELTSFlashcards,
+      ...generalIntermediaireIELTSFlashcards,
+      ...generalAvanceIELTSFlashcards
     ];
   }
   
