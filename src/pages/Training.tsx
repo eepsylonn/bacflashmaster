@@ -1,3 +1,4 @@
+
 import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import Header from '@/components/Header';
@@ -5,9 +6,10 @@ import TrainingSelector from '@/components/TrainingSelector';
 import FlashcardComponentWrapper from '@/components/FlashcardComponentWrapper';
 import TrainingProgress from '@/components/TrainingProgress';
 import TrainingResultPage from '@/pages/TrainingResult';
-import { useFlashcards } from '@/hooks/useFlashcards';
+import { useSupabaseFlashcards } from '@/hooks/useSupabaseFlashcards';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';
+import { Loader2 } from 'lucide-react';
 
 const isOralComprehensionSubject = (matiere: string | undefined): boolean => {
   if (!matiere) return false;
@@ -31,6 +33,7 @@ const Training = () => {
     isFlipped,
     score,
     training,
+    loadingData,
     startTraining,
     flipCard,
     markCorrect,
@@ -41,7 +44,7 @@ const Training = () => {
     continueAfterResult,
     calculateImprovementRate,
     finishTraining
-  } = useFlashcards();
+  } = useSupabaseFlashcards();
 
   useEffect(() => {
     const searchParams = new URLSearchParams(location.search);
@@ -147,7 +150,12 @@ const Training = () => {
                   score={score}
                 />
                 
-                {currentQuestion && (
+                {loadingData ? (
+                  <div className="flex flex-col items-center justify-center h-64">
+                    <Loader2 className="h-12 w-12 text-app-blue-medium animate-spin mb-4" />
+                    <p className="text-lg text-gray-600">Chargement des questions...</p>
+                  </div>
+                ) : currentQuestion ? (
                   <FlashcardComponentWrapper
                     flashcard={currentQuestion}
                     isFlipped={isFlipped}
@@ -159,6 +167,10 @@ const Training = () => {
                     isLastQuestion={isLastQuestion}
                     finishTraining={finishTraining}
                   />
+                ) : (
+                  <div className="text-center p-8 bg-white rounded-lg shadow-md">
+                    <p>Aucune question disponible. Veuillez choisir d'autres critères.</p>
+                  </div>
                 )}
               </motion.div>
             )}

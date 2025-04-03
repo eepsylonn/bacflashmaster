@@ -1,17 +1,17 @@
 
 import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
-import FlashcardComponent from '@/components/FlashcardComponent';
+import FlashcardComponentWrapper from '@/components/FlashcardComponentWrapper';
 import TrainingProgress from '@/components/TrainingProgress';
 import TrainingResultPage from '@/pages/TrainingResult';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { useFlashcards } from '@/hooks/useFlashcards';
+import { useSupabaseFlashcards } from '@/hooks/useSupabaseFlashcards';
 import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
 import { useDiplome } from '@/contexts/DiplomeContext';
 import { useAuth } from '@/contexts/AuthContext';
-import { Lock } from 'lucide-react';
+import { Lock, Loader2 } from 'lucide-react';
 
 const Exam = () => {
   const {
@@ -30,8 +30,9 @@ const Exam = () => {
     currentResult,
     continueAfterResult,
     calculateImprovementRate,
-    finishTraining
-  } = useFlashcards();
+    finishTraining,
+    loadingData
+  } = useSupabaseFlashcards();
   
   const { diplome } = useDiplome();
   const { isSubscribed } = useAuth();
@@ -169,8 +170,13 @@ const Exam = () => {
                 score={score}
               />
               
-              {currentQuestion && (
-                <FlashcardComponent
+              {loadingData ? (
+                <div className="flex flex-col items-center justify-center h-64">
+                  <Loader2 className="h-12 w-12 text-app-blue-medium animate-spin mb-4" />
+                  <p className="text-lg text-gray-600">Chargement des questions d'examen...</p>
+                </div>
+              ) : currentQuestion ? (
+                <FlashcardComponentWrapper
                   flashcard={currentQuestion}
                   isFlipped={isFlipped}
                   onFlip={flipCard}
@@ -181,6 +187,10 @@ const Exam = () => {
                   isLastQuestion={isLastQuestion}
                   finishTraining={finishTraining}
                 />
+              ) : (
+                <div className="text-center p-8 bg-white rounded-lg shadow-md">
+                  <p>Aucune question d'examen disponible. Veuillez réessayer plus tard.</p>
+                </div>
               )}
             </motion.div>
           )}

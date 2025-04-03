@@ -1,151 +1,64 @@
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase, signInWithEmailOrUsername } from '@/lib/supabase';
-import Header from '@/components/Header';
-import { Card } from '@/components/ui/card';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
-import Mascot from '@/components/Mascot';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { useToast } from '@/components/ui/use-toast';
 import { Label } from '@/components/ui/label';
-import { Eye, EyeOff, Mail, Lock, User } from 'lucide-react';
-import { useAuth } from '@/contexts/AuthContext';
+import { Card } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useToast } from '@/components/ui/use-toast';
+import Header from '@/components/Header';
+import Mascot from '@/components/Mascot';
+import { LogIn, UserPlus, Mail, Key, AtSign, User } from 'lucide-react';
 
 const Login = () => {
+  const [loginEmail, setLoginEmail] = useState('');
+  const [loginPassword, setLoginPassword] = useState('');
+  const [signupEmail, setSignupEmail] = useState('');
+  const [signupPassword, setSignupPassword] = useState('');
+  const [signupUsername, setSignupUsername] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const [activeTab, setActiveTab] = useState('login');
   const navigate = useNavigate();
   const { toast } = useToast();
-  const { user, isAdmin, isLoading: authIsLoading } = useAuth();
-  const [view, setView] = useState<'sign_in' | 'sign_up'>('sign_in');
-  const [isLoading, setIsLoading] = useState(false);
-  const [adminLoginSuccess, setAdminLoginSuccess] = useState(false);
+  const auth = useAuth();
 
-  const [credentials, setCredentials] = useState({
-    emailOrUsername: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-    username: '',
-  });
-  
-  const [showPassword, setShowPassword] = useState(false);
-  
-  useEffect(() => {
-    console.log("useEffect dans Login - isAdmin:", isAdmin, "user:", user, "adminLoginSuccess:", adminLoginSuccess);
-    
-    if (!authIsLoading) {
-      if (isAdmin) {
-        console.log("Utilisateur admin détecté, redirection vers le panel admin");
-        navigate('/admin');
-      } else if (user && adminLoginSuccess) {
-        console.log("Login réussi avec admin, mais isAdmin pas encore défini, redirection vers /admin");
-        navigate('/admin');
-      } else if (user && !isAdmin) {
-        console.log("Utilisateur non-admin connecté, redirection vers la page d'accueil");
+  // Redirect if already logged in
+  if (auth.user) {
+    navigate('/');
+    return null;
+  }
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: loginEmail,
+        password: loginPassword,
+      });
+
+      if (error) {
+        toast({
+          title: "Erreur de connexion",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Connexion réussie",
+          description: "Vous êtes maintenant connecté",
+        });
         navigate('/');
       }
-    }
-  }, [user, isAdmin, navigate, authIsLoading, adminLoginSuccess]);
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setCredentials(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSignIn = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    try {
-      console.log("Tentative de connexion avec:", credentials.emailOrUsername);
-      
-      const isAdminAttempt = credentials.emailOrUsername === 'admin' && credentials.password === 'admin';
-      if (isAdminAttempt) {
-        console.log("Tentative de connexion admin détectée");
-        setAdminLoginSuccess(true);
-      }
-      
-      const { data, error } = await signInWithEmailOrUsername(
-        credentials.emailOrUsername,
-        credentials.password
-      );
-      
-      if (error) {
-        throw error;
-      }
-      
-      console.log("Connexion réussie, données:", data?.user);
-      
-      toast({
-        title: "Connexion réussie",
-        description: "Vous êtes maintenant connecté.",
-      });
-      
-      if (isAdminAttempt) {
-        console.log("Redirection immédiate vers /admin après connexion admin");
-        navigate('/admin');
-      }
     } catch (error: any) {
-      console.error("Erreur de connexion:", error);
-      toast({
-        title: "Échec de la connexion",
-        description: error.message || "Identifiants incorrects. Veuillez réessayer.",
-        variant: "destructive",
-      });
-      setAdminLoginSuccess(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSignUp = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    
-    if (credentials.password !== credentials.confirmPassword) {
       toast({
         title: "Erreur",
-        description: "Les mots de passe ne correspondent pas.",
-        variant: "destructive",
-      });
-      setIsLoading(false);
-      return;
-    }
-    
-    try {
-      const { data: usernameExists } = await supabase
-        .from('profiles')
-        .select('username')
-        .eq('username', credentials.username)
-        .maybeSingle();
-      
-      if (usernameExists) {
-        throw new Error("Ce nom d'utilisateur est déjà utilisé.");
-      }
-      
-      const { data, error } = await supabase.auth.signUp({
-        email: credentials.email,
-        password: credentials.password,
-        options: {
-          data: {
-            username: credentials.username,
-          },
-        }
-      });
-      
-      if (error) throw error;
-      
-      toast({
-        title: "Inscription réussie",
-        description: "Veuillez vérifier votre email pour confirmer votre compte.",
-      });
-      
-      setView('sign_in');
-    } catch (error: any) {
-      toast({
-        title: "Échec de l'inscription",
-        description: error.message || "Une erreur s'est produite. Veuillez réessayer.",
+        description: error.message || "Une erreur est survenue",
         variant: "destructive",
       });
     } finally {
@@ -153,23 +66,41 @@ const Login = () => {
     }
   };
 
-  const handleGoogleSignIn = async () => {
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
     setIsLoading(true);
+
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
+      const { data, error } = await supabase.auth.signUp({
+        email: signupEmail,
+        password: signupPassword,
         options: {
-          redirectTo: `${window.location.origin}/login`
-        }
+          data: {
+            username: signupUsername,
+          },
+        },
       });
-      
-      if (error) throw error;
+
+      if (error) {
+        toast({
+          title: "Erreur d'inscription",
+          description: error.message,
+          variant: "destructive",
+        });
+      } else {
+        toast({
+          title: "Inscription réussie",
+          description: "Veuillez vérifier votre email pour confirmer votre compte",
+        });
+        setActiveTab('login');
+      }
     } catch (error: any) {
       toast({
-        title: "Échec de la connexion avec Google",
-        description: error.message || "Une erreur s'est produite. Veuillez réessayer.",
+        title: "Erreur",
+        description: error.message || "Une erreur est survenue",
         variant: "destructive",
       });
+    } finally {
       setIsLoading(false);
     }
   };
@@ -178,226 +109,135 @@ const Login = () => {
     <div className="min-h-screen flex flex-col bg-gradient-to-b from-blue-50 to-indigo-50">
       <Header />
       
-      <main className="flex-grow py-12 flex items-center justify-center">
-        <motion.div 
+      <main className="flex-grow flex items-center justify-center p-4">
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5 }}
           className="w-full max-w-md"
         >
-          <Card className="p-8 shadow-lg bg-white rounded-xl border-2 border-app-blue-light">
+          <Card className="p-6 shadow-lg bg-white rounded-xl border-2 border-app-blue-light">
             <div className="flex justify-center mb-6">
-              <Mascot size="lg" animation="bounce" />
+              <Mascot size="lg" animation="wave" />
             </div>
-            
-            <h2 className="text-2xl font-bold text-center mb-6 text-app-blue-dark">
-              {view === 'sign_in' ? 'Connexion' : 'Créer un compte'}
-            </h2>
-            
-            <div className="tabs flex justify-center mb-6">
-              <button 
-                className={`px-4 py-2 mx-2 rounded-full ${view === 'sign_in' ? 'bg-app-blue-medium text-white' : 'bg-gray-100'}`}
-                onClick={() => setView('sign_in')}
-              >
-                Connexion
-              </button>
-              <button 
-                className={`px-4 py-2 mx-2 rounded-full ${view === 'sign_up' ? 'bg-app-blue-medium text-white' : 'bg-gray-100'}`}
-                onClick={() => setView('sign_up')}
-              >
-                Inscription
-              </button>
-            </div>
-            
-            {view === 'sign_in' ? (
-              <form onSubmit={handleSignIn} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="emailOrUsername">Email ou nom d'utilisateur</Label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
-                      <User size={18} />
+
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+              <TabsList className="grid grid-cols-2 mb-6">
+                <TabsTrigger value="login" className="flex items-center gap-2">
+                  <LogIn className="h-4 w-4" />
+                  Connexion
+                </TabsTrigger>
+                <TabsTrigger value="signup" className="flex items-center gap-2">
+                  <UserPlus className="h-4 w-4" />
+                  Inscription
+                </TabsTrigger>
+              </TabsList>
+
+              <TabsContent value="login">
+                <form onSubmit={handleLogin} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="email">Email</Label>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="email"
+                        type="email"
+                        placeholder="votre@email.com"
+                        value={loginEmail}
+                        onChange={(e) => setLoginEmail(e.target.value)}
+                        className="pl-10"
+                        required
+                      />
                     </div>
-                    <Input
-                      id="emailOrUsername"
-                      name="emailOrUsername"
-                      type="text"
-                      placeholder="Entrez votre email ou nom d'utilisateur"
-                      value={credentials.emailOrUsername}
-                      onChange={handleChange}
-                      className="pl-10"
-                      required
-                    />
                   </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="password">Mot de passe</Label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
-                      <Lock size={18} />
+
+                  <div className="space-y-2">
+                    <Label htmlFor="password">Mot de passe</Label>
+                    <div className="relative">
+                      <Key className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="password"
+                        type="password"
+                        placeholder="••••••••"
+                        value={loginPassword}
+                        onChange={(e) => setLoginPassword(e.target.value)}
+                        className="pl-10"
+                        required
+                      />
                     </div>
-                    <Input
-                      id="password"
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Entrez votre mot de passe"
-                      value={credentials.password}
-                      onChange={handleChange}
-                      className="pl-10 pr-10"
-                      required
-                    />
-                    <button 
-                      type="button"
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
                   </div>
-                </div>
-                
-                <Button 
-                  type="submit" 
-                  className="w-full bg-app-blue-medium hover:bg-app-blue-dark"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Connexion en cours..." : "Se connecter"}
-                </Button>
-                
-                <div className="relative flex items-center justify-center my-4">
-                  <div className="border-t border-gray-300 flex-grow"></div>
-                  <span className="mx-4 text-sm text-gray-500">ou</span>
-                  <div className="border-t border-gray-300 flex-grow"></div>
-                </div>
-                
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={handleGoogleSignIn}
-                  disabled={isLoading}
-                >
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5 mr-2" />
-                  Continuer avec Google
-                </Button>
-              </form>
-            ) : (
-              <form onSubmit={handleSignUp} className="space-y-4">
-                <div className="space-y-2">
-                  <Label htmlFor="email">Email</Label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
-                      <Mail size={18} />
+
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Connexion en cours..." : "Se connecter"}
+                  </Button>
+                </form>
+              </TabsContent>
+
+              <TabsContent value="signup">
+                <form onSubmit={handleSignup} className="space-y-4">
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-email">Email</Label>
+                    <div className="relative">
+                      <AtSign className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="signup-email"
+                        type="email"
+                        placeholder="votre@email.com"
+                        value={signupEmail}
+                        onChange={(e) => setSignupEmail(e.target.value)}
+                        className="pl-10"
+                        required
+                      />
                     </div>
-                    <Input
-                      id="email"
-                      name="email"
-                      type="email"
-                      placeholder="Entrez votre email"
-                      value={credentials.email}
-                      onChange={handleChange}
-                      className="pl-10"
-                      required
-                    />
                   </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="username">Nom d'utilisateur</Label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
-                      <User size={18} />
+
+                  <div className="space-y-2">
+                    <Label htmlFor="username">Nom d'utilisateur</Label>
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="username"
+                        type="text"
+                        placeholder="votre_nom"
+                        value={signupUsername}
+                        onChange={(e) => setSignupUsername(e.target.value)}
+                        className="pl-10"
+                        required
+                      />
                     </div>
-                    <Input
-                      id="username"
-                      name="username"
-                      type="text"
-                      placeholder="Choisissez un nom d'utilisateur"
-                      value={credentials.username}
-                      onChange={handleChange}
-                      className="pl-10"
-                      required
-                    />
                   </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="signup-password">Mot de passe</Label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
-                      <Lock size={18} />
+
+                  <div className="space-y-2">
+                    <Label htmlFor="signup-password">Mot de passe</Label>
+                    <div className="relative">
+                      <Key className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
+                      <Input
+                        id="signup-password"
+                        type="password"
+                        placeholder="••••••••"
+                        value={signupPassword}
+                        onChange={(e) => setSignupPassword(e.target.value)}
+                        className="pl-10"
+                        required
+                        minLength={6}
+                      />
                     </div>
-                    <Input
-                      id="signup-password"
-                      name="password"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Créez un mot de passe"
-                      value={credentials.password}
-                      onChange={handleChange}
-                      className="pl-10 pr-10"
-                      required
-                    />
-                    <button 
-                      type="button"
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
                   </div>
-                </div>
-                
-                <div className="space-y-2">
-                  <Label htmlFor="confirmPassword">Confirmer le mot de passe</Label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-400">
-                      <Lock size={18} />
-                    </div>
-                    <Input
-                      id="confirmPassword"
-                      name="confirmPassword"
-                      type={showPassword ? "text" : "password"}
-                      placeholder="Confirmez votre mot de passe"
-                      value={credentials.confirmPassword}
-                      onChange={handleChange}
-                      className="pl-10 pr-10"
-                      required
-                    />
-                    <button 
-                      type="button"
-                      className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400"
-                      onClick={() => setShowPassword(!showPassword)}
-                    >
-                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-                    </button>
-                  </div>
-                </div>
-                
-                <Button 
-                  type="submit" 
-                  className="w-full bg-app-blue-medium hover:bg-app-blue-dark"
-                  disabled={isLoading}
-                >
-                  {isLoading ? "Inscription en cours..." : "S'inscrire"}
-                </Button>
-                
-                <div className="relative flex items-center justify-center my-4">
-                  <div className="border-t border-gray-300 flex-grow"></div>
-                  <span className="mx-4 text-sm text-gray-500">ou</span>
-                  <div className="border-t border-gray-300 flex-grow"></div>
-                </div>
-                
-                <Button 
-                  type="button" 
-                  variant="outline" 
-                  className="w-full"
-                  onClick={handleGoogleSignIn}
-                  disabled={isLoading}
-                >
-                  <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" className="w-5 h-5 mr-2" />
-                  Continuer avec Google
-                </Button>
-              </form>
-            )}
+
+                  <Button 
+                    type="submit" 
+                    className="w-full bg-gradient-to-r from-app-blue-medium to-app-blue-dark"
+                    disabled={isLoading}
+                  >
+                    {isLoading ? "Inscription en cours..." : "S'inscrire"}
+                  </Button>
+                </form>
+              </TabsContent>
+            </Tabs>
           </Card>
         </motion.div>
       </main>

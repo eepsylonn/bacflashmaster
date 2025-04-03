@@ -6,6 +6,8 @@ import { Flashcard } from '@/types';
 import { Card } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { supabase, isLocalDev } from '@/integrations/supabase/client';
+import { TextToSpeech } from '@/components/AudioTools';
 
 interface FlashcardComponentWrapperProps {
   flashcard: Flashcard;
@@ -23,11 +25,16 @@ const FlashcardComponentWrapper: React.FC<FlashcardComponentWrapperProps> = (pro
   const { flashcard } = props;
   const [text, setText] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(false);
+  const [isAudioPlaying, setIsAudioPlaying] = useState<boolean>(false);
   const isMobile = useIsMobile();
   
   const isReadingComprehension = flashcard.matiere === 'Compréhension écrite' || 
                                flashcard.matiere === 'TOEIC Reading' || 
                                flashcard.matiere === 'Reading';
+
+  const isListening = flashcard.matiere === 'Compréhension orale' || 
+                      flashcard.matiere === 'TOEIC Listening' || 
+                      flashcard.matiere === 'Listening';
 
   useEffect(() => {
     const loadText = async () => {
@@ -36,7 +43,30 @@ const FlashcardComponentWrapper: React.FC<FlashcardComponentWrapperProps> = (pro
         if (flashcard.text.startsWith('/')) {
           setLoading(true);
           try {
-            // First encode the URI to handle special characters properly
+            // Try to get from Supabase Storage first if not in local dev mode
+            if (!isLocalDev) {
+              try {
+                const bucket = 'texts';
+                const filePath = flashcard.text.startsWith('/') ? flashcard.text.substring(1) : flashcard.text;
+                
+                const { data, error } = await supabase.storage
+                  .from(bucket)
+                  .download(filePath);
+                  
+                if (!error && data) {
+                  const textContent = await data.text();
+                  setText(textContent);
+                  console.log(`Texte chargé depuis Supabase: ${filePath}`);
+                  setLoading(false);
+                  return;
+                }
+              } catch (storageError) {
+                console.error(`Erreur lors du chargement du texte depuis Supabase: ${flashcard.text}`, storageError);
+                // Continue to try fetching from public folder as fallback
+              }
+            }
+            
+            // Fallback to public folder
             const encodedPath = encodeURI(flashcard.text);
             const response = await fetch(encodedPath);
             if (response.ok) {
@@ -72,7 +102,20 @@ const FlashcardComponentWrapper: React.FC<FlashcardComponentWrapperProps> = (pro
           text && <ReadingTextDisplay text={text} />
         )
       )}
-      <FlashcardComponent {...props} />
+      
+      <div className="flex flex-col space-y-2">
+        <FlashcardComponent {...props} />
+        
+        {(props.isFlipped && !isAudioPlaying) && (
+          <div className="flex justify-center mt-4">
+            <TextToSpeech 
+              text={props.isFlipped ? flashcard.answer : flashcard.question}
+              voice="alloy"
+              onPlayStateChange={setIsAudioPlaying}
+            />
+          </div>
+        )}
+      </div>
     </div>
   );
 };

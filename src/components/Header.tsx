@@ -1,3 +1,4 @@
+
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -159,7 +160,7 @@ const Header = () => {
                 >
                   '
                 </motion.span>
-              </motion.span>
+              </span>
             </Link>
 
             <div className="absolute top-5 right-4 md:right-8 flex items-center gap-2">

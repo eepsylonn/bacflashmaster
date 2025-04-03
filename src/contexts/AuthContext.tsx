@@ -1,6 +1,6 @@
 
 import React, { createContext, useState, useEffect, useContext, ReactNode } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase, isLocalDev } from '@/integrations/supabase/client';
 import { Session, User } from '@supabase/supabase-js';
 
 interface AuthContextType {
@@ -32,13 +32,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isAdmin, setIsAdmin] = useState(false);
   const [isSubscribed, setIsSubscribed] = useState(false);
 
-  // Vérification si on est en mode développement local
-  const isLocalDev = 
-    (!import.meta.env.VITE_SUPABASE_URL || 
-     !import.meta.env.VITE_SUPABASE_ANON_KEY ||
-     import.meta.env.VITE_SUPABASE_URL === 'https://your-supabase-url.supabase.co' ||
-     import.meta.env.VITE_SUPABASE_ANON_KEY === 'your-anon-key');
-  
   // Pour déboguer
   console.log("Mode développement local:", isLocalDev);
   
@@ -127,8 +120,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Écouter les changements d'authentification
     const { data: authListener } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
-        console.log("Changement d'état d'authentification:", _event, session);
+      async (event, session) => {
+        console.log("Changement d'état d'authentification:", event, session);
         setSession(session);
         setUser(session?.user ?? null);
         setIsLoading(true);
@@ -177,6 +170,28 @@ export function AuthProvider({ children }: { children: ReactNode }) {
               console.log("Profil utilisateur récupéré:", data);
               setUserProfile(data);
               setIsAdmin(data.role === 'admin');
+            } else {
+              // Créer un profil si l'utilisateur n'en a pas
+              const newProfile = {
+                id: session.user.id,
+                username: session.user.user_metadata?.username || session.user.email?.split('@')[0],
+                email: session.user.email,
+                role: 'user',
+                created_at: new Date().toISOString()
+              };
+              
+              const { data: insertedProfile, error: insertError } = await supabase
+                .from('profiles')
+                .insert([newProfile])
+                .select()
+                .single();
+                
+              if (!insertError && insertedProfile) {
+                setUserProfile(insertedProfile);
+                setIsAdmin(insertedProfile.role === 'admin');
+              } else {
+                console.error('Erreur lors de la création du profil:', insertError);
+              }
             }
           }
           
@@ -200,7 +215,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return () => {
       authListener.subscription.unsubscribe();
     };
-  }, [isLocalDev]);
+  }, []);
 
   const signOut = async () => {
     if (isLocalDev) {
