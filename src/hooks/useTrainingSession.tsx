@@ -303,6 +303,9 @@ export const useTrainingSession = () => {
     finishTraining,
     calculateImprovementRate,
     
+    // Make sure setShowResult is explicitly included in the return object
+    setShowResult,
+    
     // Computed
     currentQuestion: currentQuestions[currentIndex]
   };
