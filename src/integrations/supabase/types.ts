@@ -9,16 +9,246 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      flashcards: {
+        Row: {
+          answer: string
+          audio: string | null
+          created_at: string | null
+          created_by: string | null
+          diplome: Database["public"]["Enums"]["diplome_type"] | null
+          explication: string | null
+          id: string
+          matiere: string
+          niveau: Database["public"]["Enums"]["niveau_type"]
+          options: string[] | null
+          question: string
+          text: string | null
+          type: Database["public"]["Enums"]["question_type"] | null
+          updated_at: string | null
+        }
+        Insert: {
+          answer: string
+          audio?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          diplome?: Database["public"]["Enums"]["diplome_type"] | null
+          explication?: string | null
+          id?: string
+          matiere: string
+          niveau: Database["public"]["Enums"]["niveau_type"]
+          options?: string[] | null
+          question: string
+          text?: string | null
+          type?: Database["public"]["Enums"]["question_type"] | null
+          updated_at?: string | null
+        }
+        Update: {
+          answer?: string
+          audio?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          diplome?: Database["public"]["Enums"]["diplome_type"] | null
+          explication?: string | null
+          id?: string
+          matiere?: string
+          niveau?: Database["public"]["Enums"]["niveau_type"]
+          options?: string[] | null
+          question?: string
+          text?: string | null
+          type?: Database["public"]["Enums"]["question_type"] | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flashcards_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string | null
+          email: string
+          id: string
+          last_login: string | null
+          role: Database["public"]["Enums"]["user_role"] | null
+          updated_at: string | null
+          username: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          email: string
+          id: string
+          last_login?: string | null
+          role?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          email?: string
+          id?: string
+          last_login?: string | null
+          role?: Database["public"]["Enums"]["user_role"] | null
+          updated_at?: string | null
+          username?: string | null
+        }
+        Relationships: []
+      }
+      texts: {
+        Row: {
+          content: string
+          created_at: string | null
+          diplome: Database["public"]["Enums"]["diplome_type"] | null
+          id: string
+          matiere: string | null
+          niveau: Database["public"]["Enums"]["niveau_type"] | null
+          titre: string
+        }
+        Insert: {
+          content: string
+          created_at?: string | null
+          diplome?: Database["public"]["Enums"]["diplome_type"] | null
+          id?: string
+          matiere?: string | null
+          niveau?: Database["public"]["Enums"]["niveau_type"] | null
+          titre: string
+        }
+        Update: {
+          content?: string
+          created_at?: string | null
+          diplome?: Database["public"]["Enums"]["diplome_type"] | null
+          id?: string
+          matiere?: string | null
+          niveau?: Database["public"]["Enums"]["niveau_type"] | null
+          titre?: string
+        }
+        Relationships: []
+      }
+      training_results: {
+        Row: {
+          created_at: string | null
+          date: string | null
+          diplome: Database["public"]["Enums"]["diplome_type"] | null
+          id: string
+          matiere: string
+          niveau: Database["public"]["Enums"]["niveau_type"]
+          nombre_questions: number
+          note: number
+          pourcentage: number
+          questions: Json
+          score: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date?: string | null
+          diplome?: Database["public"]["Enums"]["diplome_type"] | null
+          id?: string
+          matiere: string
+          niveau: Database["public"]["Enums"]["niveau_type"]
+          nombre_questions: number
+          note: number
+          pourcentage: number
+          questions: Json
+          score: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string | null
+          diplome?: Database["public"]["Enums"]["diplome_type"] | null
+          id?: string
+          matiere?: string
+          niveau?: Database["public"]["Enums"]["niveau_type"]
+          nombre_questions?: number
+          note?: number
+          pourcentage?: number
+          questions?: Json
+          score?: number
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "training_results_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_preferences: {
+        Row: {
+          created_at: string | null
+          id: string
+          preferred_niveau: Database["public"]["Enums"]["niveau_type"] | null
+          selected_specialities: string[] | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          preferred_niveau?: Database["public"]["Enums"]["niveau_type"] | null
+          selected_specialities?: string[] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          preferred_niveau?: Database["public"]["Enums"]["niveau_type"] | null
+          selected_specialities?: string[] | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_preferences_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      is_admin: {
+        Args: {
+          user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      diplome_type:
+        | "toeic"
+        | "toefl"
+        | "tage-mage"
+        | "ielts"
+        | "cambridge"
+        | "gmat"
+        | "brevet"
+        | "baccalaureat"
+      niveau_type:
+        | "facile"
+        | "intermediaire"
+        | "avance"
+        | "both"
+        | "troisieme"
+        | "quatrieme"
+        | "premiere"
+        | "terminale"
+      question_type: "mcq" | "text" | "audio"
+      user_role: "user" | "admin"
     }
     CompositeTypes: {
       [_ in never]: never
