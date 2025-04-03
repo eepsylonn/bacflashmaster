@@ -2,6 +2,7 @@
 import { supabase, getFlashcardsFromSupabase } from '@/integrations/supabase/client';
 import { Flashcard, NiveauType, DiplomeType, NombreQuestions } from '@/types';
 import { getFlashcards as getLocalFlashcards } from '@/data/flashcards';
+import { standardizeMatiere, standardizeNiveau, standardizeDiplome } from '@/utils/standardization';
 
 // Get flashcards from Supabase with fallback to local data
 export async function getFlashcards(
@@ -11,22 +12,43 @@ export async function getFlashcards(
   diplome?: DiplomeType | string
 ): Promise<Flashcard[]> {
   try {
+    // Standardize inputs for consistency
+    const standardizedMatiere = matiere ? standardizeMatiere(matiere) : undefined;
+    const standardizedNiveau = niveau ? standardizeNiveau(niveau) : undefined;
+    const standardizedDiplome = diplome ? standardizeDiplome(diplome) : undefined;
+    
+    console.log(`Récupération des flashcards avec critères standardisés:`, {
+      matiere: { original: matiere, standardized: standardizedMatiere },
+      niveau: { original: niveau, standardized: standardizedNiveau },
+      diplome: { original: diplome, standardized: standardizedDiplome },
+      limit
+    });
+    
     // Try to get from Supabase first
     const supabaseFlashcards = await getFlashcardsFromSupabase(
-      matiere,
-      niveau as NiveauType, // Type cast to ensure compatibility
+      standardizedMatiere,
+      standardizedNiveau as NiveauType, // Type cast to ensure compatibility
       limit, // Pass limit directly as NombreQuestions
-      diplome as DiplomeType // Type cast to ensure compatibility
+      standardizedDiplome as DiplomeType // Type cast to ensure compatibility
     );
     
     if (supabaseFlashcards && supabaseFlashcards.length > 0) {
+      console.log(`Récupéré ${supabaseFlashcards.length} flashcards depuis Supabase`);
       return supabaseFlashcards as Flashcard[];
     }
     
     // Fallback to local data
-    return getLocalFlashcards(matiere, niveau as NiveauType, limit as NombreQuestions, diplome as DiplomeType);
+    const localFlashcards = getLocalFlashcards(
+      standardizedMatiere, 
+      standardizedNiveau as NiveauType, 
+      limit as NombreQuestions, 
+      standardizedDiplome as DiplomeType
+    );
+    
+    console.log(`Récupéré ${localFlashcards.length} flashcards depuis les données locales`);
+    return localFlashcards;
   } catch (error) {
-    console.error('Error fetching flashcards:', error);
+    console.error('Erreur lors de la récupération des flashcards:', error);
     return getLocalFlashcards(matiere, niveau as NiveauType, limit as NombreQuestions, diplome as DiplomeType);
   }
 }

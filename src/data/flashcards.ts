@@ -1,4 +1,3 @@
-
 import { Flashcard, NiveauType, DiplomeType, NombreQuestions } from '@/types';
 import { vocabularyFacileIELTSFlashcards } from './VocabularyFacileIELTSFlashcards';
 import { vocabularyIntermediaireIELTSFlashcards } from './VocabularyIntermediaireIELTSFlashcards';
@@ -48,9 +47,8 @@ import { vocabularyAvanceToeflFlashcards } from './VocabularyAvanceToeflFlashcar
 
 import { mathematiquesCalculsTrioisemeBrevetFlashcards } from './MathematiquesCalculsTrioisemeBrevetFlashcards';
 
-import { standardizeMatiere, standardizeNiveau } from '@/utils/standardization';
+import { standardizeMatiere, standardizeNiveau, standardizeDiplome } from '@/utils/standardization';
 
-// Liste complète des flashcards
 export const allFlashcards: Flashcard[] = [
   ...vocabularyFacileIELTSFlashcards,
   ...vocabularyIntermediaireIELTSFlashcards,
@@ -101,33 +99,46 @@ export const allFlashcards: Flashcard[] = [
   ...mathematiquesCalculsTrioisemeBrevetFlashcards,
 ];
 
-// Fonction pour récupérer les flashcards selon les critères
 export const getFlashcards = (
   matiere?: string,
   niveau?: NiveauType,
   nombreQuestions: NombreQuestions = 20,
   diplome?: DiplomeType
 ): Flashcard[] => {
-  // Filtration des flashcards en fonction des critères
+  const stdMatiere = matiere ? standardizeMatiere(matiere) : undefined;
+  const stdNiveau = niveau ? standardizeNiveau(niveau) : undefined;
+  const stdDiplome = diplome ? standardizeDiplome(diplome) : undefined;
+  
+  console.log('Récupération des flashcards locales avec critères standardisés:', {
+    matiere: { original: matiere, standard: stdMatiere },
+    niveau: { original: niveau, standard: stdNiveau },
+    diplome: { original: diplome, standard: stdDiplome },
+    nombreQuestions
+  });
+  
   let filtered = allFlashcards;
   
-  if (diplome) {
-    filtered = filtered.filter(card => card.diplome === diplome);
-  }
-  
-  if (matiere) {
+  if (stdDiplome) {
     filtered = filtered.filter(card => 
-      standardizeMatiere(card.matiere) === standardizeMatiere(matiere));
+      standardizeDiplome(card.diplome) === stdDiplome);
   }
   
-  if (niveau) {
+  if (stdMatiere) {
     filtered = filtered.filter(card => 
-      standardizeNiveau(card.niveau) === standardizeNiveau(niveau));
+      standardizeMatiere(card.matiere) === stdMatiere);
   }
   
-  // Mélange des flashcards
+  if (stdNiveau) {
+    filtered = filtered.filter(card => 
+      standardizeNiveau(card.niveau) === stdNiveau);
+  }
+  
+  console.log(`Flashcards locales filtrées: ${filtered.length} résultats`);
+  
   const shuffled = [...filtered].sort(() => Math.random() - 0.5);
   
-  // Limitation au nombre demandé
-  return shuffled.slice(0, Math.min(nombreQuestions, shuffled.length));
+  const result = shuffled.slice(0, Math.min(nombreQuestions, shuffled.length));
+  console.log(`Flashcards locales retournées: ${result.length} résultats`);
+  
+  return result;
 };
