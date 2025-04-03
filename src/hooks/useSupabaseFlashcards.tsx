@@ -62,7 +62,7 @@ export const useSupabaseFlashcards = () => {
             } else if (data && data.length > 0) {
               console.log('Training history fetched from Supabase:', data);
               
-              // Transform data to match TrainingResult type
+              // Transform data to match TrainingResult type with proper handling of questions field
               const mappedResults: TrainingResult[] = data.map(item => ({
                 id: item.id,
                 date: item.date || item.created_at,
@@ -72,7 +72,14 @@ export const useSupabaseFlashcards = () => {
                 score: item.score,
                 pourcentage: item.pourcentage,
                 note: item.note,
-                questions: Array.isArray(item.questions) ? item.questions : [],
+                // Properly transform json questions to AnsweredQuestion[] type
+                questions: Array.isArray(item.questions) 
+                  ? item.questions.map((q: any) => ({
+                      flashcard: q.flashcard,
+                      isCorrect: q.isCorrect,
+                      userAnswer: q.userAnswer
+                    })) as AnsweredQuestion[]
+                  : [],
                 diplome: item.diplome as DiplomeType
               }));
               
