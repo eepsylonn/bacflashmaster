@@ -39,13 +39,13 @@ export async function getFlashcardsFromSupabase(
     
     if (niveau) {
       // Convert string to Supabase enum type if needed
-      const niveauValue = niveau as Database['public']['Enums']['niveau_type'];
+      const niveauValue = niveau as unknown as Database['public']['Enums']['niveau_type'];
       query = query.eq('niveau', niveauValue);
     }
     
     if (diplome) {
       // Convert string to Supabase enum type if needed
-      const diplomeValue = diplome as Database['public']['Enums']['diplome_type'];
+      const diplomeValue = diplome as unknown as Database['public']['Enums']['diplome_type'];
       query = query.eq('diplome', diplomeValue);
     }
     

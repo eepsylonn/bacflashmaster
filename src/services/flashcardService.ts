@@ -1,3 +1,4 @@
+
 import { supabase, getFlashcardsFromSupabase } from '@/integrations/supabase/client';
 import { Flashcard, NiveauType, DiplomeType, NombreQuestions } from '@/types';
 import { getFlashcards as getLocalFlashcards } from '@/data/flashcards';
@@ -14,7 +15,7 @@ export async function getFlashcards(
     const supabaseFlashcards = await getFlashcardsFromSupabase(
       matiere,
       niveau as NiveauType, // Type cast to ensure compatibility
-      limit as NombreQuestions, // Cast to NombreQuestions as required by type
+      typeof limit === 'number' ? limit as unknown as NombreQuestions : limit, // Handle number to NombreQuestions conversion
       diplome as DiplomeType // Type cast to ensure compatibility
     );
     
