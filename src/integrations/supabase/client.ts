@@ -50,8 +50,14 @@ export async function getFlashcardsFromSupabase(
     }
     
     // Apply limit if provided
-    if (limit && typeof limit === 'number') {
-      query = query.limit(limit);
+    if (limit) {
+      let limitValue: number;
+      if (typeof limit === 'number') {
+        limitValue = limit;
+      } else {
+        limitValue = parseInt(limit.toString(), 10);
+      }
+      query = query.limit(limitValue);
     }
     
     // Execute query

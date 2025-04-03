@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { supabase, isLocalDev, getFlashcardsFromSupabase } from '@/integrations/supabase/client';
 import { Flashcard, TrainingResult, NombreQuestions, AnsweredQuestion, NiveauType, DiplomeType } from '@/types';
@@ -194,7 +193,7 @@ export const useSupabaseFlashcards = () => {
         const fetchedQuestions = await getFlashcardsFromSupabase(
           matiere, 
           niveau, 
-          nombreQuestions as number, 
+          nombreQuestions, 
           diplome
         );
         

@@ -15,7 +15,7 @@ export async function getFlashcards(
     const supabaseFlashcards = await getFlashcardsFromSupabase(
       matiere,
       niveau as NiveauType, // Type cast to ensure compatibility
-      typeof limit === 'number' ? limit as unknown as NombreQuestions : limit, // Handle number to NombreQuestions conversion
+      limit, // Pass limit directly as NombreQuestions
       diplome as DiplomeType // Type cast to ensure compatibility
     );
     
