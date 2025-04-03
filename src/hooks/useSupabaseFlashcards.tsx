@@ -61,7 +61,22 @@ export const useSupabaseFlashcards = () => {
               console.error('Error fetching training history:', error);
             } else if (data && data.length > 0) {
               console.log('Training history fetched from Supabase:', data);
-              setTrainingHistory(data);
+              
+              // Transform data to match TrainingResult type
+              const mappedResults: TrainingResult[] = data.map(item => ({
+                id: item.id,
+                date: item.date || item.created_at,
+                matiere: item.matiere,
+                niveau: item.niveau as NiveauType,
+                nombreQuestions: item.nombre_questions,
+                score: item.score,
+                pourcentage: item.pourcentage,
+                note: item.note,
+                questions: Array.isArray(item.questions) ? item.questions : [],
+                diplome: item.diplome as DiplomeType
+              }));
+              
+              setTrainingHistory(mappedResults);
             }
           }
         } catch (error) {
@@ -375,12 +390,21 @@ export const useSupabaseFlashcards = () => {
       try {
         const { data: sessionData } = await supabase.auth.getSession();
         if (sessionData.session?.user) {
-          const resultWithUserId = {
-            ...result,
+          // Map to Supabase format
+          const resultForSupabase = {
+            date: result.date,
+            matiere: result.matiere,
+            niveau: result.niveau,
+            nombre_questions: result.nombreQuestions, // Use the correct field name for Supabase
+            score: result.score,
+            pourcentage: result.pourcentage,
+            note: result.note,
+            questions: result.questions,
+            diplome: result.diplome,
             user_id: sessionData.session.user.id
           };
           
-          await saveTrainingResult(resultWithUserId);
+          await saveTrainingResult(resultForSupabase);
           console.log('Training result saved to Supabase');
         }
       } catch (error) {

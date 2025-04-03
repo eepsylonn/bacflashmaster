@@ -1,28 +1,32 @@
-
 import { supabase, getFlashcardsFromSupabase } from '@/integrations/supabase/client';
-import { Flashcard } from '@/types';
+import { Flashcard, NiveauType, DiplomeType } from '@/types';
 import { getFlashcards as getLocalFlashcards } from '@/data/flashcards';
 
 // Get flashcards from Supabase with fallback to local data
 export async function getFlashcards(
   matiere?: string,
-  niveau?: string,
+  niveau?: NiveauType | string,
   limit?: number,
-  diplome?: string
+  diplome?: DiplomeType | string
 ): Promise<Flashcard[]> {
   try {
     // Try to get from Supabase first
-    const supabaseFlashcards = await getFlashcardsFromSupabase(matiere, niveau, limit, diplome);
+    const supabaseFlashcards = await getFlashcardsFromSupabase(
+      matiere,
+      niveau as NiveauType, // Type cast to ensure compatibility
+      limit,
+      diplome as DiplomeType // Type cast to ensure compatibility
+    );
     
     if (supabaseFlashcards && supabaseFlashcards.length > 0) {
-      return supabaseFlashcards;
+      return supabaseFlashcards as Flashcard[];
     }
     
     // Fallback to local data
-    return getLocalFlashcards(matiere, niveau, limit, diplome);
+    return getLocalFlashcards(matiere, niveau as NiveauType, limit, diplome as DiplomeType);
   } catch (error) {
     console.error('Error fetching flashcards:', error);
-    return getLocalFlashcards(matiere, niveau, limit, diplome);
+    return getLocalFlashcards(matiere, niveau as NiveauType, limit, diplome as DiplomeType);
   }
 }
 
