@@ -33,6 +33,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         // In a real app, you would check subscription status here
         // For now, we'll simulate that admins are always subscribed
         setIsSubscribed(userIsAdmin || false);
+        
+        console.log("État isAdmin:", userIsAdmin);
+        console.log("État user:", user);
       } catch (error) {
         console.error('Error initializing auth:', error);
       } finally {
@@ -45,6 +48,8 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     // Set up auth state change listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
+        console.log("Événement d'authentification:", event);
+        
         if (event === 'SIGNED_IN' && session?.user) {
           setUser(session.user);
           
@@ -53,17 +58,21 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             .from('profiles')
             .select('role')
             .eq('id', session.user.id)
-            .single();
+            .maybeSingle();
             
           const userIsAdmin = data?.role === 'admin';
           setIsAdmin(userIsAdmin);
           
           // In a real app, you would check subscription status here
           setIsSubscribed(userIsAdmin || false);
+          
+          console.log("Utilisateur connecté:", session.user);
+          console.log("Est admin:", userIsAdmin);
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
           setIsAdmin(false);
           setIsSubscribed(false);
+          console.log("Utilisateur déconnecté");
         }
       }
     );
@@ -78,11 +87,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { data, error } = await authService.signInWithEmailOrUsername(emailOrUsername, password);
       
       if (error) {
+        console.error("Erreur de connexion:", error.message);
         return { success: false, error: error.message };
       }
       
+      console.log("Connexion réussie:", data);
       return { success: true };
     } catch (error: any) {
+      console.error("Exception lors de la connexion:", error.message);
       return { success: false, error: error.message };
     }
   };
@@ -92,11 +104,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       const { data, error } = await authService.signUpWithEmail(email, password, username);
       
       if (error) {
+        console.error("Erreur d'inscription:", error.message);
         return { success: false, error: error.message };
       }
       
+      console.log("Inscription réussie:", data);
       return { success: true };
     } catch (error: any) {
+      console.error("Exception lors de l'inscription:", error.message);
       return { success: false, error: error.message };
     }
   };
@@ -104,6 +119,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const handleSignOut = async () => {
     try {
       await authService.signOut();
+      console.log("Déconnexion réussie");
     } catch (error) {
       console.error('Error signing out:', error);
     }

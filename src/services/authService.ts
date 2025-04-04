@@ -33,7 +33,7 @@ export const signInWithEmailOrUsername = async (
       .from('profiles')
       .select('email')
       .eq('username', emailOrUsername)
-      .single();
+      .maybeSingle();
 
     if (userError || !userData?.email) {
       return { data: null, error: new Error('Identifiants invalides') };
@@ -60,6 +60,31 @@ export const signUpWithEmail = async (
   username?: string
 ) => {
   try {
+    // Vérifier d'abord si l'utilisateur existe déjà
+    const { data: existingUser } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('email', email)
+      .maybeSingle();
+      
+    if (existingUser) {
+      return { data: null, error: new Error('Cet email est déjà utilisé') };
+    }
+    
+    // Vérifier si le nom d'utilisateur existe déjà (si fourni)
+    if (username) {
+      const { data: existingUsername } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('username', username)
+        .maybeSingle();
+        
+      if (existingUsername) {
+        return { data: null, error: new Error('Ce nom d\'utilisateur est déjà utilisé') };
+      }
+    }
+    
+    // Procéder à l'inscription
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -100,7 +125,7 @@ export const getCurrentUser = async () => {
         .from('profiles')
         .select('role')
         .eq('id', data.session.user.id)
-        .single();
+        .maybeSingle();
         
       return {
         user: data.session.user,

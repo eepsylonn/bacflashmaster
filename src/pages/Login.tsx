@@ -12,6 +12,7 @@ import { useToast } from '@/components/ui/use-toast';
 import Header from '@/components/Header';
 import Mascot from '@/components/Mascot';
 import { LogIn, UserPlus, Mail, Key, AtSign, User } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 
 const Login = () => {
   const [loginEmail, setLoginEmail] = useState('');
@@ -21,6 +22,7 @@ const Login = () => {
   const [signupUsername, setSignupUsername] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState('login');
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user, signIn, signUp } = useAuth();
@@ -34,11 +36,13 @@ const Login = () => {
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setErrorMessage(null);
 
     try {
       const { success, error } = await signIn(loginEmail, loginPassword);
 
       if (!success) {
+        setErrorMessage(error || "Identifiants invalides");
         toast({
           title: "Erreur de connexion",
           description: error || "Identifiants invalides",
@@ -52,6 +56,7 @@ const Login = () => {
         navigate('/');
       }
     } catch (error: any) {
+      setErrorMessage(error.message || "Une erreur est survenue");
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue",
@@ -65,11 +70,13 @@ const Login = () => {
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setErrorMessage(null);
 
     try {
       const { success, error } = await signUp(signupEmail, signupPassword, signupUsername);
 
       if (!success) {
+        setErrorMessage(error || "Une erreur est survenue lors de l'inscription");
         toast({
           title: "Erreur d'inscription",
           description: error || "Une erreur est survenue lors de l'inscription",
@@ -83,6 +90,7 @@ const Login = () => {
         setActiveTab('login');
       }
     } catch (error: any) {
+      setErrorMessage(error.message || "Une erreur est survenue");
       toast({
         title: "Erreur",
         description: error.message || "Une erreur est survenue",
@@ -108,6 +116,12 @@ const Login = () => {
             <div className="flex justify-center mb-6">
               <Mascot size="lg" animation="wave" />
             </div>
+
+            {errorMessage && (
+              <Alert variant="destructive" className="mb-4">
+                <AlertDescription>{errorMessage}</AlertDescription>
+              </Alert>
+            )}
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid grid-cols-2 mb-6">
