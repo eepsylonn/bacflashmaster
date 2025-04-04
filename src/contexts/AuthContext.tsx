@@ -99,10 +99,24 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       if (error) {
         console.error("Erreur de connexion:", error.message);
+        
+        // Message d'erreur personnalisé pour le cas admin
+        if (emailOrUsername === 'admin' && password === 'admin') {
+          toast({
+            title: "Erreur de connexion admin",
+            description: "Veuillez réessayer. Utilisez admin/admin ou admin@example.com/admin",
+            variant: "destructive",
+          });
+        }
+        
         return { success: false, error: error.message };
       }
       
       console.log("Connexion réussie:", data);
+      toast({
+        title: "Connexion réussie",
+        description: "Vous êtes maintenant connecté",
+      });
       return { success: true };
     } catch (error: any) {
       console.error("Exception lors de la connexion:", error.message);
@@ -116,10 +130,19 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       
       if (error) {
         console.error("Erreur d'inscription:", error.message);
+        toast({
+          title: "Erreur d'inscription", 
+          description: error.message,
+          variant: "destructive",
+        });
         return { success: false, error: error.message };
       }
       
       console.log("Inscription réussie:", data);
+      toast({
+        title: "Inscription réussie",
+        description: "Votre compte a été créé. Vous pouvez maintenant vous connecter.",
+      });
       return { success: true };
     } catch (error: any) {
       console.error("Exception lors de l'inscription:", error.message);
@@ -131,6 +154,10 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     try {
       await authService.signOut();
       console.log("Déconnexion réussie");
+      toast({
+        title: "Déconnexion réussie",
+        description: "Vous êtes maintenant déconnecté",
+      });
     } catch (error) {
       console.error('Error signing out:', error);
       toast({

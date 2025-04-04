@@ -20,6 +20,8 @@ export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, 
   }
 });
 
+console.log('Client Supabase initialisé avec URL:', SUPABASE_URL);
+
 // Determine if we're in development mode with undefined Supabase credentials
 export const isLocalDev = 
   (!import.meta.env.VITE_SUPABASE_URL || 

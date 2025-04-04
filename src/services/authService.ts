@@ -15,6 +15,13 @@ export const signInWithEmailOrUsername = async (
       email: 'admin@example.com',
       password: 'admin',
     });
+    
+    if (error) {
+      console.error('Erreur connexion admin:', error);
+    } else {
+      console.log('Connexion admin réussie:', data);
+    }
+    
     return { data, error };
   }
 
@@ -24,6 +31,11 @@ export const signInWithEmailOrUsername = async (
       email: emailOrUsername,
       password,
     });
+    
+    if (error) {
+      console.error('Erreur connexion avec email:', error);
+    }
+    
     return { data, error };
   }
 
@@ -65,6 +77,8 @@ export const signUpWithEmail = async (
   username?: string
 ) => {
   try {
+    console.log('Tentative d\'inscription avec:', { email, username });
+    
     // Vérifier d'abord si l'email existe déjà
     const { data: existingUserByEmail, error: emailCheckError } = await supabase
       .from('profiles')
@@ -78,6 +92,7 @@ export const signUpWithEmail = async (
     }
       
     if (existingUserByEmail) {
+      console.error('Email déjà utilisé:', email);
       return { data: null, error: new Error('Cet email est déjà utilisé') };
     }
     
@@ -95,6 +110,7 @@ export const signUpWithEmail = async (
       }
         
       if (existingUsername) {
+        console.error('Nom d\'utilisateur déjà utilisé:', username);
         return { data: null, error: new Error('Ce nom d\'utilisateur est déjà utilisé') };
       }
     }
@@ -112,18 +128,28 @@ export const signUpWithEmail = async (
     
     if (error) {
       console.error('Erreur lors de l\'inscription:', error);
+      return { data: null, error: new Error(error.message) };
+    }
+    
+    console.log('Inscription réussie:', data);
+    
+    // Vérifier que la création du profil a fonctionné en attendant un peu
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', data.user?.id)
+      .maybeSingle();
       
-      // Gérer spécifiquement l'erreur de type user_role si c'est celle-ci
-      if (error.message && error.message.includes('user_role')) {
-        return { data: null, error: new Error('Une erreur technique est survenue. Veuillez réessayer.') };
-      }
-      
-      return { data: null, error };
+    if (profileError || !profile) {
+      console.error('Erreur ou profil manquant après inscription:', profileError);
+      return { data, error: new Error('Database error saving new user') };
     }
     
     return { data, error: null };
-  } catch (error) {
-    console.error('Error in signUpWithEmail:', error);
+  } catch (error: any) {
+    console.error('Exception dans signUpWithEmail:', error);
     return { data: null, error: new Error('Une erreur est survenue lors de l\'inscription') };
   }
 };
@@ -170,7 +196,7 @@ export const getCurrentUser = async () => {
   }
 };
 
-// Function to update user preferences
+// Le reste des fonctions reste inchangé
 export const updateUserPreferences = async (preferences: any) => {
   try {
     const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
