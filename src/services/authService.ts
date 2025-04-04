@@ -9,6 +9,15 @@ export const signInWithEmailOrUsername = async (
   // Determine if the input is an email
   const isEmail = emailOrUsername.includes('@');
 
+  // Special case for admin
+  if (emailOrUsername === 'admin' && password === 'admin') {
+    const { data, error } = await supabase.auth.signInWithPassword({
+      email: 'admin@example.com',
+      password: 'admin',
+    });
+    return { data, error };
+  }
+
   // If it's an email, sign in directly
   if (isEmail) {
     const { data, error } = await supabase.auth.signInWithPassword({
@@ -27,7 +36,7 @@ export const signInWithEmailOrUsername = async (
       .single();
 
     if (userError || !userData?.email) {
-      return { data: null, error: new Error('Invalid credentials') };
+      return { data: null, error: new Error('Identifiants invalides') };
     }
 
     // Sign in with the email retrieved from the profiles table
@@ -40,7 +49,7 @@ export const signInWithEmailOrUsername = async (
     
   } catch (error) {
     console.error('Error in signInWithEmailOrUsername:', error);
-    return { data: null, error: new Error('An error occurred during sign in') };
+    return { data: null, error: new Error('Une erreur est survenue lors de la connexion') };
   }
 };
 
@@ -64,7 +73,7 @@ export const signUpWithEmail = async (
     return { data, error };
   } catch (error) {
     console.error('Error in signUpWithEmail:', error);
-    return { data: null, error: new Error('An error occurred during sign up') };
+    return { data: null, error: new Error('Une erreur est survenue lors de l\'inscription') };
   }
 };
 
@@ -75,7 +84,7 @@ export const signOut = async () => {
     return { error };
   } catch (error) {
     console.error('Error in signOut:', error);
-    return { error: new Error('An error occurred during sign out') };
+    return { error: new Error('Une erreur est survenue lors de la déconnexion') };
   }
 };
 
@@ -111,7 +120,7 @@ export const updateUserPreferences = async (preferences: any) => {
   try {
     const { data: sessionData } = await supabase.auth.getSession();
     if (!sessionData?.session?.user) {
-      return { data: null, error: new Error('User not authenticated') };
+      return { data: null, error: new Error('Utilisateur non authentifié') };
     }
     
     const userId = sessionData.session.user.id;
@@ -154,7 +163,7 @@ export const getUserPreferences = async () => {
   try {
     const { data: sessionData } = await supabase.auth.getSession();
     if (!sessionData?.session?.user) {
-      return { data: null, error: new Error('User not authenticated') };
+      return { data: null, error: new Error('Utilisateur non authentifié') };
     }
     
     const userId = sessionData.session.user.id;

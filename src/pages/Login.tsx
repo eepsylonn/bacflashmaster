@@ -1,7 +1,6 @@
 
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { motion } from 'framer-motion';
 import { Button } from '@/components/ui/button';
@@ -24,10 +23,10 @@ const Login = () => {
   const [activeTab, setActiveTab] = useState('login');
   const navigate = useNavigate();
   const { toast } = useToast();
-  const auth = useAuth();
+  const { user, signIn, signUp } = useAuth();
 
   // Redirect if already logged in
-  if (auth.user) {
+  if (user) {
     navigate('/');
     return null;
   }
@@ -37,15 +36,12 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email: loginEmail,
-        password: loginPassword,
-      });
+      const { success, error } = await signIn(loginEmail, loginPassword);
 
-      if (error) {
+      if (!success) {
         toast({
           title: "Erreur de connexion",
-          description: error.message,
+          description: error || "Identifiants invalides",
           variant: "destructive",
         });
       } else {
@@ -71,26 +67,18 @@ const Login = () => {
     setIsLoading(true);
 
     try {
-      const { data, error } = await supabase.auth.signUp({
-        email: signupEmail,
-        password: signupPassword,
-        options: {
-          data: {
-            username: signupUsername,
-          },
-        },
-      });
+      const { success, error } = await signUp(signupEmail, signupPassword, signupUsername);
 
-      if (error) {
+      if (!success) {
         toast({
           title: "Erreur d'inscription",
-          description: error.message,
+          description: error || "Une erreur est survenue lors de l'inscription",
           variant: "destructive",
         });
       } else {
         toast({
           title: "Inscription réussie",
-          description: "Veuillez vérifier votre email pour confirmer votre compte",
+          description: "Veuillez vous connecter avec vos identifiants",
         });
         setActiveTab('login');
       }
@@ -136,13 +124,13 @@ const Login = () => {
               <TabsContent value="login">
                 <form onSubmit={handleLogin} className="space-y-4">
                   <div className="space-y-2">
-                    <Label htmlFor="email">Email</Label>
+                    <Label htmlFor="email">Email ou nom d'utilisateur</Label>
                     <div className="relative">
                       <Mail className="absolute left-3 top-3 h-4 w-4 text-gray-400" />
                       <Input
                         id="email"
-                        type="email"
-                        placeholder="votre@email.com"
+                        type="text"
+                        placeholder="votre@email.com ou nom d'utilisateur"
                         value={loginEmail}
                         onChange={(e) => setLoginEmail(e.target.value)}
                         className="pl-10"
