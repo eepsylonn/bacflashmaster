@@ -2,6 +2,7 @@
 import { createContext, useContext, useEffect, useState, ReactNode } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import * as authService from '@/services/authService';
+import { useToast } from '@/components/ui/use-toast';
 
 interface AuthContextType {
   user: any | null;
@@ -20,6 +21,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isSubscribed, setIsSubscribed] = useState<boolean>(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     const initAuth = async () => {
@@ -38,6 +40,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         console.log("État user:", user);
       } catch (error) {
         console.error('Error initializing auth:', error);
+        toast({
+          title: "Erreur d'authentification",
+          description: "Une erreur est survenue lors de l'initialisation de l'authentification",
+          variant: "destructive",
+        });
       } finally {
         setIsLoading(false);
       }
@@ -53,21 +60,25 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         if (event === 'SIGNED_IN' && session?.user) {
           setUser(session.user);
           
-          // Get the user profile to check if admin
-          const { data } = await supabase
-            .from('profiles')
-            .select('role')
-            .eq('id', session.user.id)
-            .maybeSingle();
+          try {
+            // Get the user profile to check if admin
+            const { data } = await supabase
+              .from('profiles')
+              .select('role')
+              .eq('id', session.user.id)
+              .maybeSingle();
+              
+            const userIsAdmin = data?.role === 'admin';
+            setIsAdmin(userIsAdmin);
             
-          const userIsAdmin = data?.role === 'admin';
-          setIsAdmin(userIsAdmin);
-          
-          // In a real app, you would check subscription status here
-          setIsSubscribed(userIsAdmin || false);
-          
-          console.log("Utilisateur connecté:", session.user);
-          console.log("Est admin:", userIsAdmin);
+            // In a real app, you would check subscription status here
+            setIsSubscribed(userIsAdmin || false);
+            
+            console.log("Utilisateur connecté:", session.user);
+            console.log("Est admin:", userIsAdmin);
+          } catch (error) {
+            console.error('Erreur lors de la récupération du profil:', error);
+          }
         } else if (event === 'SIGNED_OUT') {
           setUser(null);
           setIsAdmin(false);
@@ -80,7 +91,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => {
       subscription.unsubscribe();
     };
-  }, []);
+  }, [toast]);
 
   const signIn = async (emailOrUsername: string, password: string) => {
     try {
@@ -122,6 +133,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       console.log("Déconnexion réussie");
     } catch (error) {
       console.error('Error signing out:', error);
+      toast({
+        title: "Erreur de déconnexion",
+        description: "Une erreur est survenue lors de la déconnexion",
+        variant: "destructive",
+      });
     }
   };
 

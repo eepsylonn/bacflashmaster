@@ -36,6 +36,7 @@ export const signInWithEmailOrUsername = async (
       .maybeSingle();
 
     if (userError || !userData?.email) {
+      console.error('Erreur lors de la recherche du nom d\'utilisateur:', userError);
       return { data: null, error: new Error('Identifiants invalides') };
     }
 
@@ -44,6 +45,10 @@ export const signInWithEmailOrUsername = async (
       email: userData.email,
       password,
     });
+
+    if (error) {
+      console.error('Erreur lors de la connexion avec l\'email récupéré:', error);
+    }
 
     return { data, error };
     
@@ -60,24 +65,34 @@ export const signUpWithEmail = async (
   username?: string
 ) => {
   try {
-    // Vérifier d'abord si l'utilisateur existe déjà
-    const { data: existingUser } = await supabase
+    // Vérifier d'abord si l'email existe déjà
+    const { data: existingUserByEmail, error: emailCheckError } = await supabase
       .from('profiles')
       .select('email')
       .eq('email', email)
       .maybeSingle();
       
-    if (existingUser) {
+    if (emailCheckError) {
+      console.error('Erreur lors de la vérification de l\'email:', emailCheckError);
+      return { data: null, error: new Error('Erreur lors de la vérification de l\'email') };
+    }
+      
+    if (existingUserByEmail) {
       return { data: null, error: new Error('Cet email est déjà utilisé') };
     }
     
     // Vérifier si le nom d'utilisateur existe déjà (si fourni)
     if (username) {
-      const { data: existingUsername } = await supabase
+      const { data: existingUsername, error: usernameCheckError } = await supabase
         .from('profiles')
         .select('username')
         .eq('username', username)
         .maybeSingle();
+        
+      if (usernameCheckError) {
+        console.error('Erreur lors de la vérification du nom d\'utilisateur:', usernameCheckError);
+        return { data: null, error: new Error('Erreur lors de la vérification du nom d\'utilisateur') };
+      }
         
       if (existingUsername) {
         return { data: null, error: new Error('Ce nom d\'utilisateur est déjà utilisé') };
@@ -95,7 +110,18 @@ export const signUpWithEmail = async (
       },
     });
     
-    return { data, error };
+    if (error) {
+      console.error('Erreur lors de l\'inscription:', error);
+      
+      // Gérer spécifiquement l'erreur de type user_role si c'est celle-ci
+      if (error.message && error.message.includes('user_role')) {
+        return { data: null, error: new Error('Une erreur technique est survenue. Veuillez réessayer.') };
+      }
+      
+      return { data: null, error };
+    }
+    
+    return { data, error: null };
   } catch (error) {
     console.error('Error in signUpWithEmail:', error);
     return { data: null, error: new Error('Une erreur est survenue lors de l\'inscription') };
@@ -121,11 +147,15 @@ export const getCurrentUser = async () => {
     
     if (data.session?.user) {
       // Get the user profile to check if admin
-      const { data: profileData } = await supabase
+      const { data: profileData, error: profileError } = await supabase
         .from('profiles')
         .select('role')
         .eq('id', data.session.user.id)
         .maybeSingle();
+        
+      if (profileError) {
+        console.error('Erreur lors de la récupération du profil:', profileError);
+      }
         
       return {
         user: data.session.user,
@@ -143,7 +173,12 @@ export const getCurrentUser = async () => {
 // Function to update user preferences
 export const updateUserPreferences = async (preferences: any) => {
   try {
-    const { data: sessionData } = await supabase.auth.getSession();
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error('Error getting session:', sessionError);
+      return { data: null, error: sessionError };
+    }
+    
     if (!sessionData?.session?.user) {
       return { data: null, error: new Error('Utilisateur non authentifié') };
     }
@@ -157,7 +192,10 @@ export const updateUserPreferences = async (preferences: any) => {
       .eq('user_id', userId)
       .maybeSingle();
       
-    if (fetchError) throw fetchError;
+    if (fetchError) {
+      console.error('Error fetching preferences:', fetchError);
+      throw fetchError;
+    }
     
     if (existingPrefs) {
       // Update existing preferences
@@ -167,6 +205,10 @@ export const updateUserPreferences = async (preferences: any) => {
         .eq('user_id', userId)
         .select();
         
+      if (error) {
+        console.error('Error updating preferences:', error);
+      }
+        
       return { data, error };
     } else {
       // Create new preferences
@@ -174,6 +216,10 @@ export const updateUserPreferences = async (preferences: any) => {
         .from('user_preferences')
         .insert([{ ...preferences, user_id: userId }])
         .select();
+        
+      if (error) {
+        console.error('Error creating preferences:', error);
+      }
         
       return { data, error };
     }
@@ -186,7 +232,12 @@ export const updateUserPreferences = async (preferences: any) => {
 // Function to get user preferences
 export const getUserPreferences = async () => {
   try {
-    const { data: sessionData } = await supabase.auth.getSession();
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error('Error getting session:', sessionError);
+      return { data: null, error: sessionError };
+    }
+    
     if (!sessionData?.session?.user) {
       return { data: null, error: new Error('Utilisateur non authentifié') };
     }
@@ -198,6 +249,10 @@ export const getUserPreferences = async () => {
       .select('*')
       .eq('user_id', userId)
       .maybeSingle();
+      
+    if (error) {
+      console.error('Error fetching preferences:', error);
+    }
       
     return { data, error };
   } catch (error) {
