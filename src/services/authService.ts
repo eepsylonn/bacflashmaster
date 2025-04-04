@@ -1,72 +1,158 @@
 
 import { supabase } from '@/integrations/supabase/client';
 
+// Function to check if user exists by email or username
+export const checkUserExists = async (email: string, username?: string) => {
+  try {
+    // Check if email exists
+    const { data: emailData, error: emailError } = await supabase
+      .from('profiles')
+      .select('email')
+      .eq('email', email)
+      .maybeSingle();
+      
+    if (emailError) {
+      console.error('Error checking email existence:', emailError);
+      throw new Error('Database error checking user');
+    }
+    
+    if (emailData) {
+      return { exists: true, field: 'email' };
+    }
+    
+    // Check if username exists (if provided)
+    if (username) {
+      const { data: usernameData, error: usernameError } = await supabase
+        .from('profiles')
+        .select('username')
+        .eq('username', username)
+        .maybeSingle();
+        
+      if (usernameError) {
+        console.error('Error checking username existence:', usernameError);
+        throw new Error('Database error checking user');
+      }
+      
+      if (usernameData) {
+        return { exists: true, field: 'username' };
+      }
+    }
+    
+    return { exists: false };
+  } catch (error) {
+    console.error('Error in checkUserExists:', error);
+    throw error;
+  }
+};
+
 // Function for signing in with email/username and password
 export const signInWithEmailOrUsername = async (
   emailOrUsername: string, 
   password: string
 ) => {
-  // Determine if the input is an email
-  const isEmail = emailOrUsername.includes('@');
-
-  // Special case for admin
-  if (emailOrUsername === 'admin' && password === 'admin') {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: 'admin@example.com',
-      password: 'admin',
-    });
-    
-    if (error) {
-      console.error('Erreur connexion admin:', error);
-    } else {
-      console.log('Connexion admin réussie:', data);
-    }
-    
-    return { data, error };
-  }
-
-  // If it's an email, sign in directly
-  if (isEmail) {
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: emailOrUsername,
-      password,
-    });
-    
-    if (error) {
-      console.error('Erreur connexion avec email:', error);
-    }
-    
-    return { data, error };
-  }
-
-  // If it's a username, try to find the associated email
   try {
-    const { data: userData, error: userError } = await supabase
-      .from('profiles')
-      .select('email')
-      .eq('username', emailOrUsername)
-      .maybeSingle();
-
-    if (userError || !userData?.email) {
-      console.error('Erreur lors de la recherche du nom d\'utilisateur:', userError);
-      return { data: null, error: new Error('Identifiants invalides') };
-    }
-
-    // Sign in with the email retrieved from the profiles table
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: userData.email,
-      password,
-    });
-
-    if (error) {
-      console.error('Erreur lors de la connexion avec l\'email récupéré:', error);
-    }
-
-    return { data, error };
+    console.log(`Attempting login with: ${emailOrUsername}`);
     
-  } catch (error) {
+    // Special case for admin login
+    if (
+      (emailOrUsername === 'admin' || emailOrUsername === 'admin@example.com') && 
+      password === 'admin'
+    ) {
+      console.log('Admin login attempt detected');
+      // Try to login with admin credentials
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: 'admin@example.com',
+        password: 'admin',
+      });
+      
+      if (error) {
+        console.error('Admin login error:', error);
+        // Try to create admin account if it doesn't exist
+        if (error.message.includes('Invalid login credentials')) {
+          console.log('Attempting to create admin account...');
+          const { data: signupData, error: signupError } = await supabase.auth.signUp({
+            email: 'admin@example.com',
+            password: 'admin',
+            options: {
+              data: {
+                username: 'admin',
+              },
+            },
+          });
+          
+          if (signupError) {
+            console.error('Admin account creation failed:', signupError);
+            return { 
+              data: null, 
+              error: new Error('Admin login failed. Please contact support.') 
+            };
+          }
+          
+          // Try logging in again with admin credentials
+          return await supabase.auth.signInWithPassword({
+            email: 'admin@example.com',
+            password: 'admin',
+          });
+        }
+      }
+      
+      return { data, error };
+    }
+
+    // Determine if the input is an email
+    const isEmail = emailOrUsername.includes('@');
+
+    // If it's an email, sign in directly
+    if (isEmail) {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: emailOrUsername,
+        password,
+      });
+      
+      if (error) {
+        console.error('Email login error:', error);
+      }
+      
+      return { data, error };
+    }
+
+    // If it's a username, try to find the associated email
+    try {
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('email')
+        .eq('username', emailOrUsername)
+        .maybeSingle();
+
+      if (profileError) {
+        console.error('Error finding user by username:', profileError);
+        return { data: null, error: new Error('Invalid credentials') };
+      }
+
+      if (!profileData?.email) {
+        console.error('Username not found:', emailOrUsername);
+        return { data: null, error: new Error('Invalid credentials') };
+      }
+
+      // Sign in with the email retrieved from the profiles table
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: profileData.email,
+        password,
+      });
+
+      if (error) {
+        console.error('Username login error:', error);
+      }
+
+      return { data, error };
+      
+    } catch (error: any) {
+      console.error('Error in username login flow:', error);
+      return { data: null, error: new Error('An error occurred during login') };
+    }
+  } catch (error: any) {
     console.error('Error in signInWithEmailOrUsername:', error);
-    return { data: null, error: new Error('Une erreur est survenue lors de la connexion') };
+    return { data: null, error: new Error('An error occurred during login') };
   }
 };
 
@@ -77,45 +163,20 @@ export const signUpWithEmail = async (
   username?: string
 ) => {
   try {
-    console.log('Tentative d\'inscription avec:', { email, username });
+    console.log(`Attempting signup with email: ${email}, username: ${username || 'not provided'}`);
     
-    // Vérifier d'abord si l'email existe déjà
-    const { data: existingUserByEmail, error: emailCheckError } = await supabase
-      .from('profiles')
-      .select('email')
-      .eq('email', email)
-      .maybeSingle();
-      
-    if (emailCheckError) {
-      console.error('Erreur lors de la vérification de l\'email:', emailCheckError);
-      return { data: null, error: new Error('Erreur lors de la vérification de l\'email') };
-    }
-      
-    if (existingUserByEmail) {
-      console.error('Email déjà utilisé:', email);
-      return { data: null, error: new Error('Cet email est déjà utilisé') };
+    // Check if user already exists
+    const { exists, field } = await checkUserExists(email, username);
+    
+    if (exists) {
+      console.error(`Signup failed - ${field} already exists`);
+      return { 
+        data: null, 
+        error: new Error(`This ${field} is already in use. Please try a different one.`) 
+      };
     }
     
-    // Vérifier si le nom d'utilisateur existe déjà (si fourni)
-    if (username) {
-      const { data: existingUsername, error: usernameCheckError } = await supabase
-        .from('profiles')
-        .select('username')
-        .eq('username', username)
-        .maybeSingle();
-        
-      if (usernameCheckError) {
-        console.error('Erreur lors de la vérification du nom d\'utilisateur:', usernameCheckError);
-        return { data: null, error: new Error('Erreur lors de la vérification du nom d\'utilisateur') };
-      }
-        
-      if (existingUsername) {
-        console.error('Nom d\'utilisateur déjà utilisé:', username);
-        return { data: null, error: new Error('Ce nom d\'utilisateur est déjà utilisé') };
-      }
-    }
-    
-    // Procéder à l'inscription
+    // Proceed with signup
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
@@ -127,15 +188,16 @@ export const signUpWithEmail = async (
     });
     
     if (error) {
-      console.error('Erreur lors de l\'inscription:', error);
+      console.error('Signup error:', error);
       return { data: null, error: new Error(error.message) };
     }
     
-    console.log('Inscription réussie:', data);
+    console.log('Signup success - waiting for profile creation');
     
-    // Vérifier que la création du profil a fonctionné en attendant un peu
+    // Wait a moment for the trigger to create the profile
     await new Promise(resolve => setTimeout(resolve, 1000));
     
+    // Verify profile was created successfully
     const { data: profile, error: profileError } = await supabase
       .from('profiles')
       .select('*')
@@ -143,14 +205,18 @@ export const signUpWithEmail = async (
       .maybeSingle();
       
     if (profileError || !profile) {
-      console.error('Erreur ou profil manquant après inscription:', profileError);
-      return { data, error: new Error('Database error saving new user') };
+      console.error('Profile verification failed:', profileError);
+      return { 
+        data, 
+        error: new Error('Account created but profile setup failed. Please contact support.') 
+      };
     }
     
+    console.log('Profile verified successfully:', profile);
     return { data, error: null };
   } catch (error: any) {
-    console.error('Exception dans signUpWithEmail:', error);
-    return { data: null, error: new Error('Une erreur est survenue lors de l\'inscription') };
+    console.error('Exception in signUpWithEmail:', error);
+    return { data: null, error: new Error('An error occurred during signup') };
   }
 };
 
@@ -161,7 +227,7 @@ export const signOut = async () => {
     return { error };
   } catch (error) {
     console.error('Error in signOut:', error);
-    return { error: new Error('Une erreur est survenue lors de la déconnexion') };
+    return { error: new Error('An error occurred during logout') };
   }
 };
 
@@ -175,28 +241,98 @@ export const getCurrentUser = async () => {
       // Get the user profile to check if admin
       const { data: profileData, error: profileError } = await supabase
         .from('profiles')
-        .select('role')
+        .select('*')
         .eq('id', data.session.user.id)
         .maybeSingle();
         
       if (profileError) {
-        console.error('Erreur lors de la récupération du profil:', profileError);
+        console.error('Error fetching profile:', profileError);
+        return {
+          user: data.session.user,
+          profile: null,
+          isAdmin: false,
+        };
       }
         
       return {
         user: data.session.user,
+        profile: profileData,
         isAdmin: profileData?.role === 'admin',
       };
     }
     
-    return { user: null, isAdmin: false };
+    return { user: null, profile: null, isAdmin: false };
   } catch (error) {
     console.error('Error in getCurrentUser:', error);
-    return { user: null, isAdmin: false };
+    return { user: null, profile: null, isAdmin: false };
   }
 };
 
-// Le reste des fonctions reste inchangé
+// Function to update user profile
+export const updateUserProfile = async (profileData: any) => {
+  try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error('Error getting session:', sessionError);
+      return { data: null, error: sessionError };
+    }
+    
+    if (!sessionData?.session?.user) {
+      return { data: null, error: new Error('User not authenticated') };
+    }
+    
+    const userId = sessionData.session.user.id;
+    
+    const { data, error } = await supabase
+      .from('profiles')
+      .update(profileData)
+      .eq('id', userId)
+      .select();
+      
+    if (error) {
+      console.error('Error updating profile:', error);
+    }
+      
+    return { data, error };
+  } catch (error) {
+    console.error('Error in updateUserProfile:', error);
+    return { data: null, error };
+  }
+};
+
+// Function to get user preferences
+export const getUserPreferences = async () => {
+  try {
+    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
+    if (sessionError) {
+      console.error('Error getting session:', sessionError);
+      return { data: null, error: sessionError };
+    }
+    
+    if (!sessionData?.session?.user) {
+      return { data: null, error: new Error('User not authenticated') };
+    }
+    
+    const userId = sessionData.session.user.id;
+    
+    const { data, error } = await supabase
+      .from('user_preferences')
+      .select('*')
+      .eq('user_id', userId)
+      .maybeSingle();
+      
+    if (error) {
+      console.error('Error fetching preferences:', error);
+    }
+      
+    return { data, error };
+  } catch (error) {
+    console.error('Error in getUserPreferences:', error);
+    return { data: null, error };
+  }
+};
+
+// Function to update user preferences
 export const updateUserPreferences = async (preferences: any) => {
   try {
     const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
@@ -206,7 +342,7 @@ export const updateUserPreferences = async (preferences: any) => {
     }
     
     if (!sessionData?.session?.user) {
-      return { data: null, error: new Error('Utilisateur non authentifié') };
+      return { data: null, error: new Error('User not authenticated') };
     }
     
     const userId = sessionData.session.user.id;
@@ -251,38 +387,6 @@ export const updateUserPreferences = async (preferences: any) => {
     }
   } catch (error) {
     console.error('Error in updateUserPreferences:', error);
-    return { data: null, error };
-  }
-};
-
-// Function to get user preferences
-export const getUserPreferences = async () => {
-  try {
-    const { data: sessionData, error: sessionError } = await supabase.auth.getSession();
-    if (sessionError) {
-      console.error('Error getting session:', sessionError);
-      return { data: null, error: sessionError };
-    }
-    
-    if (!sessionData?.session?.user) {
-      return { data: null, error: new Error('Utilisateur non authentifié') };
-    }
-    
-    const userId = sessionData.session.user.id;
-    
-    const { data, error } = await supabase
-      .from('user_preferences')
-      .select('*')
-      .eq('user_id', userId)
-      .maybeSingle();
-      
-    if (error) {
-      console.error('Error fetching preferences:', error);
-    }
-      
-    return { data, error };
-  } catch (error) {
-    console.error('Error in getUserPreferences:', error);
     return { data: null, error };
   }
 };

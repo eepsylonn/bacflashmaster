@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -206,6 +205,9 @@ const Header = () => {
                   <DropdownMenuContent align="end" className="w-56">
                     <DropdownMenuLabel>Mon Compte</DropdownMenuLabel>
                     <DropdownMenuSeparator />
+                    <DropdownMenuItem onClick={() => navigate('/profile')}>
+                      Mon Profil
+                    </DropdownMenuItem>
                     <DropdownMenuItem onClick={() => navigate('/subscription')}>
                       {isSubscribed ? (
                         <>Abonnement (Actif)</>
