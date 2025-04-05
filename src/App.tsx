@@ -23,8 +23,8 @@ function App() {
   return (
     <Router>
       <AuthProvider>
-        <DiplomeProvider>
-          <UserPreferencesProvider>
+        <UserPreferencesProvider>
+          <DiplomeProvider>
             <Routes>
               <Route path="/" element={<Index />} />
               <Route path="/methodologie" element={<Methodology />} />
@@ -42,8 +42,8 @@ function App() {
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
-          </UserPreferencesProvider>
-        </DiplomeProvider>
+          </DiplomeProvider>
+        </UserPreferencesProvider>
       </AuthProvider>
     </Router>
   );

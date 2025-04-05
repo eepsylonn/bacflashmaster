@@ -35,6 +35,7 @@ import { useToast } from '@/hooks/use-toast';
 import { BacSpecialite } from '@/types';
 import { useIsMobile } from '@/hooks/use-mobile';
 import SpecialitySelector from '@/components/SpecialitySelector';
+import { UserPreferencesProvider } from '@/contexts/UserPreferencesContext';
 
 const Settings = () => {
   const isMobile = useIsMobile();
@@ -607,10 +608,14 @@ const Settings = () => {
         </div>
       </main>
 
-      <SpecialitySelector
-        isOpen={showSpecialityPopup}
-        onClose={closeSpecialityPopup}
-      />
+      {showSpecialityPopup && (
+        <UserPreferencesProvider>
+          <SpecialitySelector
+            isOpen={showSpecialityPopup}
+            onClose={closeSpecialityPopup}
+          />
+        </UserPreferencesProvider>
+      )}
     </div>
   );
 };
