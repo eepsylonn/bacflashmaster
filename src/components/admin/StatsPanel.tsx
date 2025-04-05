@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { Card } from '@/components/ui/card';
-import { supabase } from '@/lib/supabase';
+import { supabaseExt } from '@/lib/supabase';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, LineChart, Line } from 'recharts';
 
 const StatsPanel = () => {
@@ -20,12 +20,12 @@ const StatsPanel = () => {
       setLoading(true);
       try {
         // Récupérer le nombre total d'utilisateurs
-        const { count: totalUsers } = await supabase
+        const { count: totalUsers } = await supabaseExt
           .from('profiles')
           .select('*', { count: 'exact', head: true });
 
         // Récupérer le nombre d'abonnés
-        const { count: totalSubscribers } = await supabase
+        const { count: totalSubscribers } = await supabaseExt
           .from('subscriptions')
           .select('*', { count: 'exact', head: true })
           .eq('status', 'active');
@@ -33,14 +33,14 @@ const StatsPanel = () => {
         // Récupérer le nombre d'utilisateurs actifs aujourd'hui
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-        const { count: activeToday } = await supabase
+        const { count: activeToday } = await supabaseExt
           .from('user_activity')
           .select('*', { count: 'exact', head: true })
           .gte('timestamp', today.toISOString());
 
         // Récupérer le nombre d'utilisateurs actifs ce mois
         const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-        const { count: activeThisMonth } = await supabase
+        const { count: activeThisMonth } = await supabaseExt
           .from('user_activity')
           .select('*', { count: 'exact', head: true })
           .gte('timestamp', firstDayOfMonth.toISOString());

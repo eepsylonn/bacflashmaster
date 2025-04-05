@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabaseExt } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Switch } from '@/components/ui/switch';
@@ -78,21 +78,30 @@ const UsersPanel = ({ searchQuery }: UsersPanelProps) => {
         setUsers(mockUsers);
       } else {
         // Mode production avec Supabase réel
-        const { data, error } = await supabase
+        const { data: profiles, error } = await supabaseExt
           .from('profiles')
-          .select('*, subscriptions(status)')
+          .select('*')
           .order('created_at', { ascending: false });
 
         if (error) throw error;
 
-        // Formater les données
-        const formattedUsers = data.map((item: any) => ({
-          id: item.id,
-          email: item.email || 'N/A',
-          created_at: new Date(item.created_at).toLocaleDateString(),
-          role: item.role || 'user',
-          is_subscribed: item.subscriptions?.some((sub: any) => sub.status === 'active') || false,
-          last_login: item.last_login ? new Date(item.last_login).toLocaleDateString() : 'Jamais'
+        // Get subscription status for each user
+        const formattedUsers = await Promise.all(profiles.map(async (profile: any) => {
+          const { data: subscriptions } = await supabaseExt
+            .from('subscriptions')
+            .select('*')
+            .eq('user_id', profile.id)
+            .eq('status', 'active')
+            .maybeSingle();
+
+          return {
+            id: profile.id,
+            email: profile.email || 'N/A',
+            created_at: new Date(profile.created_at).toLocaleDateString(),
+            role: profile.role || 'user',
+            is_subscribed: !!subscriptions,
+            last_login: profile.last_login ? new Date(profile.last_login).toLocaleDateString() : 'Jamais'
+          };
         }));
 
         setUsers(formattedUsers);
@@ -130,7 +139,7 @@ const UsersPanel = ({ searchQuery }: UsersPanelProps) => {
         ));
       } else {
         // Mode production avec Supabase réel
-        const { error } = await supabase
+        const { error } = await supabaseExt
           .from('profiles')
           .update({ role: newRole })
           .eq('id', userId);
@@ -166,7 +175,7 @@ const UsersPanel = ({ searchQuery }: UsersPanelProps) => {
       } else {
         if (isCurrentlySubscribed) {
           // Désactiver l'abonnement existant
-          const { error } = await supabase
+          const { error } = await supabaseExt
             .from('subscriptions')
             .update({ status: 'inactive' })
             .eq('user_id', userId)
@@ -175,7 +184,7 @@ const UsersPanel = ({ searchQuery }: UsersPanelProps) => {
           if (error) throw error;
         } else {
           // Créer un nouvel abonnement
-          const { error } = await supabase
+          const { error } = await supabaseExt
             .from('subscriptions')
             .insert({
               user_id: userId,
@@ -218,7 +227,7 @@ const UsersPanel = ({ searchQuery }: UsersPanelProps) => {
         setUsers(users.filter(user => user.id !== userId));
       } else {
         // Supprimer l'utilisateur de la base de données
-        const { error } = await supabase
+        const { error } = await supabaseExt
           .from('profiles')
           .delete()
           .eq('id', userId);

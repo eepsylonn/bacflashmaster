@@ -1,7 +1,6 @@
 
 import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
-import { NiveauType, DiplomeType, NombreQuestions } from '@/types';
 
 // Use environment variables if available, otherwise use the default values
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || "https://awgkohazhjewjtsirjqf.supabase.co";
@@ -26,12 +25,22 @@ export const isLocalDev =
    import.meta.env.VITE_SUPABASE_URL === 'https://your-supabase-url.supabase.co' ||
    import.meta.env.VITE_SUPABASE_ANON_KEY === 'your-anon-key');
 
+// Extended Supabase client for use with tables not in the Database type
+export const supabaseExt = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true,
+    storage: localStorage
+  }
+});
+
 // Helper function to get flashcards from Supabase
 export async function getFlashcardsFromSupabase(
   matiere?: string,
-  niveau?: string | NiveauType,
-  limit?: number | NombreQuestions,
-  diplome?: string | DiplomeType
+  niveau?: string,
+  limit?: number,
+  diplome?: string
 ) {
   try {
     let query = supabase
@@ -45,17 +54,13 @@ export async function getFlashcardsFromSupabase(
     }
     
     if (niveau) {
-      // Convert string to Supabase enum type if needed
-      const niveauValue = niveau as unknown as Database['public']['Enums']['niveau_type'];
       // Recherche exacte pour le niveau car c'est un enum
-      query = query.eq('niveau', niveauValue);
+      query = query.eq('niveau', niveau);
     }
     
     if (diplome) {
-      // Convert string to Supabase enum type if needed
-      const diplomeValue = diplome as unknown as Database['public']['Enums']['diplome_type'];
       // Recherche exacte pour le diplôme car c'est un enum
-      query = query.eq('diplome', diplomeValue);
+      query = query.eq('diplome', diplome);
     }
     
     // Apply limit if provided

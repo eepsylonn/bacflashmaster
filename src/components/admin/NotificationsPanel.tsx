@@ -8,7 +8,7 @@ import { Calendar } from '@/components/ui/calendar';
 import { format } from 'date-fns';
 import { fr } from 'date-fns/locale';
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
-import { supabase } from '@/lib/supabase';
+import { supabaseExt } from '@/lib/supabase';
 import { useToast } from '@/components/ui/use-toast';
 import { CalendarIcon } from 'lucide-react';
 import { Card } from '@/components/ui/card';
@@ -35,7 +35,7 @@ const NotificationsPanel = () => {
     setIsSending(true);
     try {
       // Créer la notification dans la base de données
-      const { error } = await supabase
+      const { error } = await supabaseExt
         .from('notifications')
         .insert({
           title,

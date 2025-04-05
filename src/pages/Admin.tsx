@@ -6,7 +6,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { useAuth } from '@/contexts/AuthContext';
-import { supabase } from '@/lib/supabase';
+import { supabaseExt } from '@/lib/supabase';
 import UsersPanel from '@/components/admin/UsersPanel';
 import StatsPanel from '@/components/admin/StatsPanel';
 import NotificationsPanel from '@/components/admin/NotificationsPanel';

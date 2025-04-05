@@ -8,7 +8,7 @@ import { motion } from 'framer-motion';
 import Mascot from '@/components/Mascot';
 import { useAuth } from '@/contexts/AuthContext';
 import { Check } from 'lucide-react';
-import { supabase } from '@/lib/supabase';
+import { supabaseExt } from '@/lib/supabase';
 import { useToast } from '@/components/ui/use-toast';
 
 const Subscription = () => {
@@ -28,7 +28,7 @@ const Subscription = () => {
     try {
       // Simulation d'un abonnement pour la démo
       // Dans un cas réel, cela serait remplacé par une intégration Stripe
-      const { error } = await supabase
+      const { error } = await supabaseExt
         .from('subscriptions')
         .insert({
           user_id: user.id,
