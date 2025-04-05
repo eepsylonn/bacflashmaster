@@ -5,7 +5,7 @@ import Header from '@/components/Header';
 import TrainingSelector from '@/components/TrainingSelector';
 import FlashcardComponentWrapper from '@/components/FlashcardComponentWrapper';
 import TrainingProgress from '@/components/TrainingProgress';
-import TrainingResultPage from '@/pages/TrainingResult';
+import TrainingResultPage from './TrainingResult';
 import { useSupabaseFlashcards } from '@/hooks/useSupabaseFlashcards';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from '@/components/ui/use-toast';

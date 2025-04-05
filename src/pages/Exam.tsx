@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import Header from '@/components/Header';
 import FlashcardComponentWrapper from '@/components/FlashcardComponentWrapper';
 import TrainingProgress from '@/components/TrainingProgress';
-import TrainingResultPage from '@/pages/TrainingResult';
+import TrainingResultPage from './TrainingResult';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { useSupabaseFlashcards } from '@/hooks/useSupabaseFlashcards';

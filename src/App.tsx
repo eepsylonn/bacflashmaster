@@ -13,7 +13,6 @@ import Login from '@/pages/Login';
 import Profile from '@/pages/Profile';
 import Admin from '@/pages/Admin';
 import Subscription from '@/pages/Subscription';
-import TrainingResult from '@/pages/TrainingResult';
 import { Toaster } from '@/components/ui/toaster';
 import { AuthProvider } from '@/contexts/AuthContext';
 import { DiplomeProvider } from '@/contexts/DiplomeContext';
@@ -39,7 +38,7 @@ function App() {
               <Route path="/login" element={<Login />} />
               <Route path="/profile" element={<Profile />} />
               <Route path="/subscription" element={<Subscription />} />
-              <Route path="/resultat" element={<TrainingResult />} />
+              {/* Remove the separate route for TrainingResult since it's managed within Training page */}
               <Route path="*" element={<NotFound />} />
             </Routes>
             <Toaster />
