@@ -26,6 +26,7 @@ export const isLocalDev =
    import.meta.env.VITE_SUPABASE_ANON_KEY === 'your-anon-key');
 
 // Extended Supabase client for use with tables not in the Database type
+// Use this client when working with tables not fully defined in the types
 export const supabaseExt = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     autoRefreshToken: true,
@@ -54,13 +55,15 @@ export async function getFlashcardsFromSupabase(
     }
     
     if (niveau) {
-      // Recherche exacte pour le niveau car c'est un enum
-      query = query.eq('niveau', niveau);
+      // Use a more type-safe approach by checking valid values
+      const validNiveau = niveau as Database['public']['Enums']['niveau_type'];
+      query = query.eq('niveau', validNiveau);
     }
     
     if (diplome) {
-      // Recherche exacte pour le diplôme car c'est un enum
-      query = query.eq('diplome', diplome);
+      // Use a more type-safe approach by checking valid values
+      const validDiplome = diplome as Database['public']['Enums']['diplome_type'];
+      query = query.eq('diplome', validDiplome);
     }
     
     // Apply limit if provided
