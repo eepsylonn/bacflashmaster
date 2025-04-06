@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 // Function to check if user exists by email or username
@@ -10,6 +9,48 @@ export const checkUserExists = async (email: string, username?: string) => {
   } catch (error) {
     console.error('Error in checkUserExists:', error);
     throw error;
+  }
+};
+
+// Function for signing up with email and password
+export const signUpWithEmail = async (
+  email: string,
+  password: string,
+  username?: string
+) => {
+  try {
+    console.log(`Attempting signup with email: ${email}, username: ${username || 'not provided'}`);
+    
+    // Skip checking for existing users for now due to policy issues
+    
+    // Proceed with signup
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: {
+          username: username || email.split('@')[0],
+        },
+      },
+    });
+    
+    if (error) {
+      console.error('Signup error:', error);
+      return { data: null, error: new Error(error.message) };
+    }
+    
+    console.log('Signup success - waiting for profile creation');
+    
+    // Wait a moment for the trigger to create the profile
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    
+    // We'll skip the profile verification for now due to the policy issue
+    
+    console.log('Signup process completed successfully');
+    return { data, error: null };
+  } catch (error: any) {
+    console.error('Exception in signUpWithEmail:', error);
+    return { data: null, error: new Error('An error occurred during signup') };
   }
 };
 
@@ -121,48 +162,6 @@ export const signInWithEmailOrUsername = async (
   } catch (error: any) {
     console.error('Error in signInWithEmailOrUsername:', error);
     return { data: null, error: new Error('An error occurred during login') };
-  }
-};
-
-// Function for signing up with email and password
-export const signUpWithEmail = async (
-  email: string,
-  password: string,
-  username?: string
-) => {
-  try {
-    console.log(`Attempting signup with email: ${email}, username: ${username || 'not provided'}`);
-    
-    // Skip checking for existing users for now due to policy issues
-    
-    // Proceed with signup directly
-    const { data, error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: {
-          username: username || email.split('@')[0],
-        },
-      },
-    });
-    
-    if (error) {
-      console.error('Signup error:', error);
-      return { data: null, error: new Error(error.message) };
-    }
-    
-    console.log('Signup success - waiting for profile creation');
-    
-    // Wait a moment for the trigger to create the profile
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // We'll skip the profile verification for now due to the policy issue
-    
-    console.log('Signup process completed successfully');
-    return { data, error: null };
-  } catch (error: any) {
-    console.error('Exception in signUpWithEmail:', error);
-    return { data: null, error: new Error('An error occurred during signup') };
   }
 };
 
