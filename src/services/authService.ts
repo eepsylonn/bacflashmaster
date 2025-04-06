@@ -25,6 +25,15 @@ export const signUpWithEmail = async (
     // Generate a username if not provided
     const generatedUsername = username || email.split('@')[0];
     
+    // Check if the user already exists (optional step)
+    const { exists } = await checkUserExists(email, generatedUsername);
+    if (exists) {
+      return { 
+        data: null, 
+        error: new Error('Un utilisateur avec cet email ou nom d\'utilisateur existe déjà') 
+      };
+    }
+    
     // Proceed with signup
     const { data, error } = await supabase.auth.signUp({
       email,
