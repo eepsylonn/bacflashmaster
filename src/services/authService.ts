@@ -1,3 +1,4 @@
+
 import { supabase } from '@/integrations/supabase/client';
 
 // Function to check if user exists by email or username
@@ -21,7 +22,8 @@ export const signUpWithEmail = async (
   try {
     console.log(`Attempting signup with email: ${email}, username: ${username || 'not provided'}`);
     
-    // Skip checking for existing users for now due to policy issues
+    // Generate a username if not provided
+    const generatedUsername = username || email.split('@')[0];
     
     // Proceed with signup
     const { data, error } = await supabase.auth.signUp({
@@ -29,7 +31,7 @@ export const signUpWithEmail = async (
       password,
       options: {
         data: {
-          username: username || email.split('@')[0],
+          username: generatedUsername,
         },
       },
     });
@@ -43,8 +45,6 @@ export const signUpWithEmail = async (
     
     // Wait a moment for the trigger to create the profile
     await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    // We'll skip the profile verification for now due to the policy issue
     
     console.log('Signup process completed successfully');
     return { data, error: null };
